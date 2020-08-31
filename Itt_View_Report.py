@@ -1,154 +1,248 @@
-# app.py
+#!/usr/bin/env python
+
+
+#############################################################################
+##
+## Copyright (C) 2013 Riverbank Computing Limited.
+## Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+## All rights reserved.
+##
+## This file is part of the examples of PyQt.
+##
+## $QT_BEGIN_LICENSE:BSD$
+## You may use this file under the terms of the BSD license as follows:
+##
+## "Redistribution and use in source and binary forms, with or without
+## modification, are permitted provided that the following conditions are
+## met:
+##   * Redistributions of source code must retain the above copyright
+##     notice, this list of conditions and the following disclaimer.
+##   * Redistributions in binary form must reproduce the above copyright
+##     notice, this list of conditions and the following disclaimer in
+##     the documentation and/or other materials provided with the
+##     distribution.
+##   * Neither the name of Nokia Corporation and its Subsidiary(-ies) nor
+##     the names of its contributors may be used to endorse or promote
+##     products derived from this software without specific prior written
+##     permission.
+##
+## THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+## "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+## LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+## A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+## OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+## SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+## LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+## DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+## THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+## (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+## OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+## $QT_END_LICENSE$
+##
+#############################################################################
+
+
+from PyQt5.QtCore import QDateTime, Qt, QTimer
+from PyQt5.QtWidgets import (QApplication, QCheckBox, QComboBox, QDateTimeEdit,
+        QDial, QDialog, QGridLayout, QGroupBox, QHBoxLayout, QLabel, QLineEdit,
+        QProgressBar, QPushButton, QRadioButton, QScrollBar, QSizePolicy,
+        QSlider, QSpinBox, QStyleFactory, QTableWidget, QTabWidget, QTextEdit,
+        QVBoxLayout, QWidget,QFormLayout,QMainWindow,QCompleter)
 import sys
-from PyQt5.QtWidgets import (QMainWindow, QApplication, QWidget, QVBoxLayout)
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import(QWidget, QHBoxLayout, QGridLayout, QApplication, QLineEdit, QFormLayout, QStyleFactory,QLabel, QComboBox)
+import Itt_data
 
-class View_MainWindow(QWidget):
+import xlrd
 
-    def __init__(self,parent = None):
-        #global win
-        #win = QWidget()
-        super(View_MainWindow, self).__init__(parent)
+# Give the location of the file
+file_location = ("C:\\Users\\akshay\\Downloads\\projectexecl.xlsx")
 
-        global flo
-        self.originalPalette = QApplication.palette()
-        styleComboBox = QComboBox()
-        styleComboBox.addItems(QStyleFactory.keys())
+wb = xlrd.open_workbook(file_location)
+sheet = wb.sheet_by_index(0)
+row = 0
+col = 0
+result_list = []
+print(sheet.nrows)
+print(sheet.ncols)
 
-        styleLabel = QLabel("&Style:")
-        styleLabel.setBuddy(styleComboBox)
+class View_Report(QWidget):
+    def __init__(self, parent=None):
+        super(View_Report, self).__init__(parent)
+        #flags = Qt.WindowMinimizeButtonHint | Qt.WindowMaximizeButtonHint)
 
-        styleComboBox.activated[str].connect(self.changeStyle)
-
-        topLayout = QHBoxLayout()
-        topLayout.addWidget(styleLabel)
-        topLayout.addWidget(styleComboBox)
+        self.viewDropdown()
         self.View_Search()
-        #topLayout.addWidget(self.setLayout(flo))
 
         mainLayout = QGridLayout()
-        mainLayout.addLayout(topLayout, 0, 0, 1, 2)
+        s = QLineEdit()
+        s.setEchoMode(QLineEdit.Normal)
+        s.setGeometry(0,0,30,4)
+        s.resize(300,200)
+        s.move(0,0)
+
+        mainLayout.addLayout(self.topLayout, 0, 0, 1, 2)
+        mainLayout.addLayout(self.secLayout, 1, 0, 1, 1)
+        mainLayout.addLayout(self.thirdLayout, 2, 0)
+
+        mainLayout.setRowStretch(1, 2)
+        mainLayout.setRowStretch(2, 1)
+        mainLayout.setColumnStretch(0, 1)
+        mainLayout.setColumnStretch(1, 1)
 
         self.setLayout(mainLayout)
+        self.setGeometry(400,100,600,600)
 
-        #self.setWindowTitle("Styles")
-        self.setGeometry(300, 300, 450, 400)
-        self.setWindowTitle('View')
-        #self.show()
-        self.View_Search()
-        self.initUI()
+        self.setWindowTitle("CR View Report")
+        self.changeStyle('Open')
 
+    def viewDropdown(self):
+
+        self.names = ["Santhoshi","Pavani","Tulasi","Sumalatha","Suresh"]
+
+        statusComboBox = QComboBox(self)
+        statusComboBox.addItem('Open')
+        statusComboBox.addItem('Analysis')
+        statusComboBox.addItem('Inprogress')
+        statusComboBox.addItem('Reopen')
+        statusComboBox.addItem('Closed')
+        # styleComboBox.addItems(QStyleFactory.keys())
+
+        statusComboBox.activated[str].connect(self.readStatus)
+        statusComboBox.setGeometry(0, 0, 80, 20)
+        statusLabel = QLabel("&Status:")
+        statusLabel.setBuddy(statusComboBox)
+
+        domainComboBox = QComboBox(self)
+        domainComboBox.addItem('Audio')
+        domainComboBox.addItem('Video')
+        domainComboBox.addItem('Camera')
+
+        domainComboBox.activated[str].connect(self.readDomain)
+        domainComboBox.setGeometry(0,0,80,20)
+        domainLabel = QLabel("&Domain:")
+        domainLabel.setBuddy(domainComboBox)
+
+        global topLayout
+        global crsearchbox
+        global crsearchboxLabel
+
+        crsearchbox = QLineEdit()
+        crsearchbox.setEchoMode(QLineEdit.Normal)
+        crsearchbox.textChanged.connect(self.textchanged)
+        crsearchbox.editingFinished.connect(self.View_Enter)
+        crsearchboxLabel = QLabel("&CRNo.:")
+        crsearchboxLabel.setBuddy(crsearchbox)
+
+        self.nameCompleter()
+        assigneebox = QLineEdit()
+        assigneebox.setEchoMode(QLineEdit.Normal)
+        assigneebox.textChanged.connect(self.assignee_Entry)
+        assigneebox.setCompleter(self.completer)
+        assigneebox.editingFinished.connect(self.view_assignee)
+        assigneeboxLabel = QLabel("&Assignee:")
+        assigneeboxLabel.setBuddy(assigneebox)
+
+        self.topLayout = QHBoxLayout()
+        self.topLayout.alignment()
+        self.topLayout.addWidget(crsearchboxLabel)
+        self.topLayout.addWidget(crsearchbox)
+        self.topLayout.addWidget(statusLabel)
+        self.topLayout.addWidget(statusComboBox)
+        self.topLayout.addWidget(domainLabel)
+        self.topLayout.addWidget(domainComboBox)
+        #self.topLayout.SizeConstraint(0)
+
+        sibox = QLineEdit()
+        sibox.setEchoMode(QLineEdit.Normal)
+        sibox.textChanged.connect(self.si_entry)
+        sibox.editingFinished.connect(self.view_si)
+        siboxLabel = QLabel("&SoftwareImage:")
+        siboxLabel.setBuddy(sibox)
+
+        self.secLayout = QHBoxLayout()
+        self.secLayout.addWidget(siboxLabel)
+        self.secLayout.addWidget(sibox)
+        self.secLayout.addWidget(assigneeboxLabel)
+        self.secLayout.addWidget(assigneebox)
+
+        bibox = QLineEdit()
+        bibox.setEchoMode(QLineEdit.Normal)
+        bibox.textChanged.connect(self.bi_entry)
+        bibox.editingFinished.connect(self.view_bi)
+        biboxLabel = QLabel("&BuildImage:")
+        biboxLabel.setBuddy(bibox)
+
+        self.thirdLayout = QHBoxLayout()
+        self.thirdLayout.addWidget(biboxLabel)
+        self.thirdLayout.addWidget(bibox)
+
+        self.topLayout.addStretch()
+        self.secLayout.addStretch()
+        self.thirdLayout.addStretch()
+
+    def nameCompleter(self):
+        self.completer = QCompleter(self.names)
+        self.completer.setCaseSensitivity(Qt.CaseInsensitive)
+
+    def resultBar(self):
+        print("result bar")
 
     def changeStyle(self, styleName):
-        QApplication.setStyle(QStyleFactory.create(styleName))
-        #self.changePalette()
+        st = styleName
+        print(st)
+
+    def readDomain(self,text):
+        print("Domain selected is :"+text)
+
+    def readStatus(self,text):
+        print("Status selected is :"+text)
+
+    def readAssignee(self,text):
+        print("Assignee name :"+text)
 
     def View_Search(self):
-        global flo
-        flo = QFormLayout()
-        #global win
-        global e5
-        e5 = QLineEdit()
-        e5.setEchoMode(QLineEdit.Normal)
-        flo.addRow("CRNo.", e5)
-        e5.textChanged.connect(self.textchanged)
-        e5.editingFinished.connect(self.View_Enter)
-        #win.setLayout(flo)
-        #win.setWindowTitle("PyQt")
-        #win.show()
-        self.setLayout(flo)
-        self.setWindowTitle("PyQt")
-        self.show()
+        global crsearchbox
+        global crsearchboxLabel
+        crsearchbox = QLineEdit()
+        crsearchbox.setEchoMode(QLineEdit.Normal)
+        crsearchbox.textChanged.connect(self.textchanged)
+        crsearchbox.editingFinished.connect(self.View_Enter)
+        crsearchboxLabel = QLabel("&CRNo.:")
+        crsearchboxLabel.setBuddy(crsearchbox)
+        global secLayout
 
     def textchanged(self,text):
-        global inp
-        inp = text
-        #print("contents of text box: " + text)
+        self.inp = text
 
     def View_Enter(self):
-        global inp
-        cr = int(inp)
+        cr = int(self.inp)
+        print("before cr")
+        Itt_data.getCr(cr)
+        print("CR number is : ")
         print(cr)
 
-    def initUI(self):
-        super().__init__()
-        self.lbl = QLabel('Open', self)
+    def assignee_Entry(self,text):
+        self.assigneeName=text
 
-        combo = QComboBox(self)
-        combo.addItem('Open')
-        combo.addItem('Analysis')
-        combo.addItem('Inprogress')
-        combo.addItem('Reopen')
-        combo.addItem('Closed')
+    def view_assignee(self):
+        print("assignee entered :"+self.assigneeName)
 
-        combo.move(50, 50)
-        self.lbl.move(50, 150)
+    def si_entry(self,text):
+        self.siName=text
 
-        combo.activated[str].connect(self.onActivated)
+    def view_si(self):
+        print("si entered :"+self.siName)
 
-        self.setGeometry(300, 300, 450, 400)
-        self.setWindowTitle('QComboBox')
-        self.show()
+    def bi_entry(self,text):
+        self.biName=text
 
-    def onActivated(self, text):
-        self.lbl.setText(text)
-        self.lbl.adjustSize()
+    def view_bi(self):
+        print("assignee entered :"+self.biName)
 
+#if __name__ == '__main__':
+#    import sys
 
-"""
 app = QApplication(sys.argv)
-w = View_MainWindow()
-#w.show()
-sys.exit(app.exec_())
-"""
-"""
-class Example(QWidget):
-
-    def __init__(self):
-        super().__init__()
-
-        self.initUI()
-
-    def initUI(self):
-
-        self.lbl = QLabel('Ubuntu', self)
-
-        combo = QComboBox(self)
-        combo.addItem('Ubuntu')
-        combo.addItem('Mandriva')
-        combo.addItem('Fedora')
-        combo.addItem('Arch')
-        combo.addItem('Gentoo')
-
-        combo.move(50, 50)
-        self.lbl.move(50, 150)
-
-        combo.activated[str].connect(self.onActivated)
-
-        self.setGeometry(300, 300, 450, 400)
-        self.setWindowTitle('QComboBox')
-        self.show()
-
-    def onActivated(self, text):
-        self.lbl.setText(text)
-        self.lbl.adjustSize()
-"""
-
-def main():
-
-    app = QApplication(sys.argv)
-
-    w = View_MainWindow()
-   # exo = Example()
-    #w.resize(250, 150)
-    #w.move(300, 300)
-    #w.setWindowTitle('Simple')
-    #w.show()
-
-    sys.exit(app.exec_())
-
-
-if __name__ == '__main__':
-    main()
+gallery = View_Report()
+gallery.show()
+app.exec_()
+#sys.exit(app.exec_())
