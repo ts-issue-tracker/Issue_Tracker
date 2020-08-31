@@ -5,8 +5,11 @@ from PyQt5.QtWidgets import QApplication, QWidget, QFrame, QHBoxLayout, QPushBut
     QLineEdit
 from PyQt5.QtWidgets import *
 import sys
+from itt_register_ui import *
+import itt_credentials_file_access as file_access
+credentials_file="Credentials.csv"
 
-class Window(QWidget):
+class login_window(QWidget):
 
     def resizeEvent(self, event):
         self.centerOnScreen(self.frame)
@@ -33,9 +36,9 @@ class Window(QWidget):
         usr_lb = QLabel("Username")
         usr_lb.setContentsMargins(10,10,10,10)
         usr_lb.setFont(QFont('Arial', 10))
-        user_txt = QLineEdit()
-        user_txt.setContentsMargins(0, 10, 10, 10)
-        user_txt.setFont(QFont('Arial', 10))
+        self.user_txt = QLineEdit()
+        self.user_txt.setContentsMargins(0, 10, 10, 10)
+        self.user_txt.setFont(QFont('Arial', 10))
 
         pwd_lb = QLabel("Password")
         pwd_lb.setContentsMargins(10, 10, 10, 10)
@@ -67,7 +70,7 @@ class Window(QWidget):
 
 
         self.gridLayout.addWidget(usr_lb,0,0)
-        self.gridLayout.addWidget(user_txt, 0, 1)
+        self.gridLayout.addWidget(self.user_txt, 0, 1)
 
         self.gridLayout.addWidget(pwd_lb, 1, 0)
         self.gridLayout.addWidget(self.pwd_txt, 1, 1)
@@ -86,10 +89,19 @@ class Window(QWidget):
         #screenCenterY = screenGeom.center().y()
         frame.move((self.width()-self.frame.width()) / 2, (self.height()-self.frame.height()) / 2)
 
+    def open_register_window(self):
+        self.w = register_window()
+        self.w.show()
+        self.hide()
+
     def register_btn_click(self):
         print("Register Clicked")
+        self.open_register_window()
+
     def login_btn_click(self):
         print("Login Clicked")
+        file_access.reading_and_checking_credentials(credentials_file,self.user_txt.text(),self.pwd_txt.text())
+
 
     def chk_box_chnage_event(self,checked):
         if checked:
@@ -97,6 +109,7 @@ class Window(QWidget):
         else:
             self.pwd_txt.setEchoMode(QLineEdit.Password)
 
-App = QApplication(sys.argv)
-window = Window()
-sys.exit(App.exec())
+if __name__ == "__main__":
+    App = QApplication(sys.argv)
+    window = login_window()
+    sys.exit(App.exec())
