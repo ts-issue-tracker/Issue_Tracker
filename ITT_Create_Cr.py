@@ -1,159 +1,257 @@
+from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget,QFrame,QHBoxLayout,QGridLayout
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import QFont
+from PyQt5.QtCore import QDateTime,QRect
 import sys
-from PyQt5.QtWidgets import QMainWindow, QApplication ,QLineEdit, QMessageBox,QLabel,QComboBox,QPushButton
-import sys
-from PyQt5.QtCore import QDateTime
+
+from ITT_save_excel import save_in_excel
+from ITT_read_excel import read_new_no
+
+from ITT_view_screen import view_window
 
 
-class Create_cr(QMainWindow):
-     def __init__(self):
-          super().__init__()
-          self.title = "Create New Cr"
-          self.left = 200
-          self.right = 200
-          self.width = 500
-          self.height = 500
-          self.create_new_cr()
+class create_cr(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Issue tracker")
+        self.frame = QFrame(self)
+        self.frame.setFixedSize(500,1000)
+        self.frame.setFrameShape(QFrame.StyledPanel)
+        self.frame.setLineWidth(1)
 
-     def create_new_cr(self):
-          self.setWindowTitle(self.title)
-          self.setGeometry(self.left,self.right,self.width,self.height)
-          #label cr_no
-          self.label_crno = QLabel(self)
-          self.label_crno.setText("Cr no")
-          self.label_crno.move(100, 200)
-          #entry Cr_no
-          self.entry_crno = QLineEdit(self)
-          self.entry_crno.setText("try")
-          #self.cr_no = read_excel_file()
-          self.entry_crno.setReadOnly(True)
-          self.entry_crno.resize(200,25)
-          self.entry_crno.move(200,200)
-          # title
-          self.label_title = QLabel(self)
-          self.label_title.setText("Title")
-          self.label_title.move(100, 250)
-          # title entry
-          self.title_entry = QLineEdit(self)
-          self.title_entry.resize(200,25)
-          self.title_entry.move(200, 250)
-          # Assignee
-          self.label_assignee = QLabel(self)
-          self.label_assignee.setText("Assignee")
-          self.label_assignee.move(100, 300)
-          # Assignee entry
-          self.assignee_entry = QLineEdit(self)
-          self.assignee_entry.resize(200,25)
-          self.assignee_entry.move(200, 300)
-          # state
-          self.label_state = QLabel(self)
-          self.label_state.setText("Cr State")
-          self.label_state.move(100, 350)
-          # state entry
-          self.state_drop = QComboBox(self)
-          self.state_drop.addItem("Open")
-          self.state_drop.addItem("Closed")
-          self.state_drop.addItem("Inprogress")
-          self.state_drop.addItem("Reopened")
-          self.state_drop.move(200, 350)
-          # Si_state
-          self.label_si_state = QLabel(self)
-          self.label_si_state.setText("SI State")
-          self.label_si_state.resize(200,25)
-          self.label_si_state.move(100, 400)
-          # SI entry
-          self.si_state_drop = QComboBox(self)
-          self.si_state_drop.addItem("Open")
-          self.si_state_drop.addItem("Closed")
-          self.si_state_drop.addItem("Duplicate")
-          self.si_state_drop.addItem("Fix")
-          self.si_state_drop.addItem("Ready")
-          self.si_state_drop.addItem("Withdraw")
-          self.si_state_drop.resize(200,25)
-          self.si_state_drop.move(200, 400)
-          #Issue_tyepe
-          self.techarea = QLabel(self)
-          self.techarea.setText("Issue Type")
-          self.techarea.resize(200,25)
-          self.techarea.move(100,450)
-          #Issue_type entry
-          self.techarea = QComboBox(self)
-          self.techarea.addItem("Bug")
-          self.techarea.addItem("Internal")
-          self.techarea.addItem("Blacklisting")
-          self.techarea.resize(200,25)
-          self.techarea.move(200,450)
-          # Description
-          self.label_des = QLabel(self)
-          self.label_des.setText("Description")
-          self.label_des.setWordWrap(True)
-          self.label_des.move(100, 500)
-          # Description entry
-          self.Des_entry = QLineEdit(self)
-          self.Des_entry.resize(250, 150)
-          self.Des_entry.move(200, 500)
-          # Git/Gerrit
-          self.label_git = QLabel(self)
-          self.label_git.setText("Git/Gerrit")
-          self.label_git.move(100,700)
-          # Git/Gerrit
-          self.entry_git = QLineEdit(self)
-          self.entry_git.setReadOnly(True)
-          self.entry_git.resize(200, 25)
-          self.entry_git.move(200,700)
-          #Build_Id
-          self.build_id_label = QLabel(self)
-          self.build_id_label.setText("Build id")
-          self.build_id_label.move(100,750)
-          #Build_Id
-          self.entry_buildid = QLineEdit(self)
-          self.entry_buildid.resize(200,25)
-          self.entry_buildid.move(200,750)
-          #create on
-          self.create_on_label = QLabel(self)
-          self.create_on_label.setText("Create On")
-          self.create_on_label.move(100,800)
-          #entry create on
-          self.create_on_entry = QLineEdit(self)
-          self.datetime = QDateTime.currentDateTime()
-          self.create_on_entry.setText(self.datetime.toString('dd.MM.yyyy, hh:mm:ss'))
-          self.create_on_entry.setReadOnly(True)
-          self.create_on_entry.resize(200,25)
-          self.create_on_entry.move(200,800)
-          # last modified on
-          self.last_modi_label = QLabel(self)
-          self.last_modi_label.setText("Create On")
-          self.last_modi_label.move(100, 850)
-          # entry last modified on
-          self.last_modi_entry = QLineEdit(self)
-          self.datetime = QDateTime.currentDateTime()
-          self.last_modi_entry.setText(self.datetime.toString('dd.MM.yyyy, hh:mm:ss'))
-          self.last_modi_entry.setReadOnly(True)
-          self.last_modi_entry.resize(200, 25)
-          self.last_modi_entry.move(200, 850)
-          #upload button
-          self.Upload_button = QPushButton('Upload', self)
-          self.Upload_button.move(50, 900)
-          self.Upload_button.clicked.connect(self.upload_click)
-          #submit button
-          self.Upload_button = QPushButton('Submit', self)
-          self.Upload_button.move(200, 900)
-          self.Upload_button.clicked.connect(self.submit_click)
-          #Exit button
-          self.Upload_button = QPushButton('Exit', self)
-          self.Upload_button.move(350, 900)
-          self.Upload_button.clicked.connect(self.Exit_click)
+        self.gridLayout = QGridLayout(self.frame)
+        self.create_an_issue()
 
-          self.show()
-     def upload_click(self):
-          print("upload clicked")
+    def create_an_issue(self):
+        # label crno
+        self.crno_label = QLabel("Cr.no:")
+        self.crno_label.setFont(QFont('Arial', 10))
 
-     def submit_click(self):
-          print("submit ")
+        # entry crno
+        self.crno_entry = QLineEdit()
+        self.cr_no = read_new_no()
+        self.crno_entry.setText(self.cr_no)
+        self.crno_entry.setReadOnly(True)
+        self.crno_entry.setFont(QFont('Arial', 10))
 
-     def Exit_click(self):
-          print("Exit clicked")
+        #grid cr label
+        self.gridLayout.addWidget(self.crno_label,0,0)
+        #grid cr entry
+        self.gridLayout.addWidget(self.crno_entry, 0, 1)
 
-if __name__ == '__main__':
-     app = QApplication(sys.argv)
-     Create_cr_obj = Create_cr()
-     sys.exit(app.exec_())
+        # label assignee
+        self.assignee_label = QLabel("Assignee:")
+        self.assignee_label.setFont(QFont('Arial', 10))
+        # entry assignee
+        self.assignee_entry = QLineEdit()
+        self.assignee_entry.setFont(QFont('Arial', 10))
+
+        # grid label assignee
+        self.gridLayout.addWidget(self.assignee_label, 1, 0)
+        # grid entry assignee
+        self.gridLayout.addWidget(self.assignee_entry, 1, 1)
+
+        # label title
+        self.title_label = QLabel("Title:")
+        self.title_label.setFont(QFont('Arial', 10))
+        # entry title
+        self.title_entry = QLineEdit()
+        self.title_entry.setFont(QFont('Arial', 10))
+
+        #grid label title
+        self.gridLayout.addWidget(self.title_label,2,0)
+        #grid entry assignee
+        self.gridLayout.addWidget(self.title_entry,2,1)
+
+        # label cr state
+        self.cr_state_label = QLabel("Cr State:")
+        self.cr_state_label.setFont(QFont('Arial', 10))
+        # entry_cr_state
+        self.cr_state_entry = QComboBox(self)
+        self.cr_state_entry.setFont(QFont('Arial', 10))
+        self.cr_state_entry.addItem("Open")
+        self.cr_state_entry.addItem("Analysis")
+        self.cr_state_entry.addItem("Closed")
+        self.cr_state_entry.addItem("Inprogress")
+        self.cr_state_entry.addItem("Reopened")
+
+        #grid cr state label
+        self.gridLayout.addWidget(self.cr_state_label,3,0)
+        #grid cr state entry
+        self.gridLayout.addWidget(self.cr_state_entry,3,1)
+
+        # label Si state
+        self.si_state_label = QLabel("SI State:")
+        self.si_state_label.setFont(QFont('Arial', 10))
+        # entry_si_state
+        self.si_state_entry = QComboBox(self)
+        self.si_state_entry.setFont(QFont('Arial', 10))
+        self.si_state_entry.addItem("Open")
+        self.si_state_entry.addItem("Closed")
+        self.si_state_entry.addItem("Duplicate")
+        self.si_state_entry.addItem("Fix")
+        self.si_state_entry.addItem("Ready")
+        self.si_state_entry.addItem("Withdraw")
+
+        # grid si state label
+        self.gridLayout.addWidget(self.si_state_label, 4, 0)
+        # grid si state entry
+        self.gridLayout.addWidget(self.si_state_entry, 4, 1)
+
+        # label Issue type
+        self.issuetype_label = QLabel("Issue Type:")
+        self.issuetype_label.setFont(QFont('Arial', 10))
+        # entry Issue type
+        self.issuetype_entry = QComboBox(self)
+        self.issuetype_entry.setFont(QFont('Arial', 10))
+        self.issuetype_entry.addItem("Bug")
+        self.issuetype_entry.addItem("Internal")
+        self.issuetype_entry.addItem("Blacklisting")
+
+        # grid Issue type label
+        self.gridLayout.addWidget(self.issuetype_label, 5, 0)
+        # grid issue type entry
+        self.gridLayout.addWidget(self.issuetype_entry, 5, 1)
+
+        # label Description
+        self.des_label = QLabel("Description:")
+        self.des_label.setWordWrap(True)
+        self.des_label.setFont(QFont('Arial', 10))
+        # entry Description
+        self.des_entry = QLineEdit(self)
+        self.des_entry.setFont(QFont('Arial', 10))
+
+        # grid Description label
+        self.gridLayout.addWidget(self.des_label, 6, 0)
+        # grid Description entry
+        self.gridLayout.addWidget(self.des_entry, 6, 1)
+
+        # label SI
+        self.si_label = QLabel("SI:")
+        self.si_label.setFont(QFont('Arial', 10))
+        # entry SI
+        self.si_entry = QLineEdit(self)
+        self.si_entry.setFont(QFont('Arial', 10))
+
+        # grid si label
+        self.gridLayout.addWidget(self.si_label, 7, 0)
+        # grid si entry
+        self.gridLayout.addWidget(self.si_entry, 7, 1)
+
+        # domain
+        self.domain_label = QLabel("Domain:")
+        self.domain_label.setFont(QFont('Arial', 10))
+        # domain entry
+        self.domain_entry = QComboBox(self)
+        self.domain_entry.setFont(QFont('Arial', 10))
+        self.domain_entry.addItem("Audio")
+        self.domain_entry.addItem("Camera")
+        self.domain_entry.addItem("video")
+        self.domain_entry.addItem("WLAN")
+
+        # grid domain label
+        self.gridLayout.addWidget(self.domain_label, 8, 0)
+        # grid domain entry
+        self.gridLayout.addWidget(self.domain_entry, 8, 1)
+
+        # git/gerrit
+        self.git_label = QLabel("Git/Gerrit link:")
+        self.git_label.setFont(QFont('Arial', 10))
+        # git entry
+        self.git_entry = QLineEdit(self)
+        self.git_entry.setReadOnly(True)
+
+        # grid git label
+        self.gridLayout.addWidget(self.git_label, 9, 0)
+        # grid git entry
+        self.gridLayout.addWidget(self.git_entry, 9, 1)
+
+        # build id
+        self.build_label = QLabel("Build Id:")
+        self.build_label.setFont(QFont('Arial', 10))
+        # build entry
+        self.build_entry = QLineEdit(self)
+        self.build_entry.setFont(QFont('Arial', 10))
+
+        #grid git label
+        self.gridLayout.addWidget(self.build_label, 10, 0)
+        # grid git entry
+        self.gridLayout.addWidget(self.build_entry, 10, 1)
+
+        # Create on
+        self.createon_label = QLabel("Created on:")
+        self.createon_label.setFont(QFont('Arial', 10))
+        # create_On entry
+        self.createon_entry = QLineEdit(self)
+        self.datetime = QDateTime.currentDateTime()
+        self.createon_entry.setText(self.datetime.toString('dd.MM.yyyy, hh:mm:ss'))
+        self.createon_entry.setFont(QFont('Arial', 10))
+        self.createon_entry.setReadOnly(True)
+
+        # Create on
+        self.gridLayout.addWidget(self.createon_label, 11, 0)
+        # Create on entry
+        self.gridLayout.addWidget(self.createon_entry, 11, 1)
+
+        # last modified
+        self.lastmodi_label = QLabel("Last Modified: ")
+        self.lastmodi_label.setFont(QFont('Arial', 10))
+        # last modified entry
+        self.lastmodi_entry = QLineEdit(self)
+        self.datetime = QDateTime.currentDateTime()
+        self.lastmodi_entry.setText(self.datetime.toString('dd.MM.yyyy, hh:mm:ss'))
+        self.lastmodi_entry.setFont(QFont('Arial', 10))
+        self.lastmodi_entry.setReadOnly(True)
+
+        # last modified
+        self.gridLayout.addWidget(self.lastmodi_label, 12, 0)
+        # last modifies entry
+        self.gridLayout.addWidget(self.lastmodi_entry, 12, 1)
+
+        #submit button
+        self.submit=QPushButton()
+        self.submit.setText("Submit")
+        self.submit.clicked.connect(self.submit_click)
+
+        #grid button
+        self.gridLayout.addWidget(self.submit,13,0)
+        #view button
+        self.view_but = QPushButton()
+        self.view_but.setText("View")
+        self.view_but.clicked.connect(self.view_clicked)
+        self.show()
+        #grid view button
+        self.gridLayout.addWidget(self.view_but,13,1)
+
+    def submit_click(self):
+            print("clicked")
+            cr_no = self.crno_entry.text()
+            title = self.title_entry.text()
+            des = self.des_entry.text()
+            assignee = self.assignee_entry.text()
+            status = self.cr_state_entry.currentText()
+            si = self.si_entry.text()
+            domain = self.domain_entry.currentText()
+            issue_type = self.issuetype_entry.currentText()
+            git_id = self.git_entry.text()
+            build_id = self.build_entry.text()
+            create_on = self.createon_entry.text()
+            last_modi = self.lastmodi_entry.text()
+            combo_list = [cr_no, title, des, assignee, status, si, domain, issue_type, git_id, build_id, create_on,
+                          last_modi]
+            save_in_excel(combo_list)
+
+    def view_clicked(self):
+            print("view Clicked")
+            self.open_view_screen()
+
+    def open_view_screen(self):
+        print("open view screen")
+        self.w = view_window()
+        self.w.show()
+        self.hide()
+
+app =QApplication(sys.argv)
+obj = create_cr()
+sys.exit(app.exec_())
