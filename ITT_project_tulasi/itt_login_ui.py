@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import *
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import QFont
 import sys
+from PyQt5.QtCore import Qt
 from itt_register_ui import *
 import itt_credentials_file_access as file_access
 from validations import itt_validations
@@ -13,51 +14,49 @@ class login_window(QWidget):
         super().__init__()
         self.title = "Login"
         self.setWindowTitle(self.title)
+        self.setMinimumWidth(700)
+        self.setMinimumHeight(700)
         self.frame =QFrame(self)
-        self.frame.setFixedSize(250, 200)
-        self.frame.setFrameShape(QFrame.StyledPanel)
+        #self.frame.setAttribute(Qt.WA_TranslucentBackground)
+        self.frame.setFixedSize(280, 200)
+        #self.frame.setFrameShape(QFrame.StyledPanel)
 
         self.gridLayout = QGridLayout(self.frame)
-        self.gridLayout.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout.setContentsMargins(20,20,20,20)
 
         usr_lb = QLabel("Username")
-        usr_lb.setContentsMargins(10,10,10,10)
+        usr_lb.setContentsMargins(0,0,0,10)
         usr_lb.setFont(QFont('Arial', 10))
+
         self.user_txt = QLineEdit()
-        self.user_txt.setContentsMargins(0, 10, 10, 10)
+        self.user_txt.setContentsMargins(10, 0, 0, 10)
         self.user_txt.setFont(QFont('Arial', 10))
         self.user_txt.editingFinished.connect(self.user_name_validation)
 
         pwd_lb = QLabel("Password")
-        pwd_lb.setContentsMargins(10, 10, 10, 10)
+        pwd_lb.setContentsMargins(0, 10, 10, 10)
         pwd_lb.setFont(QFont('Arial', 10))
 
         self.pwd_txt = QLineEdit()
-        self.pwd_txt.setContentsMargins(0, 10, 10, 10)
+        self.pwd_txt.setContentsMargins(10, 10, 0, 10)
         self.pwd_txt.setFont(QFont('Arial', 10))
         self.pwd_txt.setEchoMode(QLineEdit.Password)
         self.pwd_txt.editingFinished.connect(self.password_validation)
 
         chk_box=QtWidgets.QCheckBox()
         chk_box.setText("Show Password")
-        chk_box.setContentsMargins(0, 0, 0, 0)
-        chk_box.stateChanged.connect(self.chk_box_chnage_event)
+        chk_box.setContentsMargins(0, 10, 0, 10)
+        chk_box.stateChanged.connect(self.chk_box_change_event)
 
         login_btn=QPushButton()
         login_btn.setText("Login")
-        login_btn.setFixedWidth(70)
-        #login_btn.setDisabled(True)
+        login_btn.setFont(QFont('Arial', 10))
         login_btn.clicked.connect(self.login_btn_click)
 
         register_btn = QtWidgets.QPushButton()
         register_btn.setText("Register")
-        register_btn.setFixedWidth(70)
-
-        register_btn.move(50,0)
-        #register_btn.setGeometry(200, 150, 100, 40)
-        #register_btn.setContentsMargins(20, 0, 0, 0)
+        register_btn.setFont(QFont('Arial', 10))
         register_btn.clicked.connect(self.register_btn_click)
-
 
         self.gridLayout.addWidget(usr_lb,0,0)
         self.gridLayout.addWidget(self.user_txt, 0, 1)
@@ -91,11 +90,9 @@ class login_window(QWidget):
         self.hide()
 
     def register_btn_click(self):
-        print("Register Clicked")
         self.open_register_window()
 
     def login_btn_click(self):
-        print("Login Clicked")
         if self.user_txt.text() != "" and self.pwd_txt.text() != '':
             is_success=file_access.reading_and_checking_credentials(credentials_file,
                                                  self.user_txt.text(),self.pwd_txt.text())
@@ -104,7 +101,7 @@ class login_window(QWidget):
         else:
             QMessageBox.about(self, 'Information', "Username/Password Empty can\'t proceed furthur")
 
-    def chk_box_chnage_event(self,checked):
+    def chk_box_change_event(self,checked):
         if checked:
             self.pwd_txt.setEchoMode(QLineEdit.Normal)
         else:
@@ -113,7 +110,9 @@ class login_window(QWidget):
     def user_name_validation(self):
         result = itt_validations.username_check(self.user_txt.text())
         if itt_validations.SUCCESS == result:
-            pass
+            is_duplicate = file_access.duplicates_checking(credentials_file, self.user_txt.text())
+            if not is_duplicate:
+                QMessageBox.about(self, 'Information', "Please Register First,and then Login")
         elif itt_validations.EXCEED_LIMIT_ERR == result:
             QMessageBox.about(self, 'Information', "Max 15 characters are allowed")
         elif itt_validations.INVALID_INPUT_ERR == result:

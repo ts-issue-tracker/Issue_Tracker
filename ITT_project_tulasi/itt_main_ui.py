@@ -1,6 +1,8 @@
+from PyQt5.QtWidgets import *
 from itt_register_ui import *
 from itt_view_ui import *
 from itt_create_an_issue_ui import *
+from PyQt5.QtGui import QFont
 credentials_file="Credentials.csv"
 
 class main_window(QWidget):
@@ -9,6 +11,8 @@ class main_window(QWidget):
         super().__init__()
         self.title = "Issue Tracker"
         self.setWindowTitle(self.title)
+        self.setMinimumWidth(700)
+        self.setMinimumHeight(700)
         self.frame =QFrame(self)
         self.frame.setFixedSize(300, 250)
         self.frame.setFrameShape(QFrame.StyledPanel)
@@ -18,29 +22,34 @@ class main_window(QWidget):
 
         create_btn=QPushButton()
         create_btn.setText("Create")
-        create_btn.setFixedWidth(70)
+        create_btn.setFixedWidth(100)
+        create_btn.setFont(QFont('Arial', 10))
         create_btn.clicked.connect(self.create_an_issue_btn_click)
 
         update_btn = QPushButton()
         update_btn.setText("Update")
-        update_btn.setFixedWidth(70)
+        update_btn.setFixedWidth(100)
         update_btn.move(50,0)
+        update_btn.setFont(QFont('Arial', 10))
         update_btn.clicked.connect(self.update_the_record_btn_click)
 
         view_btn = QPushButton()
         view_btn.setText("View")
-        view_btn.setFixedWidth(70)
+        view_btn.setFixedWidth(100)
+        view_btn.setFont(QFont('Arial', 10))
         view_btn.clicked.connect(self.view_the_record_btn_click)
 
         display_btn = QPushButton()
         display_btn.setText("Display")
-        display_btn.setFixedWidth(70)
+        display_btn.setFixedWidth(100)
+        display_btn.setFont(QFont('Arial', 10))
         display_btn.move(50, 0)
         display_btn.clicked.connect(self.display_the_record_btn_click)
 
         exit_btn = QPushButton()
         exit_btn.setText("Exit")
-        exit_btn.setFixedWidth(70)
+        exit_btn.setFixedWidth(100)
+        exit_btn.setFont(QFont('Arial', 10))
         exit_btn.move(50, 0)
         exit_btn.clicked.connect(self.on_exit_btn_click)
 
