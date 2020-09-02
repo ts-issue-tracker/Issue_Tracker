@@ -6,7 +6,7 @@ SUCCESS=0
 def username_check(s2):
     pattern = re.compile(r'^([a-z]+)([a-z]+)*([a-z]+)*$',
     re.IGNORECASE)
-    if re.match(pattern,s2):
+    if re.match(pattern,s2) or len(s2)==0:
         if len(s2)>15:
             return EXCEED_LIMIT_ERR
         return SUCCESS
@@ -16,9 +16,16 @@ def username_check(s2):
 def password_check(s2):
     pattern = re.compile(r'^([a-z0-9]+)([a-z0-9]+)*([a-z0-9]+)*$',
     re.IGNORECASE)
-    if re.match(pattern, s2):
+    if re.match(pattern, s2) or len(s2)==0:
         if len(s2) > 15:
             return EXCEED_LIMIT_ERR
+        return SUCCESS
+    else:
+        return INVALID_INPUT_ERR
+
+def email_id_check(s):
+    pattern = re.compile(r"(^[a-z+-]+\.*[a-z-]+@thundersoft.com$)")
+    if re.match(pattern,s) or len(s)==0:
         return SUCCESS
     else:
         return INVALID_INPUT_ERR
