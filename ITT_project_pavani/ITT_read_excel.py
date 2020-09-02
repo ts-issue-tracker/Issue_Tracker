@@ -2,7 +2,7 @@ import csv
 
 def read_new_no():
     print("reading excel")
-    with open('C:\\Users\\lenovo\\PycharmProjects\\pythonProject3\\cr_list_entry.csv') as j:
+    with open('cr_list_entry.csv') as j:
         reader1 = csv.reader(j, delimiter=",")
         data1 = list(reader1)
         row_count1 = len(data1)
@@ -11,7 +11,7 @@ def read_new_no():
 
 def read_last_cr():
     print("last cr")
-    with open('C:\\Users\\lenovo\\PycharmProjects\\pythonProject3\\cr_list_entry.csv') as j:
+    with open('cr_list_entry.csv') as j:
         reader2 = csv.reader(j, delimiter=",")
         data2 = list(reader2)
         current_row = len(data2)
@@ -20,7 +20,7 @@ def read_last_cr():
 
 def read_last_title():
     print("last title")
-    with open('C:\\Users\\lenovo\\PycharmProjects\\pythonProject3\\cr_list_entry.csv') as j:
+    with open('cr_list_entry.csv') as j:
         reader3 = csv.reader(j, delimiter=",")
         data3 = list(reader3)
         current_row = len(data3)
@@ -30,7 +30,7 @@ def read_last_title():
 
 def read_last_assignee():
     print("last title")
-    with open('C:\\Users\\lenovo\\PycharmProjects\\pythonProject3\\cr_list_entry.csv') as j:
+    with open('cr_list_entry.csv') as j:
         reader4 = csv.reader(j, delimiter=",")
         data4 = list(reader4)
         current_row = len(data4)
@@ -38,7 +38,7 @@ def read_last_assignee():
         return str(current_assignee)
 
 def read_last_crstate():
-    with open('C:\\Users\\lenovo\\PycharmProjects\\pythonProject3\\cr_list_entry.csv') as j:
+    with open('cr_list_entry.csv') as j:
         reader5 = csv.reader(j, delimiter=",")
         data5 = list(reader5)
         current_row = len(data5)
@@ -46,7 +46,7 @@ def read_last_crstate():
         return str(current_crstate)
 
 def read_last_des():
-    with open('C:\\Users\\lenovo\\PycharmProjects\\pythonProject3\\cr_list_entry.csv') as j:
+    with open('cr_list_entry.csv') as j:
         reader5 = csv.reader(j, delimiter=",")
         data5 = list(reader5)
         current_row = len(data5)
@@ -54,7 +54,7 @@ def read_last_des():
         return str(current_des)
 
 def read_last_issuetype():
-    with open('C:\\Users\\lenovo\\PycharmProjects\\pythonProject3\\cr_list_entry.csv') as j:
+    with open('cr_list_entry.csv') as j:
         reader5 = csv.reader(j, delimiter=",")
         data5 = list(reader5)
         current_row = len(data5)
@@ -62,7 +62,7 @@ def read_last_issuetype():
         return str(current_issue)
 
 def read_last_si_label():
-    with open('C:\\Users\\lenovo\\PycharmProjects\\pythonProject3\\cr_list_entry.csv') as j:
+    with open('cr_list_entry.csv') as j:
         reader5 = csv.reader(j, delimiter=",")
         data5 = list(reader5)
         current_row = len(data5)
@@ -70,7 +70,7 @@ def read_last_si_label():
         return str(current_si_label)
 
 def read_last_domain():
-    with open('C:\\Users\\lenovo\\PycharmProjects\\pythonProject3\\cr_list_entry.csv') as j:
+    with open('cr_list_entry.csv') as j:
         reader5 = csv.reader(j, delimiter=",")
         data5 = list(reader5)
         current_row = len(data5)
@@ -78,7 +78,7 @@ def read_last_domain():
         return str(current_domain)
 
 def read_git_id():
-    with open('C:\\Users\\lenovo\\PycharmProjects\\pythonProject3\\cr_list_entry.csv') as j:
+    with open('cr_list_entry.csv') as j:
         reader5 = csv.reader(j, delimiter=",")
         data5 = list(reader5)
         current_row = len(data5)
@@ -86,7 +86,7 @@ def read_git_id():
         return str(current_git)
 
 def read_build():
-    with open('C:\\Users\\lenovo\\PycharmProjects\\pythonProject3\\cr_list_entry.csv') as j:
+    with open('cr_list_entry.csv') as j:
         reader5 = csv.reader(j, delimiter=",")
         data5 = list(reader5)
         current_row = len(data5)
@@ -94,7 +94,7 @@ def read_build():
         return str(current_build)
 
 def read_create_time():
-    with open('C:\\Users\\lenovo\\PycharmProjects\\pythonProject3\\cr_list_entry.csv') as j:
+    with open('cr_list_entry.csv') as j:
         reader5 = csv.reader(j, delimiter=",")
         data5 = list(reader5)
         current_row = len(data5)
@@ -102,17 +102,9 @@ def read_create_time():
         return str(current_createon)
 
 def read_lastmodi_time():
-    with open('C:\\Users\\lenovo\\PycharmProjects\\pythonProject3\\cr_list_entry.csv') as j:
+    with open('cr_list_entry.csv') as j:
         reader5 = csv.reader(j, delimiter=",")
         data5 = list(reader5)
         current_row = len(data5)
         current_laston= data5[current_row - 1][11]
         return str(current_laston)
-
-
-
-
-
-
-
-

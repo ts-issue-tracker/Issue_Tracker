@@ -31,6 +31,10 @@ class Create_cr(QWidget):
         self.cr_no = read_new_no()
         self.crno_entry.setText(self.cr_no)
         self.crno_entry.setReadOnly(True)
+        self.crno_entry.setStyleSheet("QLineEdit"
+                                     "{"
+                                     "background-color: #DBDBDB;"
+                                     "}")
         self.crno_entry.setFont(QFont('Arial', 10))
 
         #grid cr label
@@ -69,10 +73,6 @@ class Create_cr(QWidget):
         self.cr_state_entry = QComboBox(self)
         self.cr_state_entry.setFont(QFont('Arial', 10))
         self.cr_state_entry.addItem("Open")
-        self.cr_state_entry.addItem("Analysis")
-        self.cr_state_entry.addItem("Closed")
-        self.cr_state_entry.addItem("Inprogress")
-        self.cr_state_entry.addItem("Reopened")
 
         #grid cr state label
         self.gridLayout.addWidget(self.cr_state_label,3,0)
@@ -80,22 +80,30 @@ class Create_cr(QWidget):
         self.gridLayout.addWidget(self.cr_state_entry,3,1)
 
         # label Si state
-        self.si_state_label = QLabel("SI State:")
-        self.si_state_label.setFont(QFont('Arial', 10))
+        #self.si_state_label = QLabel("SI State:")
+        #self.si_state_label.setFont(QFont('Arial', 10))
         # entry_si_state
-        self.si_state_entry = QComboBox(self)
-        self.si_state_entry.setFont(QFont('Arial', 10))
-        self.si_state_entry.addItem("Open")
-        self.si_state_entry.addItem("Closed")
-        self.si_state_entry.addItem("Duplicate")
-        self.si_state_entry.addItem("Fix")
-        self.si_state_entry.addItem("Ready")
-        self.si_state_entry.addItem("Withdraw")
+        #self.si_state_entry = QComboBox(self)
+        #self.si_state_entry.setFont(QFont('Arial', 10))
+        #self.si_state_entry.addItem("Open")
 
         # grid si state label
-        self.gridLayout.addWidget(self.si_state_label, 4, 0)
+        #self.gridLayout.addWidget(self.si_state_label, 4, 0)
         # grid si state entry
-        self.gridLayout.addWidget(self.si_state_entry, 4, 1)
+        #self.gridLayout.addWidget(self.si_state_entry, 4, 1)
+
+        # label Si state
+        self.si_label = QLabel("SI:")
+        self.si_label.setFont(QFont('Arial', 10))
+        # entry_si_state
+        self.si_entry = QLineEdit(self)
+        self.si_entry.setFont(QFont('Arial', 10))
+        self.si_entry.setText("LE.BR.1.2.1")
+
+        # grid si state label
+        self.gridLayout.addWidget(self.si_label, 4, 0)
+        # grid si state entry
+        self.gridLayout.addWidget(self.si_entry, 4, 1)
 
         # label Issue type
         self.issuetype_label = QLabel("Issue Type:")
@@ -103,6 +111,10 @@ class Create_cr(QWidget):
         # entry Issue type
         self.issuetype_entry = QComboBox(self)
         self.issuetype_entry.setFont(QFont('Arial', 10))
+        self.issuetype_entry.setStyleSheet("QComboBox"
+                                     "{"
+                                      "background-color: white;"
+                                     "}")
         self.issuetype_entry.addItem("Bug")
         self.issuetype_entry.addItem("Internal")
         self.issuetype_entry.addItem("Blacklisting")
@@ -111,31 +123,28 @@ class Create_cr(QWidget):
         self.gridLayout.addWidget(self.issuetype_label, 5, 0)
         # grid issue type entry
         self.gridLayout.addWidget(self.issuetype_entry, 5, 1)
+        #issue reason entry
+        self.issue_reason_entry = QLineEdit(self)
+        self.issue_reason_entry.setFont(QFont('Arial', 10))
+        self.issue_reason_entry.setReadOnly(True)
+        self.issue_reason_entry.setStyleSheet("QLineEdit"
+                                          "{"
+                                          "background-color: #DBDBDB;"
+                                          "}")
+        #grid issue reason
+        self.gridLayout.addWidget(self.issue_reason_entry,6,1)
 
         # label Description
         self.des_label = QLabel("Description:")
-        self.des_label.setWordWrap(True)
         self.des_label.setFont(QFont('Arial', 10))
         # entry Description
         self.des_entry = QLineEdit(self)
         self.des_entry.setFont(QFont('Arial', 10))
 
         # grid Description label
-        self.gridLayout.addWidget(self.des_label, 6, 0)
+        self.gridLayout.addWidget(self.des_label, 7 , 0)
         # grid Description entry
-        self.gridLayout.addWidget(self.des_entry, 6, 1)
-
-        # label SI
-        self.si_label = QLabel("SI:")
-        self.si_label.setFont(QFont('Arial', 10))
-        # entry SI
-        self.si_entry = QLineEdit(self)
-        self.si_entry.setFont(QFont('Arial', 10))
-
-        # grid si label
-        self.gridLayout.addWidget(self.si_label, 7, 0)
-        # grid si entry
-        self.gridLayout.addWidget(self.si_entry, 7, 1)
+        self.gridLayout.addWidget(self.des_entry, 7, 1)
 
         # domain
         self.domain_label = QLabel("Domain:")
@@ -143,6 +152,11 @@ class Create_cr(QWidget):
         # domain entry
         self.domain_entry = QComboBox(self)
         self.domain_entry.setFont(QFont('Arial', 10))
+        self.domain_entry.setStyleSheet("QComboBox"
+                                     "{"
+                                      "background-color: white;"
+                                     "}")
+
         self.domain_entry.addItem("Audio")
         self.domain_entry.addItem("Camera")
         self.domain_entry.addItem("video")
@@ -159,6 +173,10 @@ class Create_cr(QWidget):
         # git entry
         self.git_entry = QLineEdit(self)
         self.git_entry.setReadOnly(True)
+        self.git_entry.setStyleSheet("QLineEdit"
+                                     "{"
+                                     "background-color: #DBDBDB	;"
+                                     "}")
 
         # grid git label
         self.gridLayout.addWidget(self.git_label, 9, 0)
@@ -186,7 +204,10 @@ class Create_cr(QWidget):
         self.createon_entry.setText(self.datetime.toString('dd.MM.yyyy, hh:mm:ss'))
         self.createon_entry.setFont(QFont('Arial', 10))
         self.createon_entry.setReadOnly(True)
-
+        self.createon_entry.setStyleSheet("QLineEdit"
+                                     "{"
+                                     "background-color: #DBDBDB	;"
+                                     "}")
         # Create on
         self.gridLayout.addWidget(self.createon_label, 11, 0)
         # Create on entry
@@ -201,6 +222,10 @@ class Create_cr(QWidget):
         self.lastmodi_entry.setText(self.datetime.toString('dd.MM.yyyy, hh:mm:ss'))
         self.lastmodi_entry.setFont(QFont('Arial', 10))
         self.lastmodi_entry.setReadOnly(True)
+        self.lastmodi_entry.setStyleSheet("QLineEdit"
+                                          "{"
+                                          "background-color: #DBDBDB;"
+                                          "}")
 
         # last modified
         self.gridLayout.addWidget(self.lastmodi_label, 12, 0)
@@ -246,17 +271,20 @@ class Create_cr(QWidget):
             title = self.title_entry.text()
             des = self.des_entry.text()
             assignee = self.assignee_entry.text()
-            status = self.cr_state_entry.currentText()
             si = self.si_entry.text()
+            status = self.cr_state_entry.currentText()
             domain = self.domain_entry.currentText()
             issue_type = self.issuetype_entry.currentText()
             git_id = self.git_entry.text()
             build_id = self.build_entry.text()
             create_on = self.createon_entry.text()
             last_modi = self.lastmodi_entry.text()
-            combo_list = [cr_no, title, des, assignee, status, si, domain, issue_type, git_id, build_id, create_on,
-                          last_modi]
-            save_in_excel(combo_list)
+            print("data collected")
+            combo_dict = {'CR':cr_no, 'Title':title, 'Description':des,'Asignee':assignee,'State':status,'Software Image':si,
+                         'Domain':domain,'Issue Type':issue_type,'GIT/Gerrit link':git_id,
+                       'Build ID':build_id,'Create On':create_on,'Last Modified On':last_modi,'History':" "}
+            save_in_excel(combo_dict)
+            print("save")
             self.open_view_screen()
 
     def open_view_screen(self):
@@ -270,4 +298,3 @@ if __name__ == "__main__":
     app =QApplication(sys.argv)
     obj = Create_cr()
     sys.exit(app.exec_())
-
