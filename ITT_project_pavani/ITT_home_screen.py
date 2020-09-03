@@ -61,7 +61,10 @@ class Main_window(QWidget):
         self.hide()
 
     def modify_click(self):
-        pass
+        from ITT_Cr_num import Enter_cr
+        self.w = Enter_cr()
+        self.w.show()
+        self.hide()
 
     def view_record_clicked(self):
         pass
