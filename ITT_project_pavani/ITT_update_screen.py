@@ -4,6 +4,7 @@ from PyQt5.QtCore import QDateTime
 import sys
 
 from ITT_Cr_num import *
+from ITT_validate import *
 
 class Update(QWidget):
     def __init__(self,cr):
@@ -297,7 +298,30 @@ class Update(QWidget):
             self.hide()
 
     def submit_click(self):
-            print("clicked")
+        print("clicked")
+        cr_no = self.crno_entry.text()
+        title = self.title_entry.text()
+        des = self.des_entry.text()
+        assignee = self.assignee_entry.text()
+        si = self.si_entry.text()
+        status = self.cr_state_entry.currentText()
+        domain = self.domain_entry.currentText()
+        issue_type = self.issuetype_entry.currentText()
+        git_id = self.git_entry.text()
+        build_id = self.build_entry.text()
+        create_on = self.createon_entry.text()
+        last_modi = self.lastmodi_entry.text()
+        print("data collected")
+        combo_dict = {'CR': cr_no, 'Title': title, 'Description': des, 'Asignee': assignee, 'State': status,
+                      'Software Image': si,
+                      'Domain': domain, 'Issue Type': issue_type, 'GIT/Gerrit link': git_id,
+                      'Build ID': build_id, 'Create On': create_on, 'Last Modified On': last_modi, 'History': " "}
+        title_ret = title_validate(title)
+        # assignee_ret = assignee_validate(assignee)
+        des_ret = des_validate(des)
+        cr_ret = cr_state_validate(status)
+        domain_ret = domain_validate(domain)
+        build_ret = build_validation(build_id)
 
 if __name__ == "__main__":
     app =QApplication(sys.argv)
