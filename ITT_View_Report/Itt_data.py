@@ -23,12 +23,14 @@ def namelist():
     index = filters["Assignee"]
     for i in range(sheet.nrows):
         names.append(sheet.cell_value(i,index))
+        names = list(dict.fromkeys(names))
 
 def bilist():
     index = filters["Build ID"]
     for i in range(sheet.nrows):
         bientries.append(sheet.cell_value(i,index))
-
+        bientries = list(dict.fromkeys(bientries))
+        
 def getCr(cr):
     print("before int conv")
     typein = int(cr)
