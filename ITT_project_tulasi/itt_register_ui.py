@@ -7,12 +7,18 @@ from PyQt5.QtGui import QFont
 from validations import itt_validations
 from itt_mail_sending import *
 credentials_file="Credentials.csv"
+from itt_utils import *
 
 class register_window(QWidget):
     def __init__(self):
         super().__init__()
         self.values = {'Username': False, 'Password': False, 'Confirm Password': False,'Email ID': False}
         self.title = "Register"
+        self.user_var = 2
+        self.pwd_var = 2
+        self.confirm_pwd_var=2
+        self.email_id_var=2
+        self.list = [self.user_var, self.pwd_var, self.confirm_pwd_var,self.email_id_var]
 
         self.setWindowTitle(self.title)
         self.setMinimumWidth(700)
@@ -95,35 +101,35 @@ class register_window(QWidget):
         self.gridLayout.addWidget(submit_btn, 5, 0)
         self.gridLayout.addWidget(continue_btn, 5, 1)
 
+        self.util = utils()
+
         self.show()
 
     def user_name_validation(self):
-        result = itt_validations.username_check(self.user_txt.text())
-        if itt_validations.SUCCESS == result:
-            self.values["Username"]=True
-        elif itt_validations.EXCEED_LIMIT_ERR == result:
-            QMessageBox.about(self, 'Information', "Max 15 characters are allowed")
-        elif itt_validations.INVALID_INPUT_ERR == result:
-            QMessageBox.about(self, 'Error', "Invalid Username,Only alphabets are allowed")
+        msg_to_display = ""
+        msg_to_display += self.util.user_name_validtion_register \
+            (self.list, credentials_file, self.user_txt.text())
+        if len(msg_to_display) != 0:
+            QMessageBox.about(self, 'Information', msg_to_display)
 
     def password_valid(self,text,number):
+        msg_to_display = ""
         if number==1:
-            result = itt_validations.password_check(self.pwd_txt.text())
+            msg_to_display += self.util.password_validation \
+                (self.list, self.pwd_txt.text())
         else:
-            result = itt_validations.password_check(self.confirm_pwd_txt.text())
-        if itt_validations.SUCCESS == result:
-            self.values[text] = True
-        elif itt_validations.EXCEED_LIMIT_ERR == result:
-            QMessageBox.about(self, 'Information', "Max 15 characters are allowed")
-        elif itt_validations.INVALID_INPUT_ERR == result:
-            QMessageBox.about(self, 'Error', "Invalid {},Only alphanumerics are allowed".format(text))
+            msg_to_display += self.util.confirm_password_validation \
+                (self.list,self.confirm_pwd_txt.text())
+        if len(msg_to_display) != 0:
+            QMessageBox.about(self, 'Information', msg_to_display)
 
     def email_validation(self):
-        result = itt_validations.email_id_check(self.email_txt.text())
-        if result == itt_validations.SUCCESS:
-            self.values["Email ID"] = True
-        else:
-            QMessageBox.about(self, 'Error', "Invalid Email ID")
+        msg_to_display = ""
+        msg_to_display += self.util.email_validation \
+            (self.list, self.email_txt.text())
+        if len(msg_to_display) != 0:
+            QMessageBox.about(self, 'Information', msg_to_display)
+
 
     def resizeEvent(self, event):
         self.centerOnScreen(self.frame)
@@ -135,20 +141,31 @@ class register_window(QWidget):
         self.open_login_window()
 
     def submit_btn_click(self):
-        print("Submit clicked")
-        print(self.user_txt.text())
-        print(self.pwd_txt.text())
-        print(self.confirm_pwd_txt.text())
-        if self.user_txt.text()!="":
-            is_duplicate=file_access.duplicates_checking(credentials_file, self.user_txt.text())
-            if is_duplicate:
-                QMessageBox.about(self,'Information', "Username already available,please enter other Username")
-            else:
-                if self.user_txt.text()!="" and self.pwd_txt.text()!='':
-                    file_access.writing_username_and_pwd(credentials_file,self.user_txt.text(),self.pwd_txt.text())
-                    #sending_registration_mail_to(self.email_txt.text())
-                else:
-                    QMessageBox.about(self, 'Information', "Username/Password Empty can\'t proceed furthur")
+        msg_to_display=""
+        username=self.user_txt.text()
+        lb_list = ["Usename", "Password","Confirm Password","Email ID"]
+        msg_to_display += self.util.empty_fields_message(self.list, lb_list)
+        invalid_msg_to_display = ""
+        invalid_msg_to_display += self.util.invalid_fields_message(self.list, lb_list, username)
+        if len(msg_to_display) == 0 and len(invalid_msg_to_display) == 0:
+            if self.list[0] != value_chk.empty.value and self.list[1] != value_chk.empty.value \
+                    and self.list[2] != value_chk.empty.value and self.list[3] !=value_chk.empty.value:
+                if self.user_txt.text() != "":
+                    is_duplicate = file_access.duplicates_checking(credentials_file, self.user_txt.text())
+                    if is_duplicate:
+                        QMessageBox.about(self, 'Information', "Username already available,please enter other Username")
+                    else:
+                        if self.user_txt.text() != "" and self.pwd_txt.text() != '' and self.email_txt.text() != '':
+                            file_access.writing_username_and_pwd(credentials_file, self.user_txt.text(),
+                                                                 self.pwd_txt.text())
+                            #sending_registration_mail_to(self.email_txt.text())
+                            QMessageBox.about(self, 'Information', "You are successfully register,Please click on Continue to Login")
+                        else:
+                            QMessageBox.about(self, 'Information', "Username/Password Empty can\'t proceed furthur")
+        else:
+            if len(invalid_msg_to_display) != 0:
+                msg_to_display += " " + invalid_msg_to_display
+            QMessageBox.about(self, 'Information', msg_to_display)
 
     def chk_box_change_event(self,checked):
         if checked:
