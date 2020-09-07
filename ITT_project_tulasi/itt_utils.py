@@ -32,13 +32,18 @@ class utils:
             if list[i] == value_chk.invalid.value or list[i]==value_chk.incorrect.value:
                 count += 1
                 final_msg += lb_list[i]
-                if i==0 and list[i]==3:
+                if i==0 and list[i]==value_chk.incorrect.value:
                     final_msg=""
                     if not len(list)>2:
                         final_msg+="{} Didn\"t Registered yet,please register".format(username)
                         return final_msg
                     if  len(list)>2:
                         final_msg+="{} Username already available,please use any other".format(username)
+                        return final_msg
+                else:
+                    if i==2 and list[i]==value_chk.incorrect.value:
+                        final_msg = ""
+                        final_msg+=" Password & Confirm Password didnt matched\n"
                         return final_msg
                 final_msg += ","
         if len(final_msg) != 0:
@@ -103,14 +108,18 @@ class utils:
             msg_to_return += "Invalid Password,Only alphanumerics are allowed\n"
             list[1] = value_chk.invalid.value
         return msg_to_return
-    def confirm_password_validation(self, list, confirm_password):
+    def confirm_password_validation(self, list,password, confirm_password):
         msg_to_return = ""
         result = valid.password_check(confirm_password)
         if valid.SUCCESS == result:
             if confirm_password == "":
                 list[2] = value_chk.empty.value
             else:
-                list[2] = value_chk.valid.value
+                if list[1]==value_chk.valid.value and password==confirm_password:
+                    list[2] = value_chk.valid.value
+                else:
+                    list[2]=value_chk.incorrect.value
+                    msg_to_return+="Password & Confirm Password are didn\'t matched"
         elif valid.EXCEED_LIMIT_ERR == result:
             msg_to_return += "Max 15 characters are allowed\n"
             list[2] = value_chk.invalid.value

@@ -119,7 +119,7 @@ class register_window(QWidget):
                 (self.list, self.pwd_txt.text())
         else:
             msg_to_display += self.util.confirm_password_validation \
-                (self.list,self.confirm_pwd_txt.text())
+                (self.list,self.pwd_txt.text(),self.confirm_pwd_txt.text())
         if len(msg_to_display) != 0:
             QMessageBox.about(self, 'Information', msg_to_display)
 
