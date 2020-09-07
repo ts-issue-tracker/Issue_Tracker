@@ -264,7 +264,13 @@ class Update(QWidget):
         self.show()
 
     def onchangeissue(self):
-        pass
+        state = self.issuetype_entry.currentText()
+        if(state == "Bug" or state == "Internal"):
+            self.issue_reason_entry.setReadOnly(False)
+            self.issue_reason_entry.setStyleSheet("QLineEdit"
+                                                  "{"
+                                                  "background-color: white;"
+                                                  "}")
 
     def onChanged(self):
         state = self.si_state.currentText()

@@ -1,4 +1,5 @@
 from csv import DictWriter
+import csv
 
 def append_dict_as_row(file,combo_dict,names):
     print(combo_dict)
@@ -15,7 +16,3 @@ def save_in_excel(combo_dict):
         #file = open('C:\\Users\\lenovo\\PycharmProjects\\pythonProject3\\cr_list_entry.csv','a+',newline='')
         file = 'cr_list_entry.csv'
         append_dict_as_row(file, combo_dict, field_names)
-
-
-
-

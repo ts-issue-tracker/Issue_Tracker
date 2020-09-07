@@ -284,15 +284,9 @@ class Create_cr(QWidget):
             combo_dict = {'CR':cr_no, 'Title':title, 'Description':des,'Asignee':assignee,'State':status,'Software Image':si,
                          'Domain':domain,'Issue Type':issue_type,'GIT/Gerrit link':git_id,
                        'Build ID':build_id,'Create On':create_on,'Last Modified On':last_modi,'History':" "}
+
             title_ret = title_validate(title)
-            #assignee_ret = assignee_validate(assignee)
-            des_ret = des_validate(des)
-            cr_ret = cr_state_validate(status)
-            domain_ret = domain_validate(domain)
-            build_ret = build_validation(build_id)
-            if(title_ret == False ):
-                return 0
-            else:
+            if(title_ret == True):
                 save_in_excel(combo_dict)
                 print("save")
                 self.open_view_screen()
