@@ -1,9 +1,9 @@
 Newly added Changes in this code are:
-1.Filtering functionality
-2.Some validations to not take blank inputs and incorrect length inputs for text entries
-3.Validation file
-4.Display list file to display final filtered CRs
-5.Button for seraching with entered filters
+1.Removing hardcoding for accessing column data
+2.New window to show filtered results
+3.Added functionality to select a filtered cr 
+4.New window to show selected CR from filtered list
+
 
 
 

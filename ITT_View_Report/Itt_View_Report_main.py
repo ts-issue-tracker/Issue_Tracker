@@ -1,59 +1,24 @@
-#!/usr/bin/env python
-
-
-#############################################################################
-##
-## Copyright (C) 2013 Riverbank Computing Limited.
-## Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
-## All rights reserved.
-##
-## This file is part of the examples of PyQt.
-##
-## $QT_BEGIN_LICENSE:BSD$
-## You may use this file under the terms of the BSD license as follows:
-##
-## "Redistribution and use in source and binary forms, with or without
-## modification, are permitted provided that the following conditions are
-## met:
-##   * Redistributions of source code must retain the above copyright
-##     notice, this list of conditions and the following disclaimer.
-##   * Redistributions in binary form must reproduce the above copyright
-##     notice, this list of conditions and the following disclaimer in
-##     the documentation and/or other materials provided with the
-##     distribution.
-##   * Neither the name of Nokia Corporation and its Subsidiary(-ies) nor
-##     the names of its contributors may be used to endorse or promote
-##     products derived from this software without specific prior written
-##     permission.
-##
-## THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-## "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-## LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-## A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-## OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-## SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-## LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-## DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-## THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-## (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-## OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
-## $QT_END_LICENSE$
-##
-#############################################################################
-
-
 from PyQt5.QtCore import QDateTime, Qt, QTimer
 from PyQt5.QtWidgets import *
 import sys
+import Itt_data
 from Itt_data import *
 from View_Report_Validation import *
 from Itt_Display_list import *
+
+class Window2(QMainWindow):                           # <===
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Window22222")
+
+#    def showresult
+
 
 class View_Report(QWidget):
     def __init__(self, parent=None):
         super(View_Report, self).__init__(parent)
         #flags = Qt.WindowMinimizeButtonHint | Qt.WindowMaximizeButtonHint)
-
+        
         self.viewWidgets()
         self.Searchbutton()
         mainLayout = QGridLayout()
@@ -71,15 +36,17 @@ class View_Report(QWidget):
 
         self.setWindowTitle("CR View Report")
         #self.changeStyle('Open')
-        self.selectedFilter = {"Crno":"None","Assignee": "None", "State": "None", "Domain": "None", "IssueType": "None",
-                               "Build ID": "None"}
+        #self.selectedFilter = {"Crno":"None","Assignee": "None", "State": "None", "Domain": "None", "IssueType": "None",
+        #                       "Build ID": "None"}
+        self.selectedFilter = {"CR":"None","Assignee":"None","State":"None","Domain":"None","Issue Type":"None","Build ID":"None"}
 
     def open_new_dialog(self):
         self.nd = NewDialog(self)
         self.nd.show()
 
     def viewSearch(self):
-        search(self.selectedFilter)
+        self.flist=search(self.selectedFilter)
+        print("li list from main:",self.flist)
 
     def Searchbutton(self):
         self.button = QPushButton("Search",self)
@@ -90,13 +57,25 @@ class View_Report(QWidget):
     def on_click(self):
         #self.open_new_dialog()
         self.viewSearch()
+        #print("l1 list is")
+        self.window2()
+
+    def window2(self):
+        print("in window 2")
+        self.w = App1(self.flist)#Window2()
+        self.w.show()
+        #self.w.close()
+        #self.w.hide()
 
 
     def viewWidgets(self):
-
+        getcols()
         namelist()
+        #names = list(dict.fromkeys(names))
+        #names = list(set(names))
         bilist()
-
+        #bientries = list(dict.fromkeys(bientries))
+        #bientries = list(set(bientries))
         statusComboBox = QComboBox(self)
         statusComboBox.addItem('None')
         statusComboBox.addItem('Open')
@@ -214,7 +193,7 @@ class View_Report(QWidget):
 
     def readIssuetype(self,text):
         ino = "issuetype"
-        self.selectedFilter["IssueType"] = text
+        self.selectedFilter["Issue Type"] = text
         print("Issuetype is :"+text)
         #report_show(issuetype,ino)
 
@@ -233,9 +212,9 @@ class View_Report(QWidget):
         if res == 0:
             return 0
         if res == 1:
-            self.seletedFilter["Crno"] = "None"
+            self.seletedFilter["CR"] = "None"
         else:
-            self.selectedFilter["Crno"] = self.inp
+            self.selectedFilter["CR"] = self.inp
         #cr = int(self.inp)
         print("before cr")
         #getCr(cr)
