@@ -6,14 +6,6 @@ from Itt_data import *
 from View_Report_Validation import *
 from Itt_Display_list import *
 
-class Window2(QMainWindow):                           # <===
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle("Window22222")
-
-#    def showresult
-
-
 class View_Report(QWidget):
     def __init__(self, parent=None):
         super(View_Report, self).__init__(parent)
@@ -35,9 +27,6 @@ class View_Report(QWidget):
         self.setGeometry(400,100,600,600)
 
         self.setWindowTitle("CR View Report")
-        #self.changeStyle('Open')
-        #self.selectedFilter = {"Crno":"None","Assignee": "None", "State": "None", "Domain": "None", "IssueType": "None",
-        #                       "Build ID": "None"}
         self.selectedFilter = {"CR":"None","Assignee":"None","State":"None","Domain":"None","Issue Type":"None","Build ID":"None"}
 
     def open_new_dialog(self):
@@ -51,31 +40,22 @@ class View_Report(QWidget):
     def Searchbutton(self):
         self.button = QPushButton("Search",self)
         self.button.setToolTip("example")
-        self.button.move(100,200)
+        #self.button.move(100,200)
         self.button.clicked.connect(self.on_click)
 
     def on_click(self):
-        #self.open_new_dialog()
         self.viewSearch()
-        #print("l1 list is")
         self.window2()
 
     def window2(self):
         print("in window 2")
         self.w = App1(self.flist)#Window2()
         self.w.show()
-        #self.w.close()
-        #self.w.hide()
-
 
     def viewWidgets(self):
         getcols()
         namelist()
-        #names = list(dict.fromkeys(names))
-        #names = list(set(names))
         bilist()
-        #bientries = list(dict.fromkeys(bientries))
-        #bientries = list(set(bientries))
         statusComboBox = QComboBox(self)
         statusComboBox.addItem('None')
         statusComboBox.addItem('Open')
