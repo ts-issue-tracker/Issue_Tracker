@@ -41,7 +41,8 @@ class Enter_cr(QWidget):
         self.cr_no = self.enter_cr_num_entry.text()
         self.ret = validate_cr_list(self.cr_no)
         if (self.ret >= 0):
-            self.w = Update(self.enter_cr_num_entry.text())
+            #self.w = Update(self.enter_cr_num_entry.text())
+            self.w = Update(self.ret)
             self.w.show()
             self.close()
         else:

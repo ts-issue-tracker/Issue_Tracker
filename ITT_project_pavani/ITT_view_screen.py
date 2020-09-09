@@ -1,3 +1,4 @@
+from PyQt5 import QtWidgets,QtCore
 from PyQt5.QtWidgets import QApplication, QWidget, QFrame, QHBoxLayout, QPushButton, QVBoxLayout, QGridLayout, QLabel, \
     QLineEdit
 from PyQt5.QtWidgets import *
@@ -123,7 +124,7 @@ class view_window(QWidget):
         # entry_si_state
         self.si_entry = QLineEdit(self)
         self.si_entry.setFont(QFont('Arial', 10))
-        self.si_state = read_last_si_label()
+        self.si_state = "Hello"
         self.si_entry.setStyleSheet("QLineEdit"
                                           "{"
                                           "background-color: #DBDBDB;"
@@ -176,6 +177,7 @@ class view_window(QWidget):
                                            "{"
                                            "background-color: #DBDBDB;"
                                            "}")
+        self.des_entry.setAlignment(QtCore.Qt.AlignCenter)
         self.des_entry.setText(self.des)
         # grid Description label
         self.gridLayout.addWidget(self.des_label, 7, 0)

@@ -1,8 +1,9 @@
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets,QtCore
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget,QFrame,QHBoxLayout,QGridLayout
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import QDateTime
+
 import sys
 
 from ITT_validate import *
@@ -96,10 +97,9 @@ class Create_cr(QWidget):
         self.si_label = QLabel("SI:")
         self.si_label.setFont(QFont('Arial', 10))
         # entry_si_state
-        self.si_entry = QLineEdit(self)
+        self.si_entry = QComboBox(self)
         self.si_entry.setFont(QFont('Arial', 10))
-        self.si_entry.setText("LE.BR.1.2.1")
-        self.si_state = "Open"
+        self.si_entry.addItem("Open")
         # grid si state label
         self.gridLayout.addWidget(self.si_label, 4, 0)
         # grid si state entry
@@ -140,7 +140,7 @@ class Create_cr(QWidget):
         # entry Description
         self.des_entry = QLineEdit(self)
         self.des_entry.setFont(QFont('Arial', 10))
-
+        self.des_entry.setAlignment(QtCore.Qt.AlignCenter)
         # grid Description label
         self.gridLayout.addWidget(self.des_label, 7 , 0)
         # grid Description entry

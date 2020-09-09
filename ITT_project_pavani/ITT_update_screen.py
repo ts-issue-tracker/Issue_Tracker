@@ -5,9 +5,11 @@ import sys
 
 from ITT_Cr_num import *
 from ITT_validate import *
+from ITT_read_excel import *
+from ITT_save_excel import *
 
 class Update(QWidget):
-    def __init__(self,cr):
+    def __init__(self,cr_index):
         super().__init__()
         self.setWindowTitle("Update Screen")
         self.frame = QFrame(self)
@@ -16,7 +18,8 @@ class Update(QWidget):
         self.frame.setLineWidth(1)
 
         self.gridLayout = QGridLayout(self.frame)
-        self.cr = cr
+        self.cr_index = cr_index
+        self.cr = read_cr_by_index(cr_index)
         self.update()
 
     def update(self):
@@ -49,6 +52,8 @@ class Update(QWidget):
         self.assignee_label.setFont(QFont('Arial', 10))
         # entry assignee
         self.assignee_entry = QLineEdit()
+        self.assignee = read_asignee_with_cr(self.cr_index)
+        self.assignee_entry.setText(self.assignee)
         self.assignee_entry.setFont(QFont('Arial', 10))
 
         # grid label assignee
@@ -61,6 +66,8 @@ class Update(QWidget):
         self.title_label.setFont(QFont('Arial', 10))
         # entry title
         self.title_entry = QLineEdit()
+        self.title = read_title_with_cr(self.cr_index)
+        self.title_entry.setText(self.title)
         self.title_entry.setFont(QFont('Arial', 10))
 
         # grid label title
@@ -79,24 +86,13 @@ class Update(QWidget):
         self.cr_state_entry.addItem("Closed")
         self.cr_state_entry.addItem("In-progress")
         self.cr_state_entry.addItem("Reopen")
+        self.prev_cr_state = read_cr_with_cr(self.cr_index)
+        self.cr_state_entry.currentIndexChanged.connect(self.cronChanged)
 
         # grid cr state label
         self.gridLayout.addWidget(self.cr_state_label, 3, 0)
         # grid cr state entry
         self.gridLayout.addWidget(self.cr_state_entry, 3, 1)
-
-        # label Si state
-        self.si_label = QLabel("SI:")
-        self.si_label.setFont(QFont('Arial', 10))
-        # entry_si_state
-        self.si_entry = QLineEdit(self)
-        self.si_entry.setFont(QFont('Arial', 10))
-        self.si_entry.setText("LE.BR.1.2.1")
-
-        # grid si state label
-        self.gridLayout.addWidget(self.si_label, 4, 0)
-        # grid si state entry
-        self.gridLayout.addWidget(self.si_entry, 4, 1)
         #si state
         self.si_state_label = QLabel("SI State")
         self.si_state_label.setFont(QFont('Arial', 10))
@@ -110,11 +106,12 @@ class Update(QWidget):
         self.si_state.addItem("Ready")
         self.si_state.addItem("Built")
         self.si_state.setFont(QFont('Arial', 10))
+        self.si_prev_state = read_si_with_cr(self.cr_index)
         self.si_state.currentIndexChanged.connect(self.onChanged)
 
         #grid for si state
-        self.gridLayout.addWidget(self.si_state_label,5,0)
-        self.gridLayout.addWidget(self.si_state,5,1)
+        self.gridLayout.addWidget(self.si_state_label,4,0)
+        self.gridLayout.addWidget(self.si_state,4,1)
 
         # label Issue type
         self.issuetype_label = QLabel("Issue Type:")
@@ -130,12 +127,13 @@ class Update(QWidget):
         self.issuetype_entry.addItem("Bug")
         self.issuetype_entry.addItem("Internal")
         self.issuetype_entry.addItem("Blacklisting")
+        self.issue_type = read_issuetype_with_cr(self.cr_index)
         self.issuetype_entry.currentIndexChanged.connect(self.onchangeissue)
 
         # grid Issue type label
-        self.gridLayout.addWidget(self.issuetype_label, 6, 0)
+        self.gridLayout.addWidget(self.issuetype_label, 5, 0)
         # grid issue type entry
-        self.gridLayout.addWidget(self.issuetype_entry, 6, 1)
+        self.gridLayout.addWidget(self.issuetype_entry, 5, 1)
 
         # issue reason entry
         self.issue_reason_entry = QLineEdit(self)
@@ -146,7 +144,7 @@ class Update(QWidget):
                                               "background-color: #DBDBDB;"
                                               "}")
         # grid issue reason
-        self.gridLayout.addWidget(self.issue_reason_entry, 6, 2)
+        self.gridLayout.addWidget(self.issue_reason_entry, 6, 1)
 
         # label Description
         self.des_label = QLabel("Description:")
@@ -154,6 +152,8 @@ class Update(QWidget):
         # entry Description
         self.des_entry = QLineEdit(self)
         self.des_entry.setFont(QFont('Arial', 10))
+        self.des = read_des_with_cr(self.cr_index)
+        self.des_entry.setText(self.title)
 
         # grid Description label
         self.gridLayout.addWidget(self.des_label, 7, 0)
@@ -215,8 +215,7 @@ class Update(QWidget):
         self.createon_label.setFont(QFont('Arial', 10))
         # create_On entry
         self.createon_entry = QLineEdit(self)
-        self.datetime = QDateTime.currentDateTime()
-        self.createon_entry.setText(self.datetime.toString('dd.MM.yyyy, hh:mm:ss'))
+        self.datetime = read_create_date()
         self.createon_entry.setFont(QFont('Arial', 10))
         self.createon_entry.setReadOnly(True)
         self.createon_entry.setStyleSheet("QLineEdit"
@@ -263,39 +262,57 @@ class Update(QWidget):
 
         self.show()
 
+    def cronChanged(self):
+        prev_state = self.prev_cr_state
+        state = self.cr_state_entry.currentText()
+
+        if(prev_state == "Closed"):
+            if(state == "Reopen"):
+                self.si_state.setCurrentIndex(0)
+
     def onchangeissue(self):
+        prev_state = self.issue_type
         state = self.issuetype_entry.currentText()
-        if(state == "Bug" or state == "Internal"):
-            self.issue_reason_entry.setReadOnly(False)
-            self.issue_reason_entry.setStyleSheet("QLineEdit"
+        if(prev_state == "Internal"):
+            if(state == "Bug"):
+                self.issue_reason_entry.setReadOnly(False)
+                self.issue_reason_entry.setStyleSheet("QLineEdit"
+                                                          "{"
+                                                          "background-color: white;"
+                                                          "}")
+
+    def onChanged(self):
+        state = self.si_state.currentText()
+        prev_state = self.si_prev_state
+
+        if(prev_state == "Open"):
+            if(state == "Analysis"):
+                self.cr_state_entry.setCurrentIndex(1)
+
+        if(prev_state == "Analysis"):
+            if(state == "Fix"):
+                self.cr_state_entry.setCurrentIndex(3)
+                self.git_entry.setReadOnly(False)
+                self.git_entry.setStyleSheet("QLineEdit"
                                                   "{"
                                                   "background-color: white;"
                                                   "}")
 
-    def onChanged(self):
-        state = self.si_state.currentText()
-        if(state == "Analysis"):
-            self.cr_state_entry.setCurrentIndex(1)
-        if(state == "Fix"):
-            self.cr_state_entry.setCurrentIndex(3)
-            self.git_entry.setReadOnly(False)
-            self.git_entry.setStyleSheet("QLineEdit"
-                                              "{"
-                                              "background-color: white;"
-                                              "}")
-        if(state == "Withdrawn" or state == "Duplicate"):
-            self.issue_reason_entry.setReadOnly(False)
-            self.issue_reason_entry.setStyleSheet("QLineEdit"
-                                                  "{"
-                                                  "background-color: white;"
-                                                  "}")
-            self.cr_state_entry.setCurrentIndex(2)
-        if(state == "Ready"):
-            self.cr_state_entry.setCurrentIndex(4)
-        if (state == "Build"):
-            self.cr_state_entry.setCurrentIndex(2)
-        if(state == "Open"):
-            self.cr_state_entry.setCurrentIndex(4)
+            if(state == "Withdrawn" or state == "Duplicate"):
+                self.issue_reason_entry.setReadOnly(False)
+                self.issue_reason_entry.setStyleSheet("QLineEdit"
+                                                      "{"
+                                                      "background-color: white;"
+                                                      "}")
+                self.cr_state_entry.setCurrentIndex(2)
+
+        if(prev_state == "Fix"):
+            if(state == "Ready"):
+                self.cr_state_entry.setCurrentIndex(4)
+
+        if(prev_state == "Ready"):
+            if (state == "Build"):
+                self.cr_state_entry.setCurrentIndex(2)
 
     def Exit_but_clicked(self):
             from ITT_home_screen import Main_window
@@ -322,13 +339,13 @@ class Update(QWidget):
                       'Software Image': si,
                       'Domain': domain, 'Issue Type': issue_type, 'GIT/Gerrit link': git_id,
                       'Build ID': build_id, 'Create On': create_on, 'Last Modified On': last_modi, 'History': " "}
-        title_ret = title_validate(title)
+        #title_ret = title_validate(title)
         # assignee_ret = assignee_validate(assignee)
-        des_ret = des_validate(des)
-        cr_ret = cr_state_validate(status)
-        domain_ret = domain_validate(domain)
-        build_ret = build_validation(build_id)
-
+        #des_ret = des_validate(des)
+        #cr_ret = cr_state_validate(status)
+        #domain_ret = domain_validate(domain)
+        #build_ret = build_validation(build_id)
+        save_update_info(combo_dict,self.cr_index)
 if __name__ == "__main__":
     app =QApplication(sys.argv)
     obj = Update(0)

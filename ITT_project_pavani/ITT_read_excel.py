@@ -2,12 +2,12 @@ import csv
 
 def read_new_no():
     print("reading excel")
-    with open('cr_list_entry.csv') as j:
-        reader1 = csv.reader(j, delimiter=",")
+    with open('cr_list_entry.csv') as f:
+        reader1 = csv.reader(f, delimiter=',')
         data1 = list(reader1)
-        row_count1 = len(data1)
-        new_cr = int(data1[row_count1-1][0]) + 1
-        return str(new_cr)
+        current_row = len(data1)
+        current_cr_num = int(data1[current_row - 1][0]) + 1
+        return str(current_cr_num)
 
 def read_last_cr():
     print("last cr")
@@ -61,14 +61,6 @@ def read_last_issuetype():
         current_issue = data5[current_row - 1][7]
         return str(current_issue)
 
-def read_last_si_label():
-    with open('cr_list_entry.csv') as j:
-        reader5 = csv.reader(j, delimiter=",")
-        data5 = list(reader5)
-        current_row = len(data5)
-        current_si_label = data5[current_row - 1][5]
-        return str(current_si_label)
-
 def read_last_domain():
     with open('cr_list_entry.csv') as j:
         reader5 = csv.reader(j, delimiter=",")
@@ -108,3 +100,53 @@ def read_lastmodi_time():
         current_row = len(data5)
         current_laston= data5[current_row - 1][11]
         return str(current_laston)
+
+def read_create_date():
+    with open('cr_list_entry.csv') as j:
+        reader5 = csv.reader(j, delimiter=",")
+        data5 = list(reader5)
+        current_row = len(data5)
+        current_createdate= data5[current_row - 1][10]
+        return str(current_createdate)
+
+def read_cr_by_index(index):
+            with open('cr_list_entry.csv') as f:
+                csv.reader(f, delimiter=",")
+                data = [row for row in csv.reader(f)]
+                return data[index][0]
+
+def read_asignee_with_cr(index):
+    with open('cr_list_entry.csv') as f:
+        csv.reader(f, delimiter=",")
+        data = [row for row in csv.reader(f)]
+        return str(data[index][3])
+
+def read_title_with_cr(index):
+    with open('cr_list_entry.csv') as f:
+        csv.reader(f, delimiter=",")
+        data = [row for row in csv.reader(f)]
+        return str(data[index][1])
+
+def read_des_with_cr(index):
+    with open('cr_list_entry.csv') as f:
+        csv.reader(f, delimiter=",")
+        data = [row for row in csv.reader(f)]
+        return str(data[index][2])
+
+def read_si_with_cr(index):
+    with open('cr_list_entry.csv') as f:
+        csv.reader(f, delimiter=",")
+        data = [row for row in csv.reader(f)]
+        return str(data[index][5])
+
+def read_cr_with_cr(index):
+    with open('cr_list_entry.csv') as f:
+        csv.reader(f, delimiter=",")
+        data = [row for row in csv.reader(f)]
+        return str(data[index][4])
+
+def read_issuetype_with_cr(index):
+    with open('cr_list_entry.csv') as f:
+        csv.reader(f, delimiter=",")
+        data = [row for row in csv.reader(f)]
+        return str(data[index][7])
