@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QFrame, QGri
 import sys
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
 from itt_main_file_access import *
 from PyQt5.QtWidgets import QMessageBox
 
@@ -78,6 +79,8 @@ class Window(QMainWindow):
     def readType(self, text):
         self.pie_chart_for_specified_type(text)
 
+    """
+
     def readAssignee(self, text):
         canvas = Canvas(self, width=8, height=4)
         self.gridLayout.addWidget(canvas,1,0)
@@ -90,7 +93,55 @@ class Window(QMainWindow):
         label_list.extend(return_label_list(type))
         list = []
         list.extend(list_to_display_on_pie_for_assignee(col,assignee,type))
-        ax.pie(list, explode=None, labels=label_list, colors=['b', 'g', 'r', 'y', 'm'], autopct='% 1d %%')
+        wedges, texts, autotexts =ax.pie(list, explode=None, colors=['b', 'g', 'r', 'y', 'm'], autopct='% 1d %%')
+        ax.legend(wedges, label_list,
+                  title=type,
+                  loc="center left",
+                  bbox_to_anchor=(1, 0, 0.5, 1))
+                  """
+
+    def readAssignee(self, text):
+        canvas = Canvas(self, width=8, height=6)
+        self.gridLayout.addWidget(canvas, 1, 0)
+        ax = canvas.figure.add_subplot(111)
+        print(text)
+        type = self.TypeCombo.currentText()
+        assignee = self.AssigneeCombo.currentText()
+        col = return_col_of_specified_col_name(assignee)
+        label_list = []
+        label_list.extend(return_label_list(type))
+        list = []
+        list.extend(list_to_display_on_pie_for_assignee(col, assignee, type))
+        pos=list[0]
+        width=0.1
+        #fig, ax = plt.subplots(figsize=(10, 5))
+        color_list = ['b', 'g', 'r', 'y', 'm']
+        for i, j, k in zip(list, color_list, range(0, len(list))):
+            ax.bar(pos + width * k, i, width, alpha=0.5, color=j, label=assignee)
+
+        # Set the y axis label
+        ax.set_ylabel('Count')
+
+        # Set the chart's title
+        ax.set_title(type)
+
+        # Set the position of the x ticks
+        ax.set_xticks([pos + 1.5 * width])
+
+        # Set the labels for the x ticks
+        list2 = [assignee]
+        ax.set_xticklabels(list2)
+        # Setting the x-axis and y-axis limits
+        plt.xlim(pos - width, pos + width * 3)
+
+        k = 0
+        for i in list:
+            k += i
+        plt.ylim([0, k])
+
+        # Adding the legend and showing the plot
+        ax.legend(label_list, loc='upper left')
+        ax.grid()
 
     def pie_chart_for_specified_type(self, text):
         canvas = Canvas(self, width=8, height=4)
@@ -100,7 +151,11 @@ class Window(QMainWindow):
         label_list.extend(return_label_list(text))
         pie_chart_list = []
         pie_chart_list.extend(list_to_display_on_pie(text))
-        ax.pie(pie_chart_list, explode=None, labels=label_list, colors=['b', 'g', 'r', 'y', 'm'], autopct='% 1d %%')
+        wedges, texts, autotexts =ax.pie(pie_chart_list, explode=None, colors=['b', 'g', 'r', 'y', 'm'], autopct='% 1d %%')
+        ax.legend(wedges, label_list,
+                  title=text,
+                  loc="center left",
+                  bbox_to_anchor=(1, 0, 0.5, 1))
 
 class Canvas(FigureCanvas):
     def __init__(self, parent=None, width=5, height=5, dpi=100):
