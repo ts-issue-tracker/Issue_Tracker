@@ -67,7 +67,10 @@ class Main_window(QWidget):
         self.hide()
 
     def view_record_clicked(self):
-        pass
+        from ITT_cr_num_view import Enter_cr
+        self.w = Enter_cr()
+        self.w.show()
+        self.hide()
 
     def Statistics_clicked(self):
         pass

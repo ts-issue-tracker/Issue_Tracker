@@ -96,9 +96,9 @@ class view_window(QWidget):
         self.cr_state_entry.setText(self.cr_state)
 
         # grid cr state label
-        self.gridLayout.addWidget(self.cr_state_label, 3, 0)
+        self.gridLayout.addWidget(self.cr_state_label, 4, 0)
         # grid cr state entry
-        self.gridLayout.addWidget(self.cr_state_entry, 3, 1)
+        self.gridLayout.addWidget(self.cr_state_entry, 4, 1)
 
         # label Si state
         #self.si_state_label = QLabel("SI State:")
@@ -124,7 +124,7 @@ class view_window(QWidget):
         # entry_si_state
         self.si_entry = QLineEdit(self)
         self.si_entry.setFont(QFont('Arial', 10))
-        self.si_state = "Hello"
+        self.si_state = read_last_si_state()
         self.si_entry.setStyleSheet("QLineEdit"
                                           "{"
                                           "background-color: #DBDBDB;"
@@ -133,9 +133,9 @@ class view_window(QWidget):
         self.si_entry.setReadOnly(True)
 
         # grid si state label
-        self.gridLayout.addWidget(self.si_label, 4, 0)
+        self.gridLayout.addWidget(self.si_label, 3, 0)
         # grid si state entry
-        self.gridLayout.addWidget(self.si_entry, 4, 1)
+        self.gridLayout.addWidget(self.si_entry, 3, 1)
 
         # label Issue type
         self.issuetype_label = QLabel("Issue Type:")

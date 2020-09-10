@@ -28,8 +28,7 @@ class Update(QWidget):
 
         # entry crno
         self.crno_entry = QLineEdit()
-        self.cr_no = self.cr
-        self.crno_entry.setText(self.cr_no)
+        self.crno_entry.setText(self.cr)
         self.crno_entry.setReadOnly(True)
         self.crno_entry.setStyleSheet("QLineEdit"
                                       "{"
@@ -90,9 +89,9 @@ class Update(QWidget):
         self.cr_state_entry.currentIndexChanged.connect(self.cronChanged)
 
         # grid cr state label
-        self.gridLayout.addWidget(self.cr_state_label, 3, 0)
+        self.gridLayout.addWidget(self.cr_state_label, 4, 0)
         # grid cr state entry
-        self.gridLayout.addWidget(self.cr_state_entry, 3, 1)
+        self.gridLayout.addWidget(self.cr_state_entry, 4, 1)
         #si state
         self.si_state_label = QLabel("SI State")
         self.si_state_label.setFont(QFont('Arial', 10))
@@ -110,8 +109,8 @@ class Update(QWidget):
         self.si_state.currentIndexChanged.connect(self.onChanged)
 
         #grid for si state
-        self.gridLayout.addWidget(self.si_state_label,4,0)
-        self.gridLayout.addWidget(self.si_state,4,1)
+        self.gridLayout.addWidget(self.si_state_label,3,0)
+        self.gridLayout.addWidget(self.si_state,3,1)
 
         # label Issue type
         self.issuetype_label = QLabel("Issue Type:")
@@ -153,7 +152,7 @@ class Update(QWidget):
         self.des_entry = QLineEdit(self)
         self.des_entry.setFont(QFont('Arial', 10))
         self.des = read_des_with_cr(self.cr_index)
-        self.des_entry.setText(self.title)
+        self.des_entry.setText(self.des)
 
         # grid Description label
         self.gridLayout.addWidget(self.des_label, 7, 0)
@@ -161,7 +160,7 @@ class Update(QWidget):
         self.gridLayout.addWidget(self.des_entry, 7, 1)
 
         # domain
-        self.domain_label = QLabel("Domain:")
+        self.domain_label = QLabel("Domain/Tech Area:")
         self.domain_label.setFont(QFont('Arial', 10))
         # domain entry
         self.domain_entry = QComboBox(self)
@@ -174,8 +173,7 @@ class Update(QWidget):
         self.domain_entry.addItem("Select")
         self.domain_entry.addItem("Audio")
         self.domain_entry.addItem("Camera")
-        self.domain_entry.addItem("video")
-        self.domain_entry.addItem("WLAN")
+        self.domain_entry.addItem("Video")
 
         # grid domain label
         self.gridLayout.addWidget(self.domain_label, 8, 0)
@@ -215,7 +213,8 @@ class Update(QWidget):
         self.createon_label.setFont(QFont('Arial', 10))
         # create_On entry
         self.createon_entry = QLineEdit(self)
-        self.datetime = read_create_date()
+        self.datetime = read_create_date_index()
+        self.createon_entry.setText(self.datetime)
         self.createon_entry.setFont(QFont('Arial', 10))
         self.createon_entry.setReadOnly(True)
         self.createon_entry.setStyleSheet("QLineEdit"
@@ -232,7 +231,8 @@ class Update(QWidget):
         self.lastmodi_label.setFont(QFont('Arial', 10))
         # last modified entry
         self.lastmodi_entry = QLineEdit(self)
-        self.datetime = QDateTime.currentDateTime()
+        self.lastdate = QDateTime.currentDateTime()
+        self.lastmodi_entry.setText(self.lastdate.toString('dd.MM.yyyy, hh:mm:ss'))
         self.lastmodi_entry.setFont(QFont('Arial', 10))
         self.lastmodi_entry.setReadOnly(True)
         self.lastmodi_entry.setStyleSheet("QLineEdit"
@@ -326,7 +326,9 @@ class Update(QWidget):
         title = self.title_entry.text()
         des = self.des_entry.text()
         assignee = self.assignee_entry.text()
-        si = self.si_entry.text()
+        print("si")
+        si = self.si_state.currentText()
+        print("after")
         status = self.cr_state_entry.currentText()
         domain = self.domain_entry.currentText()
         issue_type = self.issuetype_entry.currentText()
@@ -345,7 +347,9 @@ class Update(QWidget):
         #cr_ret = cr_state_validate(status)
         #domain_ret = domain_validate(domain)
         #build_ret = build_validation(build_id)
-        save_update_info(combo_dict,self.cr_index)
+        print("update")
+        save_update_info(combo_dict,self.cr,self.cr_index)
+
 if __name__ == "__main__":
     app =QApplication(sys.argv)
     obj = Update(0)

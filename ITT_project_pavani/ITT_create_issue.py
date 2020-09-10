@@ -76,9 +76,9 @@ class Create_cr(QWidget):
         self.cr_state_entry.addItem("Open")
 
         #grid cr state label
-        self.gridLayout.addWidget(self.cr_state_label,3,0)
+        self.gridLayout.addWidget(self.cr_state_label,4,0)
         #grid cr state entry
-        self.gridLayout.addWidget(self.cr_state_entry,3,1)
+        self.gridLayout.addWidget(self.cr_state_entry,4,1)
 
         # label Si state
         #self.si_state_label = QLabel("SI State:")
@@ -101,9 +101,9 @@ class Create_cr(QWidget):
         self.si_entry.setFont(QFont('Arial', 10))
         self.si_entry.addItem("Open")
         # grid si state label
-        self.gridLayout.addWidget(self.si_label, 4, 0)
+        self.gridLayout.addWidget(self.si_label, 3, 0)
         # grid si state entry
-        self.gridLayout.addWidget(self.si_entry, 4, 1)
+        self.gridLayout.addWidget(self.si_entry, 3, 1)
 
         # label Issue type
         self.issuetype_label = QLabel("Issue Type:")
@@ -160,8 +160,7 @@ class Create_cr(QWidget):
         self.domain_entry.addItem("Select")
         self.domain_entry.addItem("Audio")
         self.domain_entry.addItem("Camera")
-        self.domain_entry.addItem("video")
-        self.domain_entry.addItem("WLAN")
+        self.domain_entry.addItem("Video")
 
         # grid domain label
         self.gridLayout.addWidget(self.domain_label, 8, 0)
@@ -258,7 +257,11 @@ class Create_cr(QWidget):
         self.show()
 
     def Upload_but_clicked(self):
+        from ITT_upload_file import Upload
         print("Upload_but_clicked")
+        self.w = Upload()
+        self.w.show()
+        self.hide()
 
     def Exit_but_clicked(self):
         from ITT_home_screen import Main_window
@@ -272,7 +275,7 @@ class Create_cr(QWidget):
             title = self.title_entry.text()
             des = self.des_entry.text()
             assignee = self.assignee_entry.text()
-            si = self.si_entry.text()
+            si = self.si_entry.currentText()
             status = self.cr_state_entry.currentText()
             domain = self.domain_entry.currentText()
             issue_type = self.issuetype_entry.currentText()
@@ -281,7 +284,7 @@ class Create_cr(QWidget):
             create_on = self.createon_entry.text()
             last_modi = self.lastmodi_entry.text()
             print("data collected")
-            combo_dict = {'CR':cr_no, 'Title':title, 'Description':des,'Asignee':assignee,'State':status,'Software Image':si,
+            combo_dict = {'CR':cr_no, 'Title':title, 'zx':des,'Asignee':assignee,'State':status,'Software Image':si,
                          'Domain':domain,'Issue Type':issue_type,'GIT/Gerrit link':git_id,
                        'Build ID':build_id,'Create On':create_on,'Last Modified On':last_modi,'History':" "}
 

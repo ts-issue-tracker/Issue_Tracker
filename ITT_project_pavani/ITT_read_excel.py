@@ -53,6 +53,14 @@ def read_last_des():
         current_des = data5[current_row - 1][2]
         return str(current_des)
 
+def read_last_si_state():
+    with open('cr_list_entry.csv') as j:
+        reader5 = csv.reader(j, delimiter=",")
+        data5 = list(reader5)
+        current_row = len(data5)
+        current_des = data5[current_row - 1][5]
+        return str(current_des)
+
 def read_last_issuetype():
     with open('cr_list_entry.csv') as j:
         reader5 = csv.reader(j, delimiter=",")
@@ -115,11 +123,41 @@ def read_cr_by_index(index):
                 data = [row for row in csv.reader(f)]
                 return data[index][0]
 
+def read_create_date_index(index):
+    with open('cr_list_entry.csv') as f:
+        csv.reader(f, delimiter=",")
+        data = [row for row in csv.reader(f)]
+        return data[index][10]
+
+def read_late_date_index(index):
+    with open('cr_list_entry.csv') as f:
+        csv.reader(f, delimiter=",")
+        data = [row for row in csv.reader(f)]
+        return data[index][11]
+
 def read_asignee_with_cr(index):
     with open('cr_list_entry.csv') as f:
         csv.reader(f, delimiter=",")
         data = [row for row in csv.reader(f)]
         return str(data[index][3])
+
+def read_domain_with_cr(index):
+    with open('cr_list_entry.csv') as f:
+        csv.reader(f, delimiter=",")
+        data = [row for row in csv.reader(f)]
+        return str(data[index][6])
+
+def read_git_with_cr(index):
+    with open('cr_list_entry.csv') as f:
+        csv.reader(f, delimiter=",")
+        data = [row for row in csv.reader(f)]
+        return str(data[index][8])
+
+def read_build_with_cr(index):
+    with open('cr_list_entry.csv') as f:
+        csv.reader(f, delimiter=",")
+        data = [row for row in csv.reader(f)]
+        return str(data[index][9])
 
 def read_title_with_cr(index):
     with open('cr_list_entry.csv') as f:
