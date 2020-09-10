@@ -2,8 +2,11 @@ import xlrd
 from crdisplay import *
 from Itt_Display_list import *
 from Itt_Download import *
+ENTRY_NOT_FOUND = -4
 # Give the location of the file
 file_location = ("C:\\Users\\akshay\\Downloads\\projectexecl.xlsx")
+
+
 
 wb = xlrd.open_workbook(file_location)
 sheet = wb.sheet_by_index(0)
@@ -56,6 +59,7 @@ class App1(QWidget):
         for currentQTableWidgetItem in self.tableWidget.selectedItems():
             request = currentQTableWidgetItem.text()
             ret = getCr(request)
+            print("type of request",type(request))
             self.finalwindow(ret)
 
     def finalwindow(self,ret):
@@ -146,16 +150,19 @@ def search(userFilter):
                 if res == 0:
                     #print("Invalid",key)
                     print("Search Not available")
-                    return
+                    l1.append(key)
+                    return l1,ENTRY_NOT_FOUND
+                return l1,2
                 break
             else:
                 res = searchCr(key, uList[key])
                 if res == 0:
                     print("Search Not available")
-                    return
+                    l1.append(key)
+                    return l1,ENTRY_NOT_FOUND
 
     print("final l1: ",l1)
-    return l1
+    return l1,0
 
 
 def searchCr(field,entry):
@@ -166,11 +173,17 @@ def searchCr(field,entry):
     print("called searchCr")
     if field == "CR":
         print("in field")
-        getCr(entry)
+        for n in range(sheet.nrows):
+            print("n and indeex and entry and sheet.cell_value(n,index)",n,index,type(entry),type(sheet.cell_value(n, index)))
+            if sheet.cell_value(n, index) == float(entry):
+                l1.append(int(sheet.cell_value(n,crindx)))
+                return
+        #getCr(entry)
 
     if len(l1) == 0:
         print("in l1")
         for n in range(sheet.nrows):
+            print("n and indeex and entry and sheet.cell_value(n,index)",n,index,type(entry),type(sheet.cell_value(n, index)))
             if sheet.cell_value(n, index) == entry:
                 l1.append(int(sheet.cell_value(n,crindx)))
     else:
