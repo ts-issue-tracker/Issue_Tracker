@@ -5,12 +5,14 @@ from PyQt5.QtGui import QFont
 from PyQt5.QtCore import QDateTime
 
 import sys
+import textwrap
 
 from ITT_validate import *
 from ITT_save_excel import save_in_excel
 from ITT_read_excel import read_new_no
 
 class Create_cr(QWidget):
+    print("Create")
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Issue tracker")
@@ -140,7 +142,12 @@ class Create_cr(QWidget):
         # entry Description
         self.des_entry = QLineEdit(self)
         self.des_entry.setFont(QFont('Arial', 10))
-        self.des_entry.setAlignment(QtCore.Qt.AlignCenter)
+
+        self.des_entry.setFixedHeight(130)
+        #my_wrap = textwrap.TextWrapper(width=30)
+        my_des = self.des_entry.text()
+        
+        #self.des_entry.setText(my_wrap.fill(text=my_des))
         # grid Description label
         self.gridLayout.addWidget(self.des_label, 7 , 0)
         # grid Description entry
@@ -284,15 +291,20 @@ class Create_cr(QWidget):
             create_on = self.createon_entry.text()
             last_modi = self.lastmodi_entry.text()
             print("data collected")
-            combo_dict = {'CR':cr_no, 'Title':title, 'zx':des,'Asignee':assignee,'State':status,'Software Image':si,
+            combo_dict = {'CR':cr_no, 'Title':title, 'Description':des,'Assignee':assignee,'State':status,'Software Image':si,
                          'Domain':domain,'Issue Type':issue_type,'GIT/Gerrit link':git_id,
                        'Build ID':build_id,'Create On':create_on,'Last Modified On':last_modi,'History':" "}
-
-            title_ret = title_validate(title)
-            if(title_ret == True):
-                save_in_excel(combo_dict)
-                print("save")
+            print(combo_dict)
+            ret_title = title_validate(title)
+            if(ret_title == True):
+                ret_des = des_validate(des)
+                if(ret_des == True):
+                    save_in_excel(combo_dict)
+                    print("save")
                 self.open_view_screen()
+            else:
+                print("no")
+                pass
 
     def open_view_screen(self):
         print("open view screen")

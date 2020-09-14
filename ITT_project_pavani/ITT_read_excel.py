@@ -129,7 +129,7 @@ def read_create_date_index(index):
         data = [row for row in csv.reader(f)]
         return data[index][10]
 
-def read_late_date_index(index):
+def read_create_date_index(index):
     with open('cr_list_entry.csv') as f:
         csv.reader(f, delimiter=",")
         data = [row for row in csv.reader(f)]

@@ -55,6 +55,7 @@ class Main_window(QWidget):
         self.show()
 
     def create_click(self):
+        print("clicked")
         from ITT_create_issue import Create_cr
         self.w = Create_cr()
         self.w.show()

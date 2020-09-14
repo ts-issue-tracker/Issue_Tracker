@@ -213,7 +213,8 @@ class Update(QWidget):
         self.createon_label.setFont(QFont('Arial', 10))
         # create_On entry
         self.createon_entry = QLineEdit(self)
-        self.datetime = read_create_date_index()
+        self.datetime = read_create_date_index(self.cr_index)
+        print(self.datetime)
         self.createon_entry.setText(self.datetime)
         self.createon_entry.setFont(QFont('Arial', 10))
         self.createon_entry.setReadOnly(True)
@@ -337,7 +338,7 @@ class Update(QWidget):
         create_on = self.createon_entry.text()
         last_modi = self.lastmodi_entry.text()
         print("data collected")
-        combo_dict = {'CR': cr_no, 'Title': title, 'Description': des, 'Asignee': assignee, 'State': status,
+        combo_dict = {'CR': cr_no, 'Title': title, 'Description': des, 'Assignee': assignee, 'State': status,
                       'Software Image': si,
                       'Domain': domain, 'Issue Type': issue_type, 'GIT/Gerrit link': git_id,
                       'Build ID': build_id, 'Create On': create_on, 'Last Modified On': last_modi, 'History': " "}

@@ -15,6 +15,7 @@ def title_validate(title):
             msg.setText("Please enter the title")
             x = msg.exec_()
             return False
+
     if(len(numbers) > 0 or len(symbols)>0):
         print("val if")
         msg = QMessageBox()
@@ -22,6 +23,7 @@ def title_validate(title):
         msg.setText("Title is not valid")
         x = msg.exec_()
         return False
+
     if(len(title) > 80):
         msg = QMessageBox()
         msg.setWindowTitle("Invalid")
@@ -32,10 +34,21 @@ def title_validate(title):
         return True
 
 def des_validate(des):
+    numbers = re.findall('\d+', des)
+    symbols = re.findall(r"[~!@#$%^&*()_+':;<>?,.|\\/\"]", des)
+
     if(len(des) == 0):
         msg = QMessageBox()
         msg.setWindowTitle("Invalid")
         msg.setText("Description shouldnot be empty")
+        x = msg.exec_()
+        return False
+
+    if (len(numbers) > 0 or len(symbols) > 0):
+        print("val if")
+        msg = QMessageBox()
+        msg.setWindowTitle("Invalid")
+        msg.setText("Title is not valid")
         x = msg.exec_()
         return False
     else:
