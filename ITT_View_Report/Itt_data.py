@@ -84,11 +84,12 @@ class App1(QWidget):
         i=1
         for i in range(len(self.crs)):
             self.tableWidget.setItem(i,0,QTableWidgetItem(str(self.crs[i])))
-
+        self.header = QTableWidgetItem("Search results")
+        #self.header.setFont()
+        self.tableWidget.setHorizontalHeaderItem(0, QTableWidgetItem("Search results"))
         # Table will fit the screen horizontally
         self.tableWidget.horizontalHeader().setStretchLastSection(True)
-        self.tableWidget.horizontalHeader().setSectionResizeMode(
-            QHeaderView.Stretch)
+        self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
 
 def getcols():

@@ -1,10 +1,23 @@
 from PyQt5.QtCore import QDateTime, Qt, QTimer
 from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
 import sys
 import Itt_data
 from Itt_data import *
 from View_Report_Validation import *
 from Itt_Display_list import *
+#import pandas as pd
+
+
+class StackedWidget(QStackedWidget):
+    def __init__(self, parent=None):
+        QStackedWidget.__init__(self, parent=parent)
+        #QPaintEvent()
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.drawPixmap(self.rect(), QPixmap("picture.png"))
+        QStackedWidget.paintEvent(self, event)
 
 class View_Report(QWidget):
     def __init__(self, parent=None):
@@ -26,7 +39,24 @@ class View_Report(QWidget):
         self.setGeometry(400,100,600,600)
 
         self.setWindowTitle("CR View Report")
+        #self.centralwindow = StackedWidget()
+        #stylesheet = View_Report{background-image: url("D:/_Qt/img/cat.jpg");background-repeat: no-repeat; background-position: center;}
+        self.setStyleSheet("{background-image: url(picture.png);}")
+
+        # Create widget
+        label = QLabel(self)
+        pixmap = QPixmap('background1.jpg')
+        label.setPixmap(pixmap)
+        #self.resize(pixmap.width(), pixmap.height())
+
+
+        #self.setCentralWidget(StackedWidget())
+        # setting up the border and adding image to background
+        #self.setStyleSheet()D:\Thundersoft
+        #self.setStyleSheet("background-image: url("D:\Thundersoft\backgroung1.jpg"); background-repeat: no-repeat;")
+
         self.selectedFilter = {"CR":"None","Assignee":"None","State":"None","Domain":"None","Issue Type":"None","Build ID":"None"}
+
 
     def open_new_dialog(self):
         self.nd = NewDialog(self)
@@ -44,8 +74,15 @@ class View_Report(QWidget):
         self.button.clicked.connect(self.on_click)
 
     def on_click(self):
-        self.viewSearch()
-        self.window2()
+
+        # using all() + dictionary comprehension
+        # Check if all values are 0 in dictionary
+        res = all(x == "None" for x in self.selectedFilter.values())
+        if (res == 1):
+            QMessageBox.about(self, 'Information', "No selection made!")
+        else:
+            self.viewSearch()
+            self.window2()
 
     def window2(self):
         print("in window 2")
@@ -56,9 +93,11 @@ class View_Report(QWidget):
             ret = getCr(self.flist[0])
             self.w = Windowfinal(ret)
             self.w.show()
+
         elif(self.flag == -4):
             msg = self.flist[0]+" not found"
             QMessageBox.about(self, 'Information', msg)
+
         else:
             print("in cr flag false")
             self.w = App1(self.flist)
@@ -135,7 +174,7 @@ class View_Report(QWidget):
         self.biCompleter()
         self.bibox = QLineEdit()
         self.bibox.setEchoMode(QLineEdit.Normal)
-        self.bibox.textChanged.connect(self.bi_entry)
+        #self.bibox.textChanged.connect(self.bi_entry)
         self.bibox.setCompleter(self.bicompleter)
         self.bibox.editingFinished.connect(self.view_bi)
         self.biboxLabel = QLabel("&BuildImage:")
@@ -228,8 +267,19 @@ class View_Report(QWidget):
         self.biName=text
 
     def view_bi(self):
-        self.selectedFilter["Build ID"] = self.biName
-        print("BI entered :"+self.biName)
+        #self.selectedFilter["Build ID"] = self.biName
+        #print("BI entered :"+self.biName)
+        print("in view build id")
+        buildidText = self.bibox.text()
+        result = buildid_check(buildidText)#build_validation(buildidText)
+        if result == 0:
+            self.selectedFilter["Build ID"] = buildidText
+        elif result == -3:
+            self.selectedFilter["Build ID"] = "None"
+        elif result == -2:
+            QMessageBox.about(self, 'Information', "Invalid entry")
+        elif result == -1:
+            QMessageBox.about(self, 'Information', "Maximum limit is 6")
 
 
 app = QApplication(sys.argv)
