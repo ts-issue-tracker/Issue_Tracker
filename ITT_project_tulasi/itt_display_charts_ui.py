@@ -15,20 +15,17 @@ class Window(QMainWindow):
         super().__init__()
 
         title = "Display Statistics"
-        top = 400
-        left = 400
-        width = 900
-        height = 500
 
         self.filtertype = ""
         self.list_to_send = []
         self.list_of_labels_to_send = []
 
         self.setWindowTitle(title)
-        self.setGeometry(top, left, width, height)
+        self.setMinimumWidth(1000)
+        self.setMinimumHeight(700)
 
         self.frame = QFrame(self)
-        self.frame.setFixedSize(900, 500)
+        self.frame.setFixedSize(1000, 600)
         self.frame.setFrameShape(QFrame.StyledPanel)
 
         self.gridLayout = QGridLayout(self.frame)
@@ -45,9 +42,25 @@ class Window(QMainWindow):
         #self.frame_two.setFrameShape(QFrame.StyledPanel)
         self.frame_two.setFixedSize(850, 60)
 
+        self.frame_canvas=QFrame(self)
+        self.frame_canvas.setFrameShape(QFrame.StyledPanel)
+        self.gridLayout_canvas = QGridLayout(self.frame_canvas)
+        self.frame_canvas.setFixedSize(950, 350)
+        self.gridLayout.addWidget(self.frame_canvas, 1, 0)
+
         self.gridLayout_two = QGridLayout(self.frame_two)
         self.gridLayout.addWidget(self.frame_two, 2, 0)
-        #self.gridLayout_one.setContentsMargins(20, 20, 20, 20)
+
+        chk_box = QCheckBox()
+        chk_box.setText("Show Send Mail Details")
+        self.gridLayout.addWidget(chk_box, 3, 0)
+        chk_box.setFont(QFont('Arial', 10))
+
+        self.frame_three = QFrame(self)
+        #self.frame_three.setFrameShape(QFrame.StyledPanel)
+        self.gridLayout_three = QGridLayout(self.frame_three)
+        self.frame_three.setFixedSize(950, 60)
+        self.gridLayout.addWidget(self.frame_three, 4, 0)
 
         self.MyUI()
 
@@ -113,10 +126,44 @@ class Window(QMainWindow):
         self.email_txt.editingFinished.connect(self.email_validation)
         self.email_txt.resize(130,100)
 
+        #send_mail_btn = QPushButton()
+        #send_mail_btn.setText("Send Mail")
+        #send_mail_btn.setFont(QFont('Arial', 10))
+        #send_mail_btn.clicked.connect(self.send_mail_btn_click)
+
+        email_lb1 = QLabel("Sender Mail")
+        email_lb1.setFont(QFont('Arial', 10))
+
+        self.snd_email_txt = QLineEdit()
+        self.snd_email_txt.setFont(QFont('Arial', 10))
+        self.snd_email_txt.editingFinished.connect(self.email_validation)
+
+        email_pwd = QLabel("Sender Password")
+        email_pwd.setFont(QFont('Arial', 10))
+
+        self.snd_pwd_txt = QLineEdit()
+        self.snd_pwd_txt.setFont(QFont('Arial', 10))
+        self.snd_pwd_txt.editingFinished.connect(self.email_validation)
+
+        rx_email_lb = QLabel("Receiver Mail")
+        rx_email_lb.setFont(QFont('Arial', 10))
+
         send_mail_btn = QPushButton()
         send_mail_btn.setText("Send Mail")
         send_mail_btn.setFont(QFont('Arial', 10))
         send_mail_btn.clicked.connect(self.send_mail_btn_click)
+
+        self.rx_email_txt = QLineEdit()
+        self.rx_email_txt.setFont(QFont('Arial', 10))
+        self.rx_email_txt.editingFinished.connect(self.email_validation)
+
+        self.msg_txt = QTextEdit()
+        self.msg_txt.setFont(QFont('Arial', 10))
+        self.msg_txt.setFixedWidth(250)
+        self.msg_txt.setFixedHeight(self.frame_canvas.height()-20)
+        self.msg_txt.setReadOnly(True)
+
+        self.gridLayout_canvas.addWidget(self.msg_txt,1,0)
 
         self.gridLayout_one.addWidget(typeLabel, 0, 0)
         self.gridLayout_one.addWidget(self.TypeCombo,0,1)
@@ -133,11 +180,21 @@ class Window(QMainWindow):
         self.gridLayout_two.addWidget(email_lb,0,2)
         self.gridLayout_two.addWidget(self.email_txt,0,3)
 
-        self.gridLayout_two.addWidget(send_mail_btn, 0, 4)
+        self.gridLayout_three.addWidget(email_lb1,0,0)
+        self.gridLayout_three.addWidget(self.snd_email_txt, 0, 1)
+
+        self.gridLayout_three.addWidget(email_pwd, 0, 2)
+        self.gridLayout_three.addWidget(self.snd_pwd_txt, 0, 3)
+
+        self.gridLayout_three.addWidget(rx_email_lb, 0, 4)
+        self.gridLayout_three.addWidget(self.rx_email_txt, 0, 5)
+        self.gridLayout_three.addWidget(send_mail_btn, 0, 6)
+
 
         self.pie_chart_for_specified_type(self.TypeCombo.currentText())
 
         self.util = utils()
+        self.msg=""
 
     def email_validation(self):
         self.list=[]
@@ -164,15 +221,20 @@ class Window(QMainWindow):
         self.filtertype+="FILTER:"
         self.list_of_labels_to_send=[]
         self.list_to_send=[]
+    def get_filter_msg(self):
+        msg=""
+        return_msg=""
+        for i,j in zip(self.list_of_labels_to_send,self.list_to_send):
+            msg+=i+": "+str(j)+"\n"
+        return_msg+=self.filtertype+msg
+        return  return_msg
+
 
     def send_mail_btn_click(self):
         msg_to_send="Hey,..Please find the statistics details mentioned below :)\n\n\n"
-        msg=""
-        for i,j in zip(self.list_of_labels_to_send,self.list_to_send):
-            msg+=i+": "+str(j)+"\n"
-        msg_to_send+=self.filtertype+msg
-        if len(msg_to_send)!=0:
-            sending_mail_with_selected_statistics_info(self.email_txt.text(),msg_to_send)
+
+        #if len(msg_to_send)!=0:
+            #sending_mail_with_selected_statistics_info(self.email_txt.text(),msg_to_send)
     def resizeEvent(self, event):
         self.centerOnScreen(self.frame)
 
@@ -186,6 +248,7 @@ class Window(QMainWindow):
             self.pie_chart_for_specified_type(text)
         else:
             self.bar_chart_for_specified_type(text)
+        self.msg_txt.setText(self.get_filter_msg())
     def msg_format_for_display(self,type,text):
         self.filtertype+=" \""+type+"\"\nSELECTED: \""+text+"\"\n\n"
 
@@ -201,6 +264,7 @@ class Window(QMainWindow):
             self.readDomain_for_pie_chart(type,domain,text)
         else:
             self.readDomain_for_bar_chart(type,domain,text)
+        self.msg_txt.setText(self.get_filter_msg())
 
     def readAssignee(self, text):
         type = self.TypeCombo.currentText()
@@ -211,6 +275,7 @@ class Window(QMainWindow):
             self.readAssignee_for_pie_chart(type,assignee,text)
         else:
             self.readAssignee_for_bar_chart(type,assignee,text)
+        self.msg_txt.setText(self.get_filter_msg())
 
     def readAssignee_for_bar_chart(self, type, assignee, text):
         self.read_assignee_or_domain_for_bar_char(type, assignee, text)
@@ -228,7 +293,7 @@ class Window(QMainWindow):
     def read_assignee_or_domain_for_pie_chart(self, type, assignee_or_domain, text):
 
         self.canvas = Canvas(self, width=8, height=4)
-        self.gridLayout.addWidget(self.canvas, 1, 0)
+        self.gridLayout_canvas.addWidget(self.canvas, 1, 1)
         ax = self.canvas.figure.add_subplot(111)
         col = return_col_of_specified_col_name(assignee_or_domain)
         label_list = []
@@ -245,7 +310,7 @@ class Window(QMainWindow):
 
     def read_assignee_or_domain_for_bar_char(self,type,assignee_or_domain,text):
         canvas = Canvas(self, width=8, height=6)
-        self.gridLayout.addWidget(canvas, 1, 0)
+        self.gridLayout_canvas.addWidget(canvas, 1, 1)
         ax = canvas.figure.add_subplot(111)
         col = return_col_of_specified_col_name(assignee_or_domain)
         label_list = []
@@ -285,7 +350,7 @@ class Window(QMainWindow):
         ax.grid()
     def bar_chart_for_specified_type(self,text):
         canvas = Canvas(self, width=8, height=6)
-        self.gridLayout.addWidget(canvas, 1, 0)
+        self.gridLayout_canvas.addWidget(canvas, 1, 1)
         ax = canvas.figure.add_subplot(111)
         label_list = []
         label_list.extend(return_label_list(text))
@@ -322,9 +387,10 @@ class Window(QMainWindow):
 
 
     def pie_chart_for_specified_type(self, text):
-
+        self.init_msg()
+        self.msg_format_for_display("Type", text)
         canvas = Canvas(self, width=8, height=4)
-        self.gridLayout.addWidget(canvas,1,0)
+        self.gridLayout_canvas.addWidget(canvas,1,1)
         ax = canvas.figure.add_subplot(111)
         label_list = []
         label_list.extend(return_label_list(text))
@@ -337,6 +403,7 @@ class Window(QMainWindow):
                   title=text,
                   loc="center left",
                   bbox_to_anchor=(1, 0, 0.5, 1))
+        self.msg_txt.setText(self.get_filter_msg())
 
 class Canvas(FigureCanvas):
     def __init__(self, parent=None, width=5, height=5, dpi=100):
