@@ -24,6 +24,22 @@ class utils:
             else:
                 final_msg += " are Empty\n"
         return final_msg
+    def display_statastics_invalid_fields_message(self, list, lb_list):
+        final_msg = ""
+        count = 1
+        for i in range(0, len(list)):
+            if list[i] == value_chk.invalid.value:
+                count += 1
+                final_msg += lb_list[i]
+                final_msg += ","
+        if len(final_msg) != 0:
+            final_msg = final_msg[:-1]
+        if count != 1:
+            if count == 2:
+                final_msg += " is Invalid\n"
+            else:
+                final_msg += " are Invalid\n"
+        return final_msg
 
     def invalid_fields_message(self, list, lb_list,username):
         final_msg = ""
@@ -35,7 +51,7 @@ class utils:
                 if i==0 and list[i]==value_chk.incorrect.value:
                     final_msg=""
                     if not len(list)>2:
-                        final_msg+="{} Didn\"t Registered yet,please register".format(username)
+                        final_msg+="{} Not a Registered User".format(username)
                         return final_msg
                     if  len(list)>2:
                         final_msg+="{} Username already available,please use any other".format(username)
@@ -43,7 +59,7 @@ class utils:
                 else:
                     if i==2 and list[i]==value_chk.incorrect.value:
                         final_msg = ""
-                        final_msg+=" Password & Confirm Password didnt matched\n"
+                        final_msg+="Password & Confirm Password does not match\n"
                         return final_msg
                 final_msg += ","
         if len(final_msg) != 0:
@@ -63,9 +79,12 @@ class utils:
                 is_duplicate = file_access.duplicates_checking(credentials_file, username)
                 if not is_duplicate:
                     list[0]=value_chk.incorrect.value
-                    msg_to_return+="Didnt Registered yet,please register"
+                    msg_to_return+="Not a Registered User"
                     return msg_to_return
-            list[0] = value_chk.valid.value
+            if username=="":
+                list[0]=value_chk.empty.value
+            else:
+                list[0] = value_chk.valid.value
         elif valid.EXCEED_LIMIT_ERR == result:
             msg_to_return += 'Information', "Max 15 characters are allowed\n"
             list[0] = value_chk.invalid.value
@@ -84,7 +103,10 @@ class utils:
                     list[0]=value_chk.incorrect.value
                     msg_to_return+="Username is already available,please use another"
                     return msg_to_return
-            list[0] = value_chk.valid.value
+            if username=="":
+                list[0] = value_chk.empty.value
+            else:
+                list[0] = value_chk.valid.value
         elif valid.EXCEED_LIMIT_ERR == result:
             msg_to_return += 'Information', "Max 15 characters are allowed\n"
             list[0] = value_chk.invalid.value
@@ -119,7 +141,7 @@ class utils:
                     list[2] = value_chk.valid.value
                 else:
                     list[2]=value_chk.incorrect.value
-                    msg_to_return+="Password & Confirm Password are didn\'t matched"
+                    msg_to_return+="Password & Confirm Password does not match"
         elif valid.EXCEED_LIMIT_ERR == result:
             msg_to_return += "Max 15 characters are allowed\n"
             list[2] = value_chk.invalid.value
