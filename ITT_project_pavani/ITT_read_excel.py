@@ -7,6 +7,7 @@ def read_new_no():
         data1 = list(reader1)
         current_row = len(data1)
         current_cr_num = int(data1[current_row - 1][0]) + 1
+        print(current_cr_num)
         return str(current_cr_num)
 
 def read_last_cr():
@@ -129,12 +130,6 @@ def read_create_date_index(index):
         data = [row for row in csv.reader(f)]
         return data[index][10]
 
-def read_create_date_index(index):
-    with open('cr_list_entry.csv') as f:
-        csv.reader(f, delimiter=",")
-        data = [row for row in csv.reader(f)]
-        return data[index][11]
-
 def read_asignee_with_cr(index):
     with open('cr_list_entry.csv') as f:
         csv.reader(f, delimiter=",")
@@ -188,3 +183,9 @@ def read_issuetype_with_cr(index):
         csv.reader(f, delimiter=",")
         data = [row for row in csv.reader(f)]
         return str(data[index][7])
+
+def read_late_date_index(index):
+    with open('cr_list_entry.csv') as f:
+        csv.reader(f, delimiter=",")
+        data = [row for row in csv.reader(f)]
+        return str(data[index][11])

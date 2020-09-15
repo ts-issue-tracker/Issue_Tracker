@@ -10,13 +10,14 @@ class Main_window(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Home Screen")
+        self.setMinimumWidth(700)
+        self.setMinimumHeight(700)
         self.frame = QFrame(self)
-        self.frame.setFixedSize(500,1000)
-        self.frame.setFrameShape(QFrame.StyledPanel)
-        self.frame.setLineWidth(1)
+        self.frame.setFixedSize(330, 250)
+        # self.frame.setFrameShape(QFrame.StyledPanel)
 
         self.gridLayout = QGridLayout(self.frame)
-        self.gridLayout.setContentsMargins(10, 10, 10, 10)
+        self.gridLayout.setContentsMargins(20, 20, 20, 20)
         self.home_screen()
 
     def home_screen(self):
@@ -52,7 +53,21 @@ class Main_window(QWidget):
         # grid button
         self.gridLayout.addWidget(self.view_statistics, 3, 0)
 
+        # submit button
+        self.Exit = QPushButton()
+        self.Exit.setText("Exit")
+        self.Exit.clicked.connect(self.exit_clicked)
+
+        # grid button
+        self.gridLayout.addWidget(self.Exit, 5, 0)
+        #self.centerOnScreen(self.frame)
         self.show()
+
+    def centerOnScreen(self,frame):
+        frame.move(int((self.width()-self.frame.width()) / 2), int((self.height()-self.frame.height()) / 2))
+
+    def resizeEvent(self, event):
+        self.centerOnScreen(self.frame)
 
     def create_click(self):
         print("clicked")
@@ -75,6 +90,9 @@ class Main_window(QWidget):
 
     def Statistics_clicked(self):
         pass
+
+    def exit_clicked(self):
+        self.close()
 
 if __name__ == "__main__":
     App = QApplication(sys.argv)

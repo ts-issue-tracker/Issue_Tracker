@@ -9,14 +9,14 @@ from ITT_update_screen import *
 class Enter_cr(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Search Screen")
+        self.setMinimumWidth(700)
+        self.setMinimumHeight(700)
         self.frame = QFrame(self)
-        self.frame.setFixedSize(500, 1000)
-        self.frame.setFrameShape(QFrame.StyledPanel)
-        self.frame.setLineWidth(1)
+        self.frame.setFixedSize(330, 250)
+        # self.frame.setFrameShape(QFrame.StyledPanel)
 
         self.gridLayout = QGridLayout(self.frame)
-        self.gridLayout.setContentsMargins(10, 10, 10, 10)
+        self.gridLayout.setContentsMargins(20, 20, 20, 20)
         self.enter()
 
     def enter(self):
@@ -35,8 +35,25 @@ class Enter_cr(QWidget):
         self.Submit_but.clicked.connect(self.submit_but_clicked)
         # grid view button
         self.gridLayout.addWidget(self.Submit_but, 0, 2)
-
+        self.Exit_but = QPushButton()
+        self.Exit_but.setText("Exit")
+        self.Exit_but.clicked.connect(self.Exit_but_clicked)
+        # grid view button
+        self.gridLayout.addWidget(self.Exit_but, 1, 2)
         self.show()
+
+    def resizeEvent(self, event):
+        self.centerOnScreen(self.frame)
+
+    def centerOnScreen(self,frame):
+        frame.move((self.width()-self.frame.width()) / 2, (self.height()-self.frame.height()) / 2)
+
+    def Exit_but_clicked(self):
+        from ITT_home_screen import Main_window
+        self.w = Main_window()
+        self.w.show()
+        self.hide()
+
     def submit_but_clicked(self):
         self.cr_no = self.enter_cr_num_entry.text()
         self.ret = validate_cr_list(self.cr_no)

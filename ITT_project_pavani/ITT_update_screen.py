@@ -12,12 +12,15 @@ class Update(QWidget):
     def __init__(self,cr_index):
         super().__init__()
         self.setWindowTitle("Update Screen")
+        self.setMinimumWidth(600)
+        self.setMinimumHeight(600)
         self.frame = QFrame(self)
         self.frame.setFixedSize(500, 1000)
-        self.frame.setFrameShape(QFrame.StyledPanel)
-        self.frame.setLineWidth(1)
+        # self.frame.setFrameShape(QFrame.StyledPanel)
 
         self.gridLayout = QGridLayout(self.frame)
+        self.gridLayout.setContentsMargins(20, 20, 20, 20)
+
         self.cr_index = cr_index
         self.cr = read_cr_by_index(cr_index)
         self.update()
@@ -80,12 +83,19 @@ class Update(QWidget):
         # entry_cr_state
         self.cr_state_entry = QComboBox(self)
         self.cr_state_entry.setFont(QFont('Arial', 10))
+        self.cr_state_entry.setStyleSheet("QComboBox"
+                                      "{"
+                                      "background-color: white;"
+                                      "}")
         self.cr_state_entry.addItem("Open")
         self.cr_state_entry.addItem("Analysis")
         self.cr_state_entry.addItem("Closed")
         self.cr_state_entry.addItem("In-progress")
         self.cr_state_entry.addItem("Reopen")
         self.prev_cr_state = read_cr_with_cr(self.cr_index)
+        self.crindex = self.cr_state_entry.findText(self.prev_cr_state)
+        self.cr_state_entry.setCurrentIndex(self.crindex)
+
         self.cr_state_entry.currentIndexChanged.connect(self.cronChanged)
 
         # grid cr state label
@@ -97,6 +107,10 @@ class Update(QWidget):
         self.si_state_label.setFont(QFont('Arial', 10))
         #entry
         self.si_state = QComboBox(self)
+        self.si_state.setStyleSheet("QComboBox"
+                                          "{"
+                                          "background-color: white;"
+                                          "}")
         self.si_state.addItem("Open")
         self.si_state.addItem("Analysis")
         self.si_state.addItem("Fix")
@@ -106,6 +120,8 @@ class Update(QWidget):
         self.si_state.addItem("Built")
         self.si_state.setFont(QFont('Arial', 10))
         self.si_prev_state = read_si_with_cr(self.cr_index)
+        self.si_index = self.si_state.findText(self.si_prev_state)
+        self.si_state.setCurrentIndex(self.si_index)
         self.si_state.currentIndexChanged.connect(self.onChanged)
 
         #grid for si state
@@ -127,6 +143,8 @@ class Update(QWidget):
         self.issuetype_entry.addItem("Internal")
         self.issuetype_entry.addItem("Blacklisting")
         self.issue_type = read_issuetype_with_cr(self.cr_index)
+        self.it_index = self.issuetype_entry.findText(self.issue_type)
+        self.issuetype_entry.setCurrentIndex(self.it_index)
         self.issuetype_entry.currentIndexChanged.connect(self.onchangeissue)
 
         # grid Issue type label
@@ -149,9 +167,11 @@ class Update(QWidget):
         self.des_label = QLabel("Description:")
         self.des_label.setFont(QFont('Arial', 10))
         # entry Description
-        self.des_entry = QLineEdit(self)
+        self.des_entry = QTextEdit(self)
         self.des_entry.setFont(QFont('Arial', 10))
+        self.des_entry.setFixedHeight(130)
         self.des = read_des_with_cr(self.cr_index)
+        print(self.des)
         self.des_entry.setText(self.des)
 
         # grid Description label
@@ -170,10 +190,15 @@ class Update(QWidget):
                                         "background-color: white;"
                                         "}")
 
-        self.domain_entry.addItem("Select")
         self.domain_entry.addItem("Audio")
         self.domain_entry.addItem("Camera")
         self.domain_entry.addItem("Video")
+        self.domain = read_domain_with_cr(self.cr_index)
+        print(self.domain)
+        self.domain_index = self.domain_entry.findText(self.domain)
+        print(self.domain_index)
+        self.domain_entry.setCurrentIndex(self.domain_index)
+        self.domain_entry.currentIndexChanged.connect(self.onchangeissue)
 
         # grid domain label
         self.gridLayout.addWidget(self.domain_label, 8, 0)
@@ -201,6 +226,8 @@ class Update(QWidget):
         self.build_label.setFont(QFont('Arial', 10))
         # build entry
         self.build_entry = QLineEdit(self)
+        self.build = read_build_with_cr(self.cr_index)
+        self.build_entry.setText(self.build)
         self.build_entry.setFont(QFont('Arial', 10))
 
         # grid git label
@@ -263,6 +290,12 @@ class Update(QWidget):
 
         self.show()
 
+    def resizeEvent(self, event):
+        self.centerOnScreen(self.frame)
+
+    def centerOnScreen(self,frame):
+        frame.move(int((self.width()-self.frame.width()) / 2), int((self.height()-self.frame.height()) / 2))
+
     def cronChanged(self):
         prev_state = self.prev_cr_state
         state = self.cr_state_entry.currentText()
@@ -324,8 +357,11 @@ class Update(QWidget):
     def submit_click(self):
         print("clicked")
         cr_no = self.crno_entry.text()
+        print(cr_no)
         title = self.title_entry.text()
-        des = self.des_entry.text()
+        print(title)
+        des = self.des_entry.toPlainText()
+        print(des)
         assignee = self.assignee_entry.text()
         print("si")
         si = self.si_state.currentText()

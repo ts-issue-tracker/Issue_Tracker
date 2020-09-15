@@ -15,13 +15,15 @@ class Create_cr(QWidget):
     print("Create")
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Issue tracker")
+        self.setWindowTitle("Create Issue")
+        self.setMinimumWidth(600)
+        self.setMinimumHeight(600)
         self.frame = QFrame(self)
-        self.frame.setFixedSize(500,1000)
-        self.frame.setFrameShape(QFrame.StyledPanel)
-        self.frame.setLineWidth(1)
+        self.frame.setFixedSize(500, 1000)
+        #self.frame.setFrameShape(QFrame.StyledPanel)
 
         self.gridLayout = QGridLayout(self.frame)
+        self.gridLayout.setContentsMargins(20, 20, 20, 20)
         self.create_an_issue()
 
     def create_an_issue(self):
@@ -140,14 +142,9 @@ class Create_cr(QWidget):
         self.des_label = QLabel("Description:")
         self.des_label.setFont(QFont('Arial', 10))
         # entry Description
-        self.des_entry = QLineEdit(self)
+        self.des_entry = QTextEdit(self)
         self.des_entry.setFont(QFont('Arial', 10))
-
         self.des_entry.setFixedHeight(130)
-        #my_wrap = textwrap.TextWrapper(width=30)
-        my_des = self.des_entry.text()
-        
-        #self.des_entry.setText(my_wrap.fill(text=my_des))
         # grid Description label
         self.gridLayout.addWidget(self.des_label, 7 , 0)
         # grid Description entry
@@ -263,6 +260,12 @@ class Create_cr(QWidget):
 
         self.show()
 
+    def resizeEvent(self, event):
+        self.centerOnScreen(self.frame)
+
+    def centerOnScreen(self,frame):
+        frame.move(int((self.width()-self.frame.width()) / 2), int((self.height()-self.frame.height()) / 2))
+
     def Upload_but_clicked(self):
         from ITT_upload_file import Upload
         print("Upload_but_clicked")
@@ -280,7 +283,7 @@ class Create_cr(QWidget):
             print("clicked")
             cr_no = self.crno_entry.text()
             title = self.title_entry.text()
-            des = self.des_entry.text()
+            des = self.des_entry.toPlainText()
             assignee = self.assignee_entry.text()
             si = self.si_entry.currentText()
             status = self.cr_state_entry.currentText()
@@ -297,11 +300,22 @@ class Create_cr(QWidget):
             print(combo_dict)
             ret_title = title_validate(title)
             if(ret_title == True):
+                print("title")
                 ret_des = des_validate(des)
                 if(ret_des == True):
-                    save_in_excel(combo_dict)
-                    print("save")
-                self.open_view_screen()
+                    print("des")
+                    ret_domain = domain_validate(domain)
+                    if(ret_domain == True):
+                        print("domain")
+                        ret_build = build_validate(build_id)
+                        print("build")
+                        if(ret_build == True):
+                            #ret_assignee = assignee_validate(assignee)
+                            #print("assignee")
+                            #if(ret_assignee == True):
+                                save_in_excel(combo_dict)
+                                print("save")
+                                self.open_view_screen()
             else:
                 print("no")
                 pass

@@ -14,12 +14,14 @@ class view_window(QWidget):
         super().__init__()
         self.title = "View"
         self.setWindowTitle(self.title)
+        self.setMinimumWidth(600)
+        self.setMinimumHeight(600)
         self.frame = QFrame(self)
         self.frame.setFixedSize(500, 1000)
-        self.frame.setFrameShape(QFrame.StyledPanel)
-        self.frame.setLineWidth(1)
+        # self.frame.setFrameShape(QFrame.StyledPanel)
 
         self.gridLayout = QGridLayout(self.frame)
+        self.gridLayout.setContentsMargins(20, 20, 20, 20)
         self.view_screen()
 
     def view_screen(self):
@@ -169,7 +171,8 @@ class view_window(QWidget):
         self.des_label = QLabel("Description:")
         self.des_label.setFont(QFont('Arial', 10))
         # entry Description
-        self.des_entry = QLineEdit(self)
+        self.des_entry = QTextEdit(self)
+        self.des_entry.setFixedHeight(130)
         self.des = read_last_des()
         self.des_entry.setFont(QFont('Arial', 10))
         self.des_entry.setReadOnly(True)
@@ -177,7 +180,6 @@ class view_window(QWidget):
                                            "{"
                                            "background-color: #DBDBDB;"
                                            "}")
-        self.des_entry.setAlignment(QtCore.Qt.AlignCenter)
         self.des_entry.setText(self.des)
         # grid Description label
         self.gridLayout.addWidget(self.des_label, 7, 0)
@@ -280,6 +282,12 @@ class view_window(QWidget):
         # grid button
         self.gridLayout.addWidget(self.exit, 13, 2)
         self.show()
+
+    def resizeEvent(self, event):
+        self.centerOnScreen(self.frame)
+
+    def centerOnScreen(self,frame):
+        frame.move(int((self.width()-self.frame.width()) / 2), int((self.height()-self.frame.height()) / 2))
 
     def exit_clicked(self):
         self.w = Main_window()

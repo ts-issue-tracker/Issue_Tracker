@@ -38,6 +38,7 @@ def save_update_info(combo_dict1,cr,index):
     olddata.extend(newdata)
     combo_dict1.update({'History': olddata})
     print(combo_dict1)
+    print("saving")
     save_data(combo_dict1,index)
     print("complete")
 

@@ -9,14 +9,15 @@ from ITT_view_cr import *
 class Enter_cr(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Search Screen")
+        self.setWindowTitle("View Screen")
+        self.setMinimumWidth(700)
+        self.setMinimumHeight(700)
         self.frame = QFrame(self)
-        self.frame.setFixedSize(500, 1000)
-        self.frame.setFrameShape(QFrame.StyledPanel)
-        self.frame.setLineWidth(1)
+        self.frame.setFixedSize(330, 250)
+        # self.frame.setFrameShape(QFrame.StyledPanel)
 
         self.gridLayout = QGridLayout(self.frame)
-        self.gridLayout.setContentsMargins(10, 10, 10, 10)
+        self.gridLayout.setContentsMargins(20, 20, 20, 20)
         self.enter()
 
     def enter(self):
@@ -37,6 +38,13 @@ class Enter_cr(QWidget):
         self.gridLayout.addWidget(self.Submit_but, 0, 2)
 
         self.show()
+
+    def resizeEvent(self, event):
+            self.centerOnScreen(self.frame)
+
+    def centerOnScreen(self, frame):
+            frame.move(int((self.width()-self.frame.width()) / 2), int((self.height()-self.frame.height()) / 2))
+
     def submit_but_clicked(self):
         self.cr_no = self.enter_cr_num_entry.text()
         self.ret = validate_cr_list(self.cr_no)

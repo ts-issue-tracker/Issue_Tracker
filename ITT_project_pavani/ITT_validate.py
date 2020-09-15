@@ -1,15 +1,14 @@
 import re
 import csv
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QWidget,QMessageBox
-
-global msg
-
+from PyQt5.QtWidgets import QMessageBox
 
 def title_validate(title):
     numbers = re.findall('\d+', title)
-    symbols = re.findall(r"[~!@#$%^&*()_+':;<>?,.|\\/\"]", title)
+    symbols = re.findall(r"[~`!@#$%^&*(){}[]_-+':;<>?=|\\/\"]", title)
+
     if(len(title) == 0):
+            print("t1")
             msg = QMessageBox()
             msg.setWindowTitle("Invalid")
             msg.setText("Please enter the title")
@@ -17,7 +16,7 @@ def title_validate(title):
             return False
 
     if(len(numbers) > 0 or len(symbols)>0):
-        print("val if")
+        print("t2")
         msg = QMessageBox()
         msg.setWindowTitle("Invalid")
         msg.setText("Title is not valid")
@@ -25,72 +24,51 @@ def title_validate(title):
         return False
 
     if(len(title) > 80):
+        print("t3")
         msg = QMessageBox()
         msg.setWindowTitle("Invalid")
         msg.setText("Please enter the title less than 80 characters")
         x = msg.exec_()
         return False
+
     else:
+        print("t4")
         return True
 
 def des_validate(des):
     numbers = re.findall('\d+', des)
-    symbols = re.findall(r"[~!@#$%^&*()_+':;<>?,.|\\/\"]", des)
+    symbols = re.findall(r"[~`!@#$%^&*(){}[]_-+':;<>=?|\\/\"]", des)
 
     if(len(des) == 0):
+        print("d1")
         msg = QMessageBox()
         msg.setWindowTitle("Invalid")
-        msg.setText("Description shouldnot be empty")
+        msg.setText("Description should not be empty")
         x = msg.exec_()
         return False
 
     if (len(numbers) > 0 or len(symbols) > 0):
-        print("val if")
+        print("d2")
         msg = QMessageBox()
         msg.setWindowTitle("Invalid")
-        msg.setText("Title is not valid")
+        msg.setText("Description is not valid")
         x = msg.exec_()
         return False
     else:
-        return True
-
-def cr_state_validate(status):
-    if status != "Open":
-        msg = QMessageBox()
-        msg.setWindowTitle("Invalid")
-        msg.setText("Change the CR State to open")
-        x = msg.exec_()
-        return False
-    else:
+        print("d3")
         return True
 
 def domain_validate(domain):
     if domain == "Select":
+        print("d01")
         msg = QMessageBox()
         msg.setWindowTitle("Invalid")
         msg.setText("Please Select tech area/domain")
         x = msg.exec_()
         return False
     else:
+        print("do2")
         return True
-
-def build_validation(build):
-    str = str(build)
-    symbols = re.findall(r"[~!@#$%^&*()_+':;<>?,|\\/\"]", str)
-    if str.isupper() or str.isalnum():
-        return True
-    if len(symbols) > 0:
-        msg = QMessageBox()
-        msg.setWindowTitle("Invalid")
-        msg.setText("Build Id is invalid")
-        x = msg.exec_()
-        return False
-    else:
-        msg = QMessageBox()
-        msg.setWindowTitle("Invalid")
-        msg.setText("Build Id is invalid")
-        x = msg.exec_()
-        return False
 
 def validate_cr_list(crno):
     ck = -1
@@ -112,3 +90,30 @@ def validate_cr_list(crno):
         return False
     else:
         return ck
+
+def build_validate(buildid):
+    print(buildid)
+    symbols = re.findall(r"[~`!@#$%^&*(){}[]_-=+':;<>?|\\/\"]", buildid)
+    print(symbols)
+    if(len(symbols) > 0):
+        print("b1")
+        msg = QMessageBox()
+        msg.setWindowTitle("Invalid")
+        msg.setText("Build Id is not valid")
+        x = msg.exec_()
+        return False
+    if(len(buildid) == 0):
+        print("b2")
+        msg = QMessageBox()
+        msg.setWindowTitle("Invalid")
+        msg.setText("Please enter Build id")
+        x = msg.exec_()
+        return False
+    else:
+        print("b3")
+        return True
+
+def assignee_validate(assignee):
+    ck = False
+    if(len(assignee == 0)):
+        return True
