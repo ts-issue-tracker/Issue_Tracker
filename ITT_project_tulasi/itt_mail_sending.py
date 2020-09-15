@@ -20,18 +20,17 @@ def sending_registration_mail_to(toaddrs):
     #use smtplib.SMTP() if port is 587
     #server.starttls()
     server.ehlo()
-    server.login(login, password)
+    r=server.login(login, password)
+    print(r)
     server.send_message(msg)
     server.ehlo()
     server.quit()
 
-def sending_mail_with_selected_statistics_info(toaddrs,msgtxt):
-    fromaddr = "tulasi.jana"
-    # toaddrs="tulasi.jana@thundersoft.com"
+def sending_mail_with_selected_statistics_info(login,password,toaddrs,msgtxt):
+    msg_to_return=""
+    fromaddr = "tulasi.jana@thundersoft.com"
     SMTPServer = "mail.thundersoft.com"
     port = 465  # 587
-    login = "tulasi.jana@thundersoft.com"
-    password = "tulasi@tsoft1994"
     msg = EmailMessage()
     msg.set_content(msgtxt)
     msg['Subject'] = "Issue Tracking Tool: Selected Statistics Information"
@@ -41,7 +40,15 @@ def sending_mail_with_selected_statistics_info(toaddrs,msgtxt):
     #use smtplib.SMTP() if port is 587
     #server.starttls() 
     server.ehlo()
-    server.login(login, password)
-    server.send_message(msg)
-    server.ehlo()
-    server.quit()
+    try:
+        server.login(login, password)
+        server.send_message(msg)
+    except smtplib.SMTPAuthenticationError:
+        msg_to_return+="Incorrect Login Credentials"
+    except smtplib.SMTPRecipientsRefused:
+        msg_to_return += "Incorrect Recipient Mail ID"
+    else:
+        server.ehlo()
+        server.quit()
+        msg_to_return+="Mail Sent Successfully"
+    return msg_to_return
