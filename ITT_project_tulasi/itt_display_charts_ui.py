@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import *
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
 from itt_mail_sending import *
 from itt_main_file_access import *
 from PyQt5.QtWidgets import QMessageBox
@@ -19,7 +20,8 @@ class Window(QMainWindow):
         self.filtertype = ""
         self.list_to_send = []
         self.list_of_labels_to_send = []
-
+        self.list=[value_chk.empty.value,value_chk.empty.value,value_chk.empty.value]
+        self.label=["Mail ID","Password","Recipient Mail ID"]
         self.setWindowTitle(title)
         self.setMinimumWidth(1000)
         self.setMinimumHeight(700)
@@ -33,7 +35,7 @@ class Window(QMainWindow):
 
         self.frame_one = QFrame(self)
         #self.frame_one.setFrameShape(QFrame.StyledPanel)
-        self.frame_one.setFixedSize(850, 60)
+        self.frame_one.setFixedSize(950, 40)
 
         self.gridLayout_one = QGridLayout(self.frame_one)
         self.gridLayout.addWidget(self.frame_one,0,0)
@@ -51,16 +53,11 @@ class Window(QMainWindow):
         self.gridLayout_two = QGridLayout(self.frame_two)
         self.gridLayout.addWidget(self.frame_two, 2, 0)
 
-        chk_box = QCheckBox()
-        chk_box.setText("Show Send Mail Details")
-        self.gridLayout.addWidget(chk_box, 3, 0)
-        chk_box.setFont(QFont('Arial', 10))
-
         self.frame_three = QFrame(self)
-        #self.frame_three.setFrameShape(QFrame.StyledPanel)
+        self.frame_three.setFrameShape(QFrame.StyledPanel)
         self.gridLayout_three = QGridLayout(self.frame_three)
-        self.frame_three.setFixedSize(950, 60)
-        self.gridLayout.addWidget(self.frame_three, 4, 0)
+        self.frame_three.setFixedSize(370, 150)
+        self.gridLayout.addWidget(self.frame_three, 3, 0)
 
         self.MyUI()
 
@@ -71,7 +68,7 @@ class Window(QMainWindow):
         self.TypeCombo.addItem('Domain')
         self.TypeCombo.addItem('IssueType')
         self.TypeCombo.activated[str].connect(self.readType)
-        self.TypeCombo.setFixedWidth(150)
+        self.TypeCombo.setFixedWidth(120)
 
         typeLabel = QLabel("&Type:")
         typeLabel.setFont(QFont('Arial', 10))
@@ -87,10 +84,10 @@ class Window(QMainWindow):
         self.AssigneeCombo.addItem('Suresh')
         self.AssigneeCombo.addItem('Swetha')
         self.AssigneeCombo.activated[str].connect(self.readAssignee)
-        self.AssigneeCombo.setFixedWidth(150)
+        self.AssigneeCombo.setFixedWidth(120)
 
-        AssigneeLabel = QLabel("&Assignee && &Type:")
-        AssigneeLabel.setFixedWidth(100)
+        AssigneeLabel = QLabel("&Assignee:")
+        AssigneeLabel.setFixedWidth(80)
         AssigneeLabel.setFont(QFont('Arial', 10))
         AssigneeLabel.setBuddy(self.AssigneeCombo)
 
@@ -100,9 +97,9 @@ class Window(QMainWindow):
         self.DomianCombo.addItem('Camera')
         self.DomianCombo.addItem('Video')
         self.DomianCombo.activated[str].connect(self.readDomain)
-        self.DomianCombo.setFixedWidth(150)
+        self.DomianCombo.setFixedWidth(120)
 
-        DomainLabel = QLabel("&Domain && &Type:")
+        DomainLabel = QLabel("&Domain:")
         DomainLabel.setFixedWidth(100)
         DomainLabel.setFont(QFont('Arial', 10))
         DomainLabel.setBuddy(self.DomianCombo)
@@ -112,50 +109,43 @@ class Window(QMainWindow):
         self.ChartTypeCombo.addItem('Pie Chart')
         self.ChartTypeCombo.addItem('Bar Chart')
         self.ChartTypeCombo.activated[str].connect(self.readChartType)
-        self.ChartTypeCombo.setFixedWidth(150)
+        self.ChartTypeCombo.setFixedWidth(120)
+
         ChartTypeLabel = QLabel("&ChartType:")
         ChartTypeLabel.setFixedWidth(100)
         ChartTypeLabel.setFont(QFont('Arial', 10))
         ChartTypeLabel.setBuddy(self.ChartTypeCombo)
 
-        email_lb = QLabel("Email ID")
-        email_lb.setFont(QFont('Arial', 10))
-
-        self.email_txt = QLineEdit()
-        self.email_txt.setFont(QFont('Arial', 10))
-        self.email_txt.editingFinished.connect(self.email_validation)
-        self.email_txt.resize(130,100)
-
-        #send_mail_btn = QPushButton()
-        #send_mail_btn.setText("Send Mail")
-        #send_mail_btn.setFont(QFont('Arial', 10))
-        #send_mail_btn.clicked.connect(self.send_mail_btn_click)
-
-        email_lb1 = QLabel("Sender Mail")
+        email_lb1 = QLabel("Mail ID")
         email_lb1.setFont(QFont('Arial', 10))
 
-        self.snd_email_txt = QLineEdit()
-        self.snd_email_txt.setFont(QFont('Arial', 10))
-        self.snd_email_txt.editingFinished.connect(self.email_validation)
+        self.mail_txt = QLineEdit()
+        self.mail_txt.setFont(QFont('Arial', 10))
+        self.mail_txt.editingFinished.connect(lambda: self.email_validation(email_lb1.text(),0))
+        self.mail_txt.setFixedWidth(250)
 
-        email_pwd = QLabel("Sender Password")
+        email_pwd = QLabel("Password")
         email_pwd.setFont(QFont('Arial', 10))
 
-        self.snd_pwd_txt = QLineEdit()
-        self.snd_pwd_txt.setFont(QFont('Arial', 10))
-        self.snd_pwd_txt.editingFinished.connect(self.email_validation)
+        self.pwd_txt = QLineEdit()
+        self.pwd_txt.setFont(QFont('Arial', 10))
+        self.pwd_txt.editingFinished.connect(self.password_validation)
+        self.pwd_txt.setFixedWidth(250)
+        self.pwd_txt.setEchoMode(QLineEdit.Password)
 
-        rx_email_lb = QLabel("Receiver Mail")
+        rx_email_lb = QLabel("Recipient Mail ID")
         rx_email_lb.setFont(QFont('Arial', 10))
+
+        self.rx_email_txt = QLineEdit()
+        self.rx_email_txt.setFont(QFont('Arial', 10))
+        self.rx_email_txt.editingFinished.connect(lambda: self.email_validation(rx_email_lb.text(),2))
+        self.rx_email_txt.setFixedWidth(250)
 
         send_mail_btn = QPushButton()
         send_mail_btn.setText("Send Mail")
         send_mail_btn.setFont(QFont('Arial', 10))
         send_mail_btn.clicked.connect(self.send_mail_btn_click)
-
-        self.rx_email_txt = QLineEdit()
-        self.rx_email_txt.setFont(QFont('Arial', 10))
-        self.rx_email_txt.editingFinished.connect(self.email_validation)
+        send_mail_btn.setFixedWidth(100)
 
         self.msg_txt = QTextEdit()
         self.msg_txt.setFont(QFont('Arial', 10))
@@ -174,47 +164,45 @@ class Window(QMainWindow):
         self.gridLayout_one.addWidget(DomainLabel, 0, 4)
         self.gridLayout_one.addWidget(self.DomianCombo, 0, 5)
 
-        self.gridLayout_two.addWidget(ChartTypeLabel, 0, 0)
-        self.gridLayout_two.addWidget(self.ChartTypeCombo, 0, 1)
-
-        self.gridLayout_two.addWidget(email_lb,0,2)
-        self.gridLayout_two.addWidget(self.email_txt,0,3)
+        self.gridLayout_one.addWidget(ChartTypeLabel, 0, 6)
+        self.gridLayout_one.addWidget(self.ChartTypeCombo, 0, 7)
 
         self.gridLayout_three.addWidget(email_lb1,0,0)
-        self.gridLayout_three.addWidget(self.snd_email_txt, 0, 1)
+        self.gridLayout_three.addWidget(self.mail_txt, 0, 1)
 
-        self.gridLayout_three.addWidget(email_pwd, 0, 2)
-        self.gridLayout_three.addWidget(self.snd_pwd_txt, 0, 3)
+        self.gridLayout_three.addWidget(email_pwd, 1, 0)
+        self.gridLayout_three.addWidget(self.pwd_txt, 1, 1)
 
-        self.gridLayout_three.addWidget(rx_email_lb, 0, 4)
-        self.gridLayout_three.addWidget(self.rx_email_txt, 0, 5)
-        self.gridLayout_three.addWidget(send_mail_btn, 0, 6)
-
+        self.gridLayout_three.addWidget(rx_email_lb, 2, 0)
+        self.gridLayout_three.addWidget(self.rx_email_txt, 2, 1)
+        self.gridLayout_three.addWidget(send_mail_btn, 3, 0)
 
         self.pie_chart_for_specified_type(self.TypeCombo.currentText())
 
         self.util = utils()
         self.msg=""
 
-    def email_validation(self):
-        self.list=[]
-        self.list.append(0)
+    def email_validation(self,mail_label,index):
+        if mail_label.__contains__("Recipient"):
+            mail=self.rx_email_txt.text()
+        else:
+            mail=self.mail_txt.text()
         msg_to_display = ""
-        msg_to_display += self.email_validation_with_msg(self.list, self.email_txt.text())
+        msg_to_display += self.email_validation_with_msg(self.list, mail,mail_label,index)
         if len(msg_to_display) != 0:
             QMessageBox.about(self, 'Information', msg_to_display)
 
-    def email_validation_with_msg(self,list,email_id):
+    def email_validation_with_msg(self,list,mail_id,mail_label,index):
         msg_to_return = ""
-        result = valid.email_id_check(email_id)
+        result = valid.email_id_check(mail_id)
         if result == valid.SUCCESS:
-            if email_id == "":
-                list[0] = value_chk.empty.value
+            if mail_id == "":
+                list[index] = value_chk.empty.value
             else:
-                list[0] = value_chk.valid.value
+                list[index] = value_chk.valid.value
         else:
-            msg_to_return += "Invalid Email ID"
-            list[0] = value_chk.invalid.value
+            msg_to_return += "Invalid {}".format(mail_label)
+            list[index] = value_chk.invalid.value
         return msg_to_return
     def init_msg(self):
         self.filtertype=""
@@ -228,13 +216,34 @@ class Window(QMainWindow):
             msg+=i+": "+str(j)+"\n"
         return_msg+=self.filtertype+msg
         return  return_msg
+    def password_validation(self):
+        msg_to_display = ""
+        if self.pwd_txt.text()=="":
+            self.list[1]=value_chk.empty.value
+        else:
+            self.list[1] = value_chk.valid.value
+        #msg_to_display+=self.util.password_validation\
+        #   (self.list,self.pwd_txt.text())
+        if len(msg_to_display)!=0:
+            QMessageBox.about(self, 'Information', msg_to_display)
 
 
     def send_mail_btn_click(self):
         msg_to_send="Hey,..Please find the statistics details mentioned below :)\n\n\n"
-
-        #if len(msg_to_send)!=0:
-            #sending_mail_with_selected_statistics_info(self.email_txt.text(),msg_to_send)
+        msg_to_send+=self.get_filter_msg()
+        mail_id=self.mail_txt.text()
+        pwd=self.pwd_txt.text()
+        rx_mail_id=self.rx_email_txt.text()
+        print(mail_id+pwd+rx_mail_id)
+        msg=self.util.empty_fields_message(self.list,self.label)
+        msg+=self.util.display_statastics_invalid_fields_message(self.list,self.label)
+        if msg!="":
+            QMessageBox.about(self, 'Information', msg)
+        if len(msg_to_send)!=0 and len(msg)!=0 :
+            if self.list[0]==value_chk.valid.value and self.list[1]==value_chk.valid.value \
+                    and self.list[2]==value_chk.valid.value:
+                msg_j=sending_mail_with_selected_statistics_info(mail_id,pwd,rx_mail_id,msg_to_send)
+                print(msg_j)
     def resizeEvent(self, event):
         self.centerOnScreen(self.frame)
 
@@ -302,7 +311,9 @@ class Window(QMainWindow):
         list = []
         list.extend(list_to_display_on_pie_for_assignee(col, assignee_or_domain, type))
         self.list_to_send.extend(list)
-        wedges, texts, autotexts = ax.pie(list, explode=None, colors=['b', 'g', 'r', 'y', 'm'], autopct='% 1d %%')
+        wedges, texts, autotexts = ax.pie(list, explode=None, colors=['b', 'g', 'r', 'y', 'm'],
+                                          autopct=lambda p: '{:1d}%'.format(round(p)) if p > 0 else ''
+                                          )
         ax.legend(wedges, label_list,
                   title=type,
                   loc="center left",
@@ -344,6 +355,7 @@ class Window(QMainWindow):
         for i in list:
             k += i
         plt.ylim([0, k])
+        ax.yaxis.set_major_locator(ticker.MultipleLocator(1))
 
         # Adding the legend and showing the plot
         ax.legend(label_list, loc='upper left')
@@ -362,7 +374,7 @@ class Window(QMainWindow):
         width = 0.1
         color_list = ['b', 'g', 'r', 'y', 'm']
         for i, j, k in zip(list, color_list, range(0, len(list))):
-            ax.bar(pos + width * k, i, width, alpha=0.5, color=j)
+            ax.bar(pos + width * k, i, width, alpha=1, color=j)
 
         # Set the y axis label
         ax.set_ylabel('Count')
@@ -380,6 +392,7 @@ class Window(QMainWindow):
         for i in list:
             k += i
         plt.ylim([0, k])
+        ax.yaxis.set_major_locator(ticker.MultipleLocator(1))
 
         # Adding the legend and showing the plot
         ax.legend(label_list, loc='upper left')
@@ -398,7 +411,8 @@ class Window(QMainWindow):
         pie_chart_list = []
         pie_chart_list.extend(list_to_display_on_pie(text))
         self.list_to_send.extend(pie_chart_list)
-        wedges, texts, autotexts =ax.pie(pie_chart_list, explode=None, colors=['b', 'g', 'r', 'y', 'm'], autopct='% 1d %%')
+        wedges, texts, autotexts =ax.pie(pie_chart_list, explode=None, colors=['b', 'g', 'r', 'y', 'm'],
+                                         autopct=lambda p: '{:1d}%'.format(round(p)) if p > 0 else '')
         ax.legend(wedges, label_list,
                   title=text,
                   loc="center left",
