@@ -16,8 +16,8 @@ class login_window(QWidget):
         super().__init__()
         self.title = "Login"
 
-        self.user_var=2
-        self.pwd_var=2
+        self.user_var=value_chk.empty.value
+        self.pwd_var=value_chk.empty.value
         self.list=[self.user_var,self.pwd_var]
         self.lb_list=["Usename","Password"]
         self.non_exising_user=False
@@ -111,7 +111,7 @@ class login_window(QWidget):
         msg_to_display+=self.util.empty_fields_message(self.list,self.lb_list)
         invalid_msg_to_display = ""
         invalid_msg_to_display += self.util.invalid_fields_message(self.list,self.lb_list,username)
-        if invalid_msg_to_display.__contains__("Didn\"t Registered yet,please register"):
+        if invalid_msg_to_display.__contains__("Not a Registered User"):
             msg_to_display=""
         if len(msg_to_display)==0 and len(invalid_msg_to_display)==0:
             if username != "" and password != '':
@@ -127,10 +127,10 @@ class login_window(QWidget):
                             pwd_var=value_chk.incorrect.value
                             return
                         else:
-                            QMessageBox.about(self, 'Information', "Didnt Registered yet,please register")
+                            QMessageBox.about(self, 'Information', "Not a Registered User")
                 else:
                     if self.list[0]==value_chk.incorrect.value:
-                        QMessageBox.about(self, 'Information', "Didnt Registered yet,please register")
+                        QMessageBox.about(self, 'Information', "Not a Registered User")
         else:
             if len(invalid_msg_to_display)!=0:
                  msg_to_display+=" "+invalid_msg_to_display
@@ -148,6 +148,10 @@ class login_window(QWidget):
             (self.list,credentials_file,self.user_txt.text())
         if len(msg_to_display)!=0:
             QMessageBox.about(self, 'Information', msg_to_display)
+        if msg_to_display.__contains__("Not a Registered User"):
+            self.user_txt.setText("")
+            self.list[0]=value_chk.empty.value
+            self.user_txt.setFocus()
 
     def password_validation(self):
         msg_to_display = ""
