@@ -14,10 +14,10 @@ class register_window(QWidget):
         super().__init__()
         self.values = {'Username': False, 'Password': False, 'Confirm Password': False,'Email ID': False}
         self.title = "Register"
-        self.user_var = 2
-        self.pwd_var = 2
-        self.confirm_pwd_var=2
-        self.email_id_var=2
+        self.user_var = value_chk.empty.value
+        self.pwd_var = value_chk.empty.value
+        self.confirm_pwd_var=value_chk.empty.value
+        self.email_id_var=value_chk.empty.value
         self.list = [self.user_var, self.pwd_var, self.confirm_pwd_var,self.email_id_var]
 
         self.setWindowTitle(self.title)
