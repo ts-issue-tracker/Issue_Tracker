@@ -1,26 +1,82 @@
 import xlrd
 from crdisplay import *
-from Itt_Display_list import *
 from Itt_Download import *
+from ITT_mail import *
 ENTRY_NOT_FOUND = -4
 # Give the location of the file
 file_location = ("C:\\Users\\akshay\\Downloads\\projectexecl.xlsx")
-
-
 
 wb = xlrd.open_workbook(file_location)
 sheet = wb.sheet_by_index(0)
 row = 0
 col = 0
 result_list = []
-print(sheet.nrows)
-print(sheet.ncols)
-
 names = []
 bientries = []
 sientries = []
 filters = {"CR":'nil',"Title":'nil',"Assignee":'nil',"State":'nil',"Software Image":'nil',"Domain":'nil',"Issue Type":'nil',"GIT commit ID/Gerrit Link":'nil',"Build ID":'nil',"Created on":'nil',"Last Modified":'nil',"History":'nil'}
 filrow = 0
+
+
+class CustomDialog(QDialog):
+
+    def __init__(self, *args, **kwargs):
+        super(CustomDialog, self).__init__(*args, **kwargs)
+
+        self.setWindowTitle("HELLO!")
+
+        #QBtn = QDialogButtonBox.Ok | QDialogButtonBox.Cancel
+        self.sendButton = QPushButton("Send",self)
+        self.credential()
+        #self.buttonBox = QDialogButtonBox(QBtn)
+        #self.buttonBox.accepted.connect(self.accept)
+        #self.buttonBox.rejected.connect(self.reject)
+        self.sendButton.clicked.connect(self.ok_clicked)
+        self.layout = QVBoxLayout()
+        self.layout.addWidget(self.senderidLabel)
+        self.layout.addWidget(self.senderid)
+        self.layout.addWidget(self.senderpswdLabel)
+        self.layout.addWidget(self.senderpswd)
+        self.layout.addWidget(self.receiverIdLabel)
+        self.layout.addWidget(self.receiverId)
+        self.layout.addWidget(self.sendButton)
+        self.setLayout(self.layout)
+
+    def credential(self):
+        #self.senderid = QLineEdit()
+        #self.nameCompleter()
+        self.senderid = QLineEdit()
+        self.senderid.setEchoMode(QLineEdit.Normal)
+        #self.senderid.setCompleter(self.completer)
+        self.senderid.editingFinished.connect(self.view_senderid)
+        self.senderidLabel = QLabel("User Email-ID")
+        self.senderidLabel.setBuddy(self.senderid)
+
+        self.senderpswd = QLineEdit()
+        self.senderpswd.setEchoMode(QLineEdit.Password)
+        # self.senderid.setCompleter(self.completer)
+        self.senderpswd.editingFinished.connect(self.view_password)
+        self.senderpswdLabel = QLabel("Password")
+        self.senderpswdLabel.setBuddy(self.senderpswd)
+
+        self.receiverId = QLineEdit()
+        self.receiverId.setEchoMode(QLineEdit.Normal)
+        # self.senderid.setCompleter(self.completer)
+        self.receiverId.editingFinished.connect(self.view_receiver)
+        self.receiverIdLabel = QLabel("Receiver Email-ID")
+        self.receiverIdLabel.setBuddy(self.receiverId)
+
+    def view_senderid(self):
+        print("sender id is ",self.senderid.text())
+
+    def view_password(self):
+        print("password is ",self.senderpswd.text())
+
+    def view_receiver(self):
+        print("receiver is ",self.receiverId.text())
+
+    def ok_clicked(self):
+        send_mail(self.senderid.text(),self.senderpswd.text(),self.receiverId.text())
 
 class App1(QWidget):
     def __init__(self,crlist):
@@ -37,10 +93,12 @@ class App1(QWidget):
 
         self.createTable()
         self.downloadButton()
+        self.sendmailButton()
         self.tableWidget.itemSelectionChanged.connect(self.itemSelectionChangedCallback)
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.tableWidget)
         self.layout.addWidget(self.dbutton)
+        self.layout.addWidget(self.emailbutton)
         self.setLayout(self.layout)
 
         # Show window
@@ -54,6 +112,20 @@ class App1(QWidget):
     def on_download_click(self):
         print("download clicked")
         saveCrsData(self.crs)
+
+    def sendmailButton(self):
+        self.emailbutton = QPushButton("Send Mail",self)
+        self.emailbutton.clicked.connect(self.on_email_click)
+
+    def on_email_click(self):
+        print("click")
+
+        dlg = CustomDialog(self)
+        if dlg.exec_():
+            print("Success!")
+        else:
+            print("Cancel!")
+        #send_mail()
 
     def itemSelectionChangedCallback(self):
         for currentQTableWidgetItem in self.tableWidget.selectedItems():

@@ -44,7 +44,7 @@ def saveCrsData(crlist):
         indx = indx + 1
         print("indx",indx)
     print("end of writing")
-    wb.save("example2.xls")
+    wb.save('filterData.xls')
 
 def sort(ret):
     print("in sort ")
