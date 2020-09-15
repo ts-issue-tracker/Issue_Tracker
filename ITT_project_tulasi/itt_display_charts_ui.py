@@ -10,8 +10,10 @@ from itt_main_file_access import *
 from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtGui import QFont
 from itt_utils import *
+from PyQt5.QtGui import *
 
-class Window(QMainWindow):
+
+class Window(QWidget):
     def __init__(self):
         super().__init__()
 
@@ -25,6 +27,13 @@ class Window(QMainWindow):
         self.setWindowTitle(title)
         self.setMinimumWidth(1000)
         self.setMinimumHeight(700)
+
+        # Create widget
+        #pixmap = QPixmap('main_ui.png')
+        #label = QLabel(self)
+
+        #pixmap.setDevicePixelRatio(0.8)
+        #label.setPixmap(pixmap)
 
         self.frame = QFrame(self)
         self.frame.setFixedSize(1000, 600)
@@ -229,6 +238,7 @@ class Window(QMainWindow):
 
 
     def send_mail_btn_click(self):
+        mail_deliver_msg=""
         msg_to_send="Hey,..Please find the statistics details mentioned below :)\n\n\n"
         msg_to_send+=self.get_filter_msg()
         mail_id=self.mail_txt.text()
@@ -239,11 +249,15 @@ class Window(QMainWindow):
         msg+=self.util.display_statastics_invalid_fields_message(self.list,self.label)
         if msg!="":
             QMessageBox.about(self, 'Information', msg)
-        if len(msg_to_send)!=0 and len(msg)!=0 :
+        print(self.list)
+        print(msg_to_send)
+        print(msg)
+        if len(msg_to_send)!=0 and len(msg)==0 :
             if self.list[0]==value_chk.valid.value and self.list[1]==value_chk.valid.value \
                     and self.list[2]==value_chk.valid.value:
-                msg_j=sending_mail_with_selected_statistics_info(mail_id,pwd,rx_mail_id,msg_to_send)
-                print(msg_j)
+                mail_deliver_msg+=sending_mail_with_selected_statistics_info(mail_id,pwd,rx_mail_id,msg_to_send)
+                QMessageBox.about(self, 'Information', mail_deliver_msg)
+
     def resizeEvent(self, event):
         self.centerOnScreen(self.frame)
 
@@ -427,7 +441,8 @@ class Canvas(FigureCanvas):
         FigureCanvas.__init__(self, fig)
         self.setParent(parent)
 
-app = QApplication(sys.argv)
-window = Window()
-window.show()
-app.exec()
+if __name__ == "__main__":
+    App = QApplication(sys.argv)
+    window = Window()
+    window.show()
+    sys.exit(App.exec())

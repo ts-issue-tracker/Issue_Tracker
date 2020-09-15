@@ -44,7 +44,7 @@ def sending_mail_with_selected_statistics_info(login,password,toaddrs,msgtxt):
         server.login(login, password)
         server.send_message(msg)
     except smtplib.SMTPAuthenticationError:
-        msg_to_return+="Incorrect Login Credentials"
+        msg_to_return+="Incorrect Mail ID/Password"
     except smtplib.SMTPRecipientsRefused:
         msg_to_return += "Incorrect Recipient Mail ID"
     else:
