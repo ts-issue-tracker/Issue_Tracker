@@ -63,7 +63,8 @@ class Create_cr(QWidget):
         self.title_label = QLabel("Title:")
         self.title_label.setFont(QFont('Arial', 10))
         # entry title
-        self.title_entry = QLineEdit()
+        self.title_entry = QTextEdit()
+        self.title_entry.setFixedHeight(50)
         self.title_entry.setFont(QFont('Arial', 10))
 
         #grid label title
@@ -282,7 +283,7 @@ class Create_cr(QWidget):
     def submit_click(self):
             print("clicked")
             cr_no = self.crno_entry.text()
-            title = self.title_entry.text()
+            title = self.title_entry.toPlainText()
             des = self.des_entry.toPlainText()
             assignee = self.assignee_entry.text()
             si = self.si_entry.currentText()

@@ -32,7 +32,7 @@ class Upload(QWidget):
         self.exit.clicked.connect(self.exit_click)
 
         # grid button
-        self.gridLayout.addWidget(self.upload, 2, 1)
+        self.gridLayout.addWidget(self.exit, 2, 1)
         self.show()
 
     def exit_click(self):

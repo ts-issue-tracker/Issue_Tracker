@@ -9,8 +9,9 @@ import sys
 from ITT_home_screen import *
 from ITT_read_excel import *
 
-class view_window(QWidget):
-    def __init__(self):
+class view_cr_window(QWidget):
+    def __init__(self,cr_index,cr):
+        print("view_cr_window")
         super().__init__()
         self.title = "View"
         self.setWindowTitle(self.title)
@@ -19,20 +20,21 @@ class view_window(QWidget):
         self.frame = QFrame(self)
         self.frame.setFixedSize(500, 1000)
         # self.frame.setFrameShape(QFrame.StyledPanel)
-
+        self.cr_index = cr_index
+        self.cr_no = cr
         self.gridLayout = QGridLayout(self.frame)
         self.gridLayout.setContentsMargins(20, 20, 20, 20)
-        self.view_screen()
+        self.view_cr_screen()
 
-    def view_screen(self):
+    def view_cr_screen(self):
         # label crno
+        print("view_cr_screen")
         self.crno_label = QLabel("Cr.no:")
         self.crno_label.setFont(QFont('Arial', 10))
 
         # entry crno
         self.crno_entry = QLineEdit()
-        self.cr_no = read_last_cr()
-        self.crno_entry.setText(self.cr_no)
+        self.crno_entry.setText(str(self.cr_no))
         self.crno_entry.setReadOnly(True)
         self.crno_entry.setFont(QFont('Arial', 10))
         self.crno_entry.setStyleSheet("QLineEdit"
@@ -49,7 +51,7 @@ class view_window(QWidget):
         self.assignee_label.setFont(QFont('Arial', 10))
         # entry assignee
         self.assignee_entry = QLineEdit()
-        self.assignee = read_last_assignee()
+        self.assignee = read_asignee_with_cr(self.cr_index)
         self.assignee_entry.setText(self.assignee)
         self.assignee_entry.setReadOnly(True)
         self.assignee_entry.setFont(QFont('Arial', 10))
@@ -68,12 +70,12 @@ class view_window(QWidget):
         self.title_label.setFont(QFont('Arial', 10))
         # entry title
         self.title_entry = QTextEdit()
-        self.title = read_last_title()
+        self.title = read_title_with_cr(self.cr_index)
         self.title_entry.setPlainText(self.title)
         self.title_entry.setReadOnly(True)
         self.title_entry.setFont(QFont('Arial', 10))
         self.title_entry.setFixedHeight(50)
-        self.title_entry.setStyleSheet("QLineEdit"
+        self.title_entry.setStyleSheet("QTextEdit"
                                           "{"
                                           "background-color: #DBDBDB;"
                                           "}")
@@ -90,7 +92,7 @@ class view_window(QWidget):
         # entry_cr_state
         self.cr_state_entry = QLineEdit(self)
         self.cr_state_entry.setFont(QFont('Arial', 10))
-        self.cr_state = read_last_crstate()
+        self.cr_state = read_cr_with_cr(self.cr_index)
         self.cr_state_entry.setStyleSheet("QLineEdit"
                                       "{"
                                       "background-color: #DBDBDB;"
@@ -127,7 +129,7 @@ class view_window(QWidget):
         # entry_si_state
         self.si_entry = QLineEdit(self)
         self.si_entry.setFont(QFont('Arial', 10))
-        self.si_state = read_last_si_state()
+        self.si_state = read_si_with_cr(self.cr_index)
         self.si_entry.setStyleSheet("QLineEdit"
                                           "{"
                                           "background-color: #DBDBDB;"
@@ -146,7 +148,7 @@ class view_window(QWidget):
         # entry Issue type
         self.issuetype_entry = QLineEdit(self)
         self.issuetype_entry.setFont(QFont('Arial', 10))
-        self.issuetype = read_last_issuetype()
+        self.issuetype = read_issuetype_with_cr(self.cr_index)
         self.issuetype_entry.setText(self.issuetype)
         self.issuetype_entry.setStyleSheet("QLineEdit"
                                           "{"
@@ -178,7 +180,7 @@ class view_window(QWidget):
                                      "{"
                                      "background-color: #DBDBDB;"
                                      "}")
-        self.des = read_last_des()
+        self.des = read_des_with_cr(self.cr_index)
         self.des_entry.setFont(QFont('Arial', 10))
         self.des_entry.setReadOnly(True)
         self.des_entry.setPlainText(self.des)
@@ -193,7 +195,7 @@ class view_window(QWidget):
         # domain entry
         self.domain_entry = QLineEdit(self)
         self.domain_entry.setFont(QFont('Arial', 10))
-        self.domain = read_last_domain()
+        self.domain = read_domain_with_cr(self.cr_index)
         self.domain_entry.setText(self.domain)
         self.domain_entry.setStyleSheet("QLineEdit"
                                     "{"
@@ -209,7 +211,7 @@ class view_window(QWidget):
         self.git_label.setFont(QFont('Arial', 10))
         # git entry
         self.git_entry = QLineEdit(self)
-        self.git = read_git_id()
+        self.git = read_git_with_cr(self.cr_index)
         self.git_entry.setText(self.git)
         self.git_entry.setReadOnly(True)
         self.git_entry.setStyleSheet("QLineEdit"
@@ -226,7 +228,7 @@ class view_window(QWidget):
         self.build_label.setFont(QFont('Arial', 10))
         # build entry
         self.build_entry = QLineEdit(self)
-        self.build = read_build()
+        self.build = read_build_with_cr(self.cr_index)
         self.build_entry.setText(self.build)
         self.build_entry.setReadOnly(True)
         self.build_entry.setFont(QFont('Arial', 10))
@@ -244,7 +246,7 @@ class view_window(QWidget):
         self.createon_label.setFont(QFont('Arial', 10))
         # create_On entry
         self.createon_entry = QLineEdit(self)
-        self.createon = read_create_time()
+        self.createon = read_create_date_index(self.cr_index)
         self.createon_entry.setText(self.createon)
         self.createon_entry.setFont(QFont('Arial', 10))
         self.createon_entry.setReadOnly(True)
@@ -262,7 +264,7 @@ class view_window(QWidget):
         self.lastmodi_label.setFont(QFont('Arial', 10))
         # last modified entry
         self.lastmodi_entry = QLineEdit(self)
-        self.lastmodi_time = read_lastmodi_time()
+        self.lastmodi_time =  read_late_date_index(self.cr_index)
         self.lastmodi_entry.setText(self.lastmodi_time)
         self.lastmodi_entry.setFont(QFont('Arial', 10))
         self.lastmodi_entry.setReadOnly(True)
@@ -282,20 +284,7 @@ class view_window(QWidget):
 
         # grid button
         self.gridLayout.addWidget(self.exit, 13, 3)
-
-        self.continuebt = QPushButton()
-        self.continuebt.setText("Create CR")
-        self.continuebt.clicked.connect(self.continuebt_clicked)
-
-        # grid button
-        self.gridLayout.addWidget(self.continuebt, 13, 1)
         self.show()
-
-    def continuebt_clicked(self):
-        from ITT_create_issue import Create_cr
-        self.w = Create_cr()
-        self.w.show()
-        self.hide()
 
     def resizeEvent(self, event):
         self.centerOnScreen(self.frame)
@@ -310,5 +299,5 @@ class view_window(QWidget):
 
 if __name__ == "__main__":
     App = QApplication(sys.argv)
-    window = view_window()
+    window = view_cr_window(0,0)
     sys.exit(App.exec())

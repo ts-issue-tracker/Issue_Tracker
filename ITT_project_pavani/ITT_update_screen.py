@@ -8,6 +8,7 @@ from ITT_validate import *
 from ITT_read_excel import *
 from ITT_save_excel import *
 
+
 class Update(QWidget):
     def __init__(self,cr_index):
         super().__init__()
@@ -17,7 +18,7 @@ class Update(QWidget):
         self.frame = QFrame(self)
         self.frame.setFixedSize(500, 1000)
         # self.frame.setFrameShape(QFrame.StyledPanel)
-
+        self.history_dict = { }
         self.gridLayout = QGridLayout(self.frame)
         self.gridLayout.setContentsMargins(20, 20, 20, 20)
 
@@ -56,6 +57,7 @@ class Update(QWidget):
         self.assignee_entry = QLineEdit()
         self.assignee = read_asignee_with_cr(self.cr_index)
         self.assignee_entry.setText(self.assignee)
+        self.assignee_entry.textChanged.connect(self.assignee_change)
         self.assignee_entry.setFont(QFont('Arial', 10))
 
         # grid label assignee
@@ -67,9 +69,11 @@ class Update(QWidget):
         self.title_label = QLabel("Title:")
         self.title_label.setFont(QFont('Arial', 10))
         # entry title
-        self.title_entry = QLineEdit()
+        self.title_entry = QTextEdit()
         self.title = read_title_with_cr(self.cr_index)
-        self.title_entry.setText(self.title)
+        self.title_entry.setPlainText(self.title)
+        self.title_entry.setFixedHeight(50)
+        self.title_entry.textChanged.connect(self.title_change)
         self.title_entry.setFont(QFont('Arial', 10))
 
         # grid label title
@@ -171,7 +175,7 @@ class Update(QWidget):
         self.des_entry.setFont(QFont('Arial', 10))
         self.des_entry.setFixedHeight(130)
         self.des = read_des_with_cr(self.cr_index)
-        print(self.des)
+        self.des_entry.textChanged.connect(self.des_changed)
         self.des_entry.setText(self.des)
 
         # grid Description label
@@ -198,7 +202,7 @@ class Update(QWidget):
         self.domain_index = self.domain_entry.findText(self.domain)
         print(self.domain_index)
         self.domain_entry.setCurrentIndex(self.domain_index)
-        self.domain_entry.currentIndexChanged.connect(self.onchangeissue)
+        self.domain_entry.currentIndexChanged.connect(self.domainchange)
 
         # grid domain label
         self.gridLayout.addWidget(self.domain_label, 8, 0)
@@ -215,6 +219,7 @@ class Update(QWidget):
                                      "{"
                                      "background-color: #DBDBDB	;"
                                      "}")
+        self.git_entry.textChanged.connect(self.git_change)
 
         # grid git label
         self.gridLayout.addWidget(self.git_label, 9, 0)
@@ -227,6 +232,7 @@ class Update(QWidget):
         # build entry
         self.build_entry = QLineEdit(self)
         self.build = read_build_with_cr(self.cr_index)
+        self.build_entry.textChanged.connect(self.build_changed)
         self.build_entry.setText(self.build)
         self.build_entry.setFont(QFont('Arial', 10))
 
@@ -267,6 +273,7 @@ class Update(QWidget):
                                           "{"
                                           "background-color: #DBDBDB;"
                                           "}")
+        self.lastmodi_entry.textChanged.connect(self.lastchange)
 
         # last modified
         self.gridLayout.addWidget(self.lastmodi_label, 12, 0)
@@ -296,17 +303,46 @@ class Update(QWidget):
     def centerOnScreen(self,frame):
         frame.move(int((self.width()-self.frame.width()) / 2), int((self.height()-self.frame.height()) / 2))
 
+    def git_change(self):
+        self.git_val = self.git_entry.text()
+        self.history_dict.update({"git/gerrit":self.git_val})
+
+    def build_changed(self):
+        self.build_val = self.build_entry.text()
+        self.history_dict.update({"build":self.build_val})
+
+    def lastchange(self):
+        self.last_change_val = self.lastmodi_entry.text()
+        self.history_dict.update({"Last modified":self.last_change_val})
+
     def cronChanged(self):
         prev_state = self.prev_cr_state
         state = self.cr_state_entry.currentText()
-
+        self.history_dict.update({"CR state":state})
         if(prev_state == "Closed"):
             if(state == "Reopen"):
                 self.si_state.setCurrentIndex(0)
 
+    def domainchange(self):
+        self.domain_val = self.domain_entry.currentText()
+        self.history_dict.update({'Domain': self.domain_val})
+
+    def des_changed(self):
+        self.des_val = self.des_entry.toPlainText()
+        self.history_dict.update({'description':self.des_val})
+
+    def assignee_change(self):
+        self.assignee_val = self.assignee_entry.text()
+        self.history_dict.update({'assignee':self.assignee_val})
+
+    def title_change(self):
+        self.title_val = self.title_entry.toPlainText()
+        self.history_dict.update({'Title': self.title_val})
+
     def onchangeissue(self):
         prev_state = self.issue_type
         state = self.issuetype_entry.currentText()
+        self.history_dict.update({"Issue Type": state})
         if(prev_state == "Internal"):
             if(state == "Bug"):
                 self.issue_reason_entry.setReadOnly(False)
@@ -314,11 +350,16 @@ class Update(QWidget):
                                                           "{"
                                                           "background-color: white;"
                                                           "}")
+                self.issue_reason_entry.textChanged(self.issue_reason_changed)
+
+    def issue_reason_changed(self):
+        self.issue_reason = self.issue_reason_entry.text()
+        self.history_dict.update({"Issue Reason":self.issue_reason})
 
     def onChanged(self):
         state = self.si_state.currentText()
         prev_state = self.si_prev_state
-
+        self.history_dict.update({"SI state": state})
         if(prev_state == "Open"):
             if(state == "Analysis"):
                 self.cr_state_entry.setCurrentIndex(1)
@@ -358,7 +399,7 @@ class Update(QWidget):
         print("clicked")
         cr_no = self.crno_entry.text()
         print(cr_no)
-        title = self.title_entry.text()
+        title = self.title_entry.toPlainText()
         print(title)
         des = self.des_entry.toPlainText()
         print(des)
@@ -385,7 +426,16 @@ class Update(QWidget):
         #domain_ret = domain_validate(domain)
         #build_ret = build_validation(build_id)
         print("update")
-        save_update_info(combo_dict,self.cr,self.cr_index)
+        save_update_info(combo_dict,self.cr,self.cr_index,self.history_dict)
+        print("call")
+        self.open_cr_view_screen()
+
+    def open_cr_view_screen(self):
+        print("view screen")
+        from ITT_view_cr_screen import view_cr_window
+        self.w = view_cr_window(self.cr_index,self.cr)
+        self.w.show()
+        self.hide()
 
 if __name__ == "__main__":
     app =QApplication(sys.argv)

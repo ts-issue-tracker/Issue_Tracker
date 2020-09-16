@@ -66,14 +66,15 @@ class View(QWidget):
         self.title_label = QLabel("Title:")
         self.title_label.setFont(QFont('Arial', 10))
         # entry title
-        self.title_entry = QLineEdit()
+        self.title_entry = QTextEdit()
         self.title_entry.setStyleSheet("QLineEdit"
                                       "{"
                                       "background-color: #DBDBDB;"
                                       "}")
         self.title = read_title_with_cr(self.cr_index)
-        self.title_entry.setText(self.title)
+        self.title_entry.setPlainText(self.title)
         self.title_entry.setReadOnly(True)
+        self.title_entry.setFixedHeight(50)
         self.title_entry.setFont(QFont('Arial', 10))
 
         # grid label title
@@ -119,14 +120,14 @@ class View(QWidget):
         self.gridLayout.addWidget(self.si_state, 3, 1)
         # label Issue type
         self.issuetype_label = QLabel("Issue Type:")
-        self.issuetype_label.setStyleSheet("QLineEdit"
-                                    "{"
-                                    "background-color: #DBDBDB;"
-                                    "}")
         self.issuetype_label.setFont(QFont('Arial', 10))
 
         # entry Issue type
         self.issuetype_entry = QLineEdit(self)
+        self.issuetype_entry.setStyleSheet("QLineEdit"
+                                           "{"
+                                           "background-color: #DBDBDB;"
+                                           "}")
         self.issuetype_entry.setFont(QFont('Arial', 10))
         self.issue_type = read_issuetype_with_cr(self.cr_index)
         self.issuetype_entry.setText(self.issue_type)
