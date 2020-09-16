@@ -12,8 +12,8 @@ print(sheet.nrows)
 print(sheet.ncols)
 
 wb = xlwt.Workbook()
-ws = wb.add_sheet('My Sheet')
-
+ws = wb.add_sheet('My Sheet',cell_overwrite_ok=True)
+#worksheet = workbook.add_sheet("Sheet 1", cell_overwrite_ok=True)
 def getCr2(cr):
     print("before int conv")
     print("type of real cr",type(cr))
@@ -44,7 +44,7 @@ def saveCrsData(crlist):
         indx = indx + 1
         print("indx",indx)
     print("end of writing")
-    wb.save('filterData.xls')
+    wb.save("filterData.xls")
 
 def sort(ret):
     print("in sort ")

@@ -41,6 +41,12 @@ def buildid_check(s2):
     else:
         return INVALID_INPUT_ERR
 
+def email_id_check(s):
+    pattern = re.compile(r"(^[a-z+-]+\.*[a-z-]+@thundersoft.com$)")
+    if re.match(pattern, s) :#or len(s) == 0:
+        return SUCCESS
+    else:
+        return INVALID_INPUT_ERR
 
 def build_validation(build):
     str = str(build)

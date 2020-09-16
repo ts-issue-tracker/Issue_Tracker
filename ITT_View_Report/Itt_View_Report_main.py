@@ -23,8 +23,9 @@ class View_Report(QWidget):
         self.viewWidgets()
         self.Searchbutton()
         mainLayout = QGridLayout()
-
+        #self.topform = QFormLayout()
         mainLayout.addLayout(self.topLayout, 0, 0, 1, 2)
+        #mainLayout.addLayout(self.topform, 0, 0, 1, 2)
         mainLayout.addLayout(self.secLayout, 1, 0, 1, 2)
         mainLayout.addWidget(self.button,2,0,1,2)
         mainLayout.setRowStretch(1, 2)
@@ -40,7 +41,7 @@ class View_Report(QWidget):
 
         # Create widget
         label = QLabel(self)
-        pixmap = QPixmap('background1.jpg')
+        pixmap = QPixmap('picture.png')
         label.setPixmap(pixmap)
         self.selectedFilter = {"CR":"None","Assignee":"None","State":"None","Domain":"None","Issue Type":"None","Build ID":"None"}
 
@@ -157,6 +158,10 @@ class View_Report(QWidget):
         self.topLayout.addWidget(self.domainComboBox)
         self.topLayout.addWidget(self.issuetypeLabel)
         self.topLayout.addWidget(self.issuetypeComboBox)
+
+        #self.topform = QFormLayout()
+        #self.topform.addWidget(self.crsearchboxLabel)
+        #self.topform.addWidget(self.crsearchbox)
 
         self.biCompleter()
         self.bibox = QLineEdit()

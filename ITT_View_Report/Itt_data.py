@@ -1,13 +1,20 @@
 import xlrd
+from View_Report_Validation import *
 from crdisplay import *
 from Itt_Download import *
 from ITT_mail import *
+from PyQt5.QtCore import Qt
+from itt_mail_sending import *
 ENTRY_NOT_FOUND = -4
 # Give the location of the file
-file_location = ("C:\\Users\\akshay\\Downloads\\projectexecl.xlsx")
-
+data_file_location = ("C:\\Users\\akshay\\Downloads\\projectexecl.xlsx")
+credential_file_location = ("")
 wb = xlrd.open_workbook(file_location)
 sheet = wb.sheet_by_index(0)
+
+wb2 = xlrd.open_workbook(file_location)
+sheet = wb.sheet_by_index(0)
+
 row = 0
 col = 0
 result_list = []
@@ -22,8 +29,10 @@ class CustomDialog(QDialog):
 
     def __init__(self, *args, **kwargs):
         super(CustomDialog, self).__init__(*args, **kwargs)
-
-        self.setWindowTitle("HELLO!")
+        #setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint)
+        #flags = (Qt.WindowMinimizeButtonHint | Qt.WindowMaximizeButtonHint)
+        self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)
+        self.setWindowTitle("Send Email")
 
         #QBtn = QDialogButtonBox.Ok | QDialogButtonBox.Cancel
         self.sendButton = QPushButton("Send",self)
@@ -31,7 +40,7 @@ class CustomDialog(QDialog):
         #self.buttonBox = QDialogButtonBox(QBtn)
         #self.buttonBox.accepted.connect(self.accept)
         #self.buttonBox.rejected.connect(self.reject)
-        self.sendButton.clicked.connect(self.ok_clicked)
+        self.sendButton.clicked.connect(self.send_clicked)
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.senderidLabel)
         self.layout.addWidget(self.senderid)
@@ -75,8 +84,30 @@ class CustomDialog(QDialog):
     def view_receiver(self):
         print("receiver is ",self.receiverId.text())
 
-    def ok_clicked(self):
-        send_mail(self.senderid.text(),self.senderpswd.text(),self.receiverId.text())
+    def send_clicked(self):
+        #send_mail(self.senderid.text(),self.senderpswd.text(),self.receiverId.text())
+        text = "mail content"
+
+        if (self.senderid.text() == '') and (self.senderpswd.text() == '') and (self.receiverId.text()):
+            QMessageBox.about(self,'Information',"Enter the details")
+
+        if (self.senderid.text() == '') or (self.senderpswd.text() == '') or (self.receiverId.text()):
+            if self.senderid.text()=='':
+                QMessageBox.about(self, 'Information', "sender Mail-ID empty")
+            elif self.senderpswd.text()=='':
+                QMessageBox.about(self, 'Information', "Password empty")
+            elif self.receiverId.text()=='':
+                QMessageBox.about(self, 'Information', "Receiver Mail-ID empty")
+
+            ret = email_id_check(self.senderid.text())
+            if ret == -2:
+                QMessageBox.about(self, 'Information', "Invalid Sender Mail-ID")
+
+            ret = email_id_check(self.receiverId)
+            if ret == -2:
+                QMessageBox.about(self, 'Information', "Invalid Receiver Mail-ID")
+        else:
+            sending_mail_with_selected_statistics_info(self.senderid.text(), self.senderpswd.text(), self.receiverId.text(),text)
 
 class App1(QWidget):
     def __init__(self,crlist):
@@ -161,6 +192,9 @@ class App1(QWidget):
         self.tableWidget.setHorizontalHeaderItem(0, QTableWidgetItem("Search results"))
         # Table will fit the screen horizontally
         self.tableWidget.horizontalHeader().setStretchLastSection(True)
+        self.tableWidget.verticalHeader().setStretchLastSection(False)
+        #self.tableWidget.setAutoScroll(True)#VerticalScrollBar()
+        self.tableWidget.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
 
