@@ -173,6 +173,10 @@ class view_window(QWidget):
         # entry Description
         self.des_entry = QTextEdit(self)
         self.des_entry.setFixedHeight(130)
+        self.des_entry.setStyleSheet("QTextEdit"
+                                     "{"
+                                     "background-color: #DBDBDB;"
+                                     "}")
         self.des = read_last_des()
         self.des_entry.setFont(QFont('Arial', 10))
         self.des_entry.setReadOnly(True)

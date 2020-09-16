@@ -1,5 +1,6 @@
 import csv
 from csv import DictWriter
+import os
 
 def save_data(combo_dict,index):
     print("in save excel")
@@ -25,4 +26,12 @@ def save_data(combo_dict,index):
                     dict_writer = DictWriter(f_out, fieldnames=field_names)
                     dict_writer.writerow(mydict)
                     print("other")
-    #delete_file()
+    f.close()
+    g.close()
+    f_out.close()
+
+    print("removing")
+    os.remove("cr_list_entry.csv")
+    print("renaming")
+    os.rename("otemp.csv", "cr_list_entry.csv")
+    print("complete")

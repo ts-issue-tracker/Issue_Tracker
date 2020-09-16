@@ -67,6 +67,10 @@ class View(QWidget):
         self.title_label.setFont(QFont('Arial', 10))
         # entry title
         self.title_entry = QLineEdit()
+        self.title_entry.setStyleSheet("QLineEdit"
+                                      "{"
+                                      "background-color: #DBDBDB;"
+                                      "}")
         self.title = read_title_with_cr(self.cr_index)
         self.title_entry.setText(self.title)
         self.title_entry.setReadOnly(True)
@@ -82,6 +86,10 @@ class View(QWidget):
         self.cr_state_label.setFont(QFont('Arial', 10))
         # entry_cr_state
         self.cr_state_entry = QLineEdit(self)
+        self.cr_state_entry.setStyleSheet("QLineEdit"
+                                       "{"
+                                       "background-color: #DBDBDB;"
+                                       "}")
         self.cr_state_entry.setFont(QFont('Arial', 10))
         self.prev_cr_state = read_cr_with_cr(self.cr_index)
         self.cr_state_entry.setText(self.prev_cr_state)
@@ -97,6 +105,10 @@ class View(QWidget):
         self.si_state_label.setFont(QFont('Arial', 10))
         # entry
         self.si_state = QLineEdit(self)
+        self.si_state.setStyleSheet("QLineEdit"
+                                          "{"
+                                          "background-color: #DBDBDB;"
+                                          "}")
         self.si_state.setFont(QFont('Arial', 10))
         self.si_prev_state = read_si_with_cr(self.cr_index)
         self.si_state.setText(self.si_prev_state)
@@ -107,6 +119,10 @@ class View(QWidget):
         self.gridLayout.addWidget(self.si_state, 3, 1)
         # label Issue type
         self.issuetype_label = QLabel("Issue Type:")
+        self.issuetype_label.setStyleSheet("QLineEdit"
+                                    "{"
+                                    "background-color: #DBDBDB;"
+                                    "}")
         self.issuetype_label.setFont(QFont('Arial', 10))
 
         # entry Issue type
@@ -125,6 +141,10 @@ class View(QWidget):
         self.des_label.setFont(QFont('Arial', 10))
         # entry Description
         self.des_entry = QTextEdit(self)
+        self.des_entry.setStyleSheet("QTextEdit"
+                                           "{"
+                                           "background-color: #DBDBDB;"
+                                           "}")
         self.des_entry.setFont(QFont('Arial', 10))
         self.des_entry.setFixedHeight(130)
         self.des = read_des_with_cr(self.cr_index)
@@ -141,10 +161,14 @@ class View(QWidget):
         self.domain_label.setFont(QFont('Arial', 10))
         # domain entry
         self.domain_entry = QLineEdit(self)
+        self.domain_entry.setStyleSheet("QLineEdit"
+                                     "{"
+                                     "background-color: #DBDBDB;"
+                                     "}")
         self.domain_entry.setFont(QFont('Arial', 10))
-        self.domain_entry.setStyleSheet("QComboBox"
+        self.domain_entry.setStyleSheet("QLineEdit"
                                         "{"
-                                        "background-color: white;"
+                                        "background-color: #DBDBDB;"
                                         "}")
         self.domain =  read_domain_with_cr(self.cr_index)
         self.domain_entry.setText(self.domain)
@@ -160,6 +184,10 @@ class View(QWidget):
         self.git_label.setFont(QFont('Arial', 10))
         # git entry
         self.git_entry = QLineEdit(self)
+        self.git_entry.setStyleSheet("QLineEdit"
+                                        "{"
+                                        "background-color: #DBDBDB;"
+                                        "}")
         self.git = read_git_with_cr(self.cr_index)
         self.git_entry.setText(self.git)
         self.git_entry.setReadOnly(True)
@@ -178,6 +206,10 @@ class View(QWidget):
         self.build_label.setFont(QFont('Arial', 10))
         # build entry
         self.build_entry = QLineEdit(self)
+        self.build_entry.setStyleSheet("QLineEdit"
+                                     "{"
+                                     "background-color: #DBDBDB;"
+                                     "}")
         self.build = read_build_with_cr(self.cr_index)
         self.build_entry.setText(self.build)
         self.build_entry.setReadOnly(True)
@@ -193,6 +225,10 @@ class View(QWidget):
         self.createon_label.setFont(QFont('Arial', 10))
         # create_On entry
         self.createon_entry = QLineEdit(self)
+        self.createon_entry.setStyleSheet("QLineEdit"
+                                       "{"
+                                       "background-color: #DBDBDB;"
+                                       "}")
         self.datetime = read_create_date_index(self.cr_index)
         self.createon_entry.setText(self.datetime)
         self.createon_entry.setFont(QFont('Arial', 10))
@@ -211,6 +247,10 @@ class View(QWidget):
         self.lastmodi_label.setFont(QFont('Arial', 10))
         # last modified entry
         self.lastmodi_entry = QLineEdit(self)
+        self.lastmodi_entry.setStyleSheet("QLineEdit"
+                                          "{"
+                                          "background-color: #DBDBDB;"
+                                          "}")
         self.lastdate = read_late_date_index(self.cr_index)
         self.lastmodi_entry.setText(self.lastdate)
         self.lastmodi_entry.setFont(QFont('Arial', 10))

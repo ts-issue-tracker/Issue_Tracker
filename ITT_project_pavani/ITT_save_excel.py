@@ -8,6 +8,7 @@ def append_dict_as_row(file_name, dict_of_elem, field_names):
     with open(file_name, 'a+', newline='') as write_obj:
         dict_writer = DictWriter(write_obj, fieldnames=field_names)
         dict_writer.writerow(dict_of_elem)
+        write_obj.close()
 
 def save_in_excel(combo_dict):
         print("in write excel file")
@@ -28,9 +29,6 @@ def save_update_info(combo_dict1,cr,index):
     field_names = ['CR', 'Title', 'Description', 'Assignee', 'State', 'Software Image',
                    'Domain', 'Issue Type', 'GIT/Gerrit link',
                    'Build ID', 'Create On', 'Last Modified On', 'History']
-
-    filename = "cr_list_entry.csv"
-    file_name = open(filename, "r")
     coll_data = []
     combo_dict1 = dict(combo_dict1)
     olddata = collect_olddata(cr,index)
@@ -66,4 +64,5 @@ def collect_olddata(crnum,index):
                 lon = data[i][11]
                 history = data[i][12]
                 olddata = [cr,title,des,assignee,state,si,domain,issue_type,git,bid,con,lon,history]
+                f.close()
                 return olddata
