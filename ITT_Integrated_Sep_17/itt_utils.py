@@ -42,6 +42,7 @@ class utils:
         return final_msg
 
     def invalid_fields_message(self, list, lb_list,username):
+        print(list)
         final_msg = ""
         count = 1
         for i in range(0, len(list)):
@@ -58,9 +59,10 @@ class utils:
                         return final_msg
                 else:
                     if i==2 and list[i]==value_chk.incorrect.value:
-                        final_msg = ""
-                        final_msg+="Password & Confirm Password does not match\n"
-                        return final_msg
+                        if not list[i-1]==value_chk.empty.value:
+                            final_msg = ""
+                            final_msg+="Password & Confirm Password does not match\n"
+                            return final_msg
                 final_msg += ","
         if len(final_msg) != 0:
             final_msg = final_msg[:-1]
@@ -121,6 +123,8 @@ class utils:
         if valid.SUCCESS == result:
             if password=="":
                 list[1]=value_chk.empty.value
+                if list[2]==value_chk.incorrect.value:
+                    list[2]=value_chk.valid.value
             else:
                 list[1] = value_chk.valid.value
         elif valid.EXCEED_LIMIT_ERR == result:
@@ -137,11 +141,14 @@ class utils:
             if confirm_password == "":
                 list[2] = value_chk.empty.value
             else:
-                if list[1]==value_chk.valid.value and password==confirm_password:
-                    list[2] = value_chk.valid.value
-                else:
-                    list[2]=value_chk.incorrect.value
-                    msg_to_return+="Password & Confirm Password does not match"
+                if not password == "":
+                    if password == confirm_password:
+                        list[2] = value_chk.valid.value
+                    elif list[1]==value_chk.valid.value:
+                        list[2] = value_chk.incorrect.value
+                        msg_to_return += "Password & Confirm Password does not match"
+                    else:
+                        list[2]=value_chk.valid.value
         elif valid.EXCEED_LIMIT_ERR == result:
             msg_to_return += "Max 15 characters are allowed\n"
             list[2] = value_chk.invalid.value

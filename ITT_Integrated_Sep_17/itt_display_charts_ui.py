@@ -246,6 +246,7 @@ class Statistics_Window(QWidget):
     def send_mail_btn_click(self):
         mail_deliver_msg=""
         msg_to_send="Hey,..Please find the statistics details mentioned below :)\n\n\n"
+        subject="Issue Tracking Tool: Selected Statistics Information"
         msg_to_send+=self.get_filter_msg()
         mail_id=self.mail_txt.text()
         pwd=self.pwd_txt.text()
@@ -261,7 +262,7 @@ class Statistics_Window(QWidget):
         if len(msg_to_send)!=0 and len(msg)==0 :
             if self.list[0]==value_chk.valid.value and self.list[1]==value_chk.valid.value \
                     and self.list[2]==value_chk.valid.value:
-                mail_deliver_msg+=sending_mail_with_selected_statistics_info(mail_id,pwd,rx_mail_id,msg_to_send)
+                mail_deliver_msg+=sending_mail(mail_id,pwd,rx_mail_id,msg_to_send,subject)
                 QMessageBox.about(self, 'Information', mail_deliver_msg)
 
     def resizeEvent(self, event):
