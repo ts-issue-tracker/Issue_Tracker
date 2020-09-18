@@ -2,6 +2,7 @@ import xlrd
 from crdisplay import *
 from Itt_Download import *
 ENTRY_NOT_FOUND = -4
+from itt_mail_sending import *
 
 import pandas as pd
 import numpy as np
@@ -44,7 +45,7 @@ class CustomDialog(QDialog):
         #self.buttonBox = QDialogButtonBox(QBtn)
         #self.buttonBox.accepted.connect(self.accept)
         #self.buttonBox.rejected.connect(self.reject)
-        self.sendButton.clicked.connect(self.ok_clicked)
+        self.sendButton.clicked.connect(self.send_clicked)
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.senderidLabel)
         self.layout.addWidget(self.senderid)
@@ -88,9 +89,18 @@ class CustomDialog(QDialog):
     def view_receiver(self):
         print("receiver is ",self.receiverId.text())
 
-    def ok_clicked(self):
-        pass
+    def send_clicked(self):
+
+        #sending_mail(self.senderid, self.senderpswd, self.receiverId, msgtxt, subject)
         #send_mail(self.senderid.text(),self.senderpswd.text(),self.receiverId.text())
+        self.mailmsg = "PFA of filtered data"
+        self.subject = "[Issue Tracker Tool] Filtered data"
+        print("send clicked")
+        sId = self.senderid.text()
+        sPwd = self.senderpswd.text()
+        rId = self.receiverId.text()
+        status = sending_mail_with_attachment(sId, sPwd, rId, self.mailmsg,self.subject )
+        print(status)
 
 class App1(QWidget):
     def __init__(self,crlist):
@@ -108,11 +118,13 @@ class App1(QWidget):
         self.createTable()
         self.downloadButton()
         self.sendmailButton()
+        self.backbuttonFilter()
         self.tableWidget.itemSelectionChanged.connect(self.itemSelectionChangedCallback)
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.tableWidget)
         self.layout.addWidget(self.dbutton)
         self.layout.addWidget(self.emailbutton)
+        self.layout.addWidget(self.backFilter)
         self.setLayout(self.layout)
 
         # Show window
@@ -133,13 +145,24 @@ class App1(QWidget):
 
     def on_email_click(self):
         print("click")
-
+        self.on_download_click()
         dlg = CustomDialog(self)
         if dlg.exec_():
             print("Success!")
         else:
             print("Cancel!")
         #send_mail()
+
+    def backbuttonFilter(self):
+        self.backFilter = QPushButton("Back",self)
+        #self.exitFilter.setToolTip("example")
+        self.backFilter.clicked.connect(self.on_backfilter)
+
+    def on_backfilter(self):
+        from Itt_View_Report_main import View_Report
+        self.w = View_Report()
+        self.w.show()
+        self.hide()
 
     def itemSelectionChangedCallback(self):
         for currentQTableWidgetItem in self.tableWidget.selectedItems():
@@ -152,7 +175,7 @@ class App1(QWidget):
         print("in window three")
         self.v = Windowfinal(ret)
         self.v.show()
-        self.hide()
+        #self.hide()
     def cell_was_clicked(self, row, column):
         print("Row %d and Column %d was clicked" % (row, column))
         item = self.tableWidget.itemAt(row, column)
@@ -189,14 +212,18 @@ def getcols():
 
 def namelist():
     index = filters["Assignee"]
+    list1 = []
     for i in range(sheet.nrows):
-        names.append(sheet.cell_value(i,index))
+        list1.append(sheet.cell_value(i,index))
+    [names.append(x) for x in list1 if x not in names]
 
 def bilist():
     index = filters["Build ID"]
+    list1 = []
     for i in range(sheet.nrows):
-        bientries.append(sheet.cell_value(i,index))
-        
+        list1.append(sheet.cell_value(i,index))
+    [bientries.append(x) for x in list1 if x not in bientries]
+
 def getCr(cr):
     print("before int conv")
     print("type of real cr",type(cr))
@@ -299,3 +326,4 @@ def searchInl1(cri):
     print("in searchinl1")
     if cri in l1:
         l2.append(cri)
+

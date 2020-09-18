@@ -15,7 +15,22 @@ class Windowfinal(QWidget):
         self.gridLayout = QGridLayout()
         self.setGeometry(400,100,600,600)
         self.ret = ret
+        #self.exitbuttonData()
         self.gui()
+
+    def exitbuttonData(self):
+        print("exitbuttonfuntion")
+        self.exitData = QPushButton("Exit", self)
+        # self.exitFilter.setToolTip("example")
+        self.exitData.clicked.connect(self.on_exitdata)
+
+    def on_exitdata(self):
+        print("exit clicked")
+        from Itt_data import App1
+        #from Itt_View_Report_main import search
+        self.w = App1(self.flist)
+        self.w.show()
+        self.hide()
 
     def gui(self):
         print("inside gui")
@@ -74,11 +89,12 @@ class Windowfinal(QWidget):
         self.lastmodifiedboxLabel = QLabel("&Last Modified:")
         self.lastmodifiedboxLabel.setBuddy(self.lastmodifiedbox)
 
-        self.historybox = QLineEdit()
-        self.historybox.setEchoMode(QLineEdit.Normal)
-        self.historyboxLabel = QLabel("&History:")
+        self.historybox = QTextBrowser()
+        self.historybox.setAcceptRichText(True)
+        self.historyboxLabel = QLabel("History")
         self.historyboxLabel.setBuddy(self.historybox)
-
+        self.historybox.setOpenExternalLinks(True)
+        self.historybox.clear()
         self.fill()
 
         self.gridLayout.addWidget(self.crboxLabel, 0, 0,)
@@ -105,6 +121,7 @@ class Windowfinal(QWidget):
         self.gridLayout.addWidget(self.lastmodifiedbox, 10, 1)
         self.gridLayout.addWidget(self.historyboxLabel, 11, 0)
         self.gridLayout.addWidget(self.historybox, 11, 1)
+        #self.gridLayout.addWidget(self.exitData,12,1)
 
         self.setLayout(self.gridLayout)
         self.show()
@@ -166,3 +183,26 @@ class Windowfinal(QWidget):
         self.Lastmodified = str(self.details["Last Modified"])
         self.lastmodifiedbox.setText((self.Lastmodified))
         self.lastmodifiedbox.setReadOnly(True)
+
+        # entering history
+        self.append_history()
+
+    def append_history(self):
+        self.history = str(self.details["History"])
+       # self.history=dict(self.history)
+
+        #self.mylist = list(self.history.values())
+        #print(self.mylist)
+        #self.history.reverse()
+        print("type of history",type(self.details))
+        self.history = self.history.replace('[', '')
+        self.history = self.history.replace('"', '')
+        self.history = self.history.replace('"[','')
+        self.history = self.history.replace(']','')
+        self.history = self.history.replace("'", '')
+
+        self.changes = self.history.split(",")
+        for line in self.changes:
+            self.historybox.append(line)
+            self.historybox.append("")
+        # self.le.clear()
