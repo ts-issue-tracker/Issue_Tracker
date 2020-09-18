@@ -1,4 +1,5 @@
 import xlrd
+from itt_resource_names import *
 import pandas as pd
 import numpy as np
 
@@ -12,7 +13,7 @@ df_new.to_excel(GFG, index=False)
 GFG.save()
 # Give the location of the file
 #file_location = "cr_list_entry.xlsx"
-file_location="main.xlsx"
+file_location="cr_list_entry.xlsx"
 
 wb = xlrd.open_workbook(file_location)
 sheet = wb.sheet_by_index(0)
@@ -44,6 +45,7 @@ def list_to_display_on_pie(col_name):
     return return_list(list2, label_list, col)
 def list_to_display_on_pie_for_assignee(assignee_col,assignee_name,col_name):
     assignee_filter_list=[]
+    list2 = []
     col = return_col_of_specified_col_name(col_name)
     print(col)
     for k in range(sheet.nrows):
@@ -53,26 +55,27 @@ def list_to_display_on_pie_for_assignee(assignee_col,assignee_name,col_name):
         list=[]
         list.extend(return_label_list(col_name))
         print(list)
-        list2=[]
         for i in range(0,len(list)):
             list2.append(0)
         for i,k in zip(list,range(0,len(list))):
             for j in assignee_filter_list:
                 if i==j:
                     list2[k]+=1
-    print(list2)
     return list2
 
 def return_label_list(col_name):
-    state_list = ["Open", "Analysis", "In Progress", "Reopen", "Closed"]
-    domain_list = ["Audio", "Video", "Camera"]
-    issue_list = ["Bug", "Internal", "Blacklisting"]
+    state_list=[]
+    domain_list=[]
+    issue_list=[]
+    names=resource_names()
+    state_list.extend(names.get_cr_state_names())
+    domain_list.extend(names.get_domain_names())
+    issue_list.extend(names.get_issue_type_names())
     assignee_list = ["Tulasi", "Santhoshi", "Pavani", "Suma", "Suresh"]
-
     get_label_list_of_specified_col_name = {
         "State": state_list,
         "Domain": domain_list,
-        "IssueType": issue_list,
+        "Issue Type": issue_list,
         "Assignee": assignee_list
     }
     return get_label_list_of_specified_col_name.get(col_name)

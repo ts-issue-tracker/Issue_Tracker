@@ -11,6 +11,7 @@ from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtGui import QFont
 from itt_utils import *
 from PyQt5.QtGui import *
+from itt_resource_names import *
 
 
 class Statistics_Window(QWidget):
@@ -60,6 +61,7 @@ class Statistics_Window(QWidget):
         self.gridLayout_three = QGridLayout(self.frame_three)
         self.frame_three.setFixedSize(370, 150)
         self.gridLayout.addWidget(self.frame_three, 3, 0)
+        self.names=resource_names()
 
         self.MyUI()
 
@@ -68,7 +70,7 @@ class Statistics_Window(QWidget):
         self.TypeCombo.setFont(QFont('Arial', 10))
         self.TypeCombo.addItem('State')
         self.TypeCombo.addItem('Domain')
-        self.TypeCombo.addItem('IssueType')
+        self.TypeCombo.addItem('Issue Type')
         self.TypeCombo.activated[str].connect(self.readType)
         self.TypeCombo.setFixedWidth(120)
 
@@ -77,14 +79,12 @@ class Statistics_Window(QWidget):
         typeLabel.setFixedWidth(50)
         typeLabel.setBuddy(self.TypeCombo)
 
+        self.names.get_assignee_names()
+
         self.AssigneeCombo = QComboBox(self)
         self.AssigneeCombo.setFont(QFont('Arial', 10))
-        self.AssigneeCombo.addItem('Tulasi')
-        self.AssigneeCombo.addItem('Santhoshi')
-        self.AssigneeCombo.addItem('Pavani')
-        self.AssigneeCombo.addItem('Sumalatha')
-        self.AssigneeCombo.addItem('Suresh')
-        self.AssigneeCombo.addItem('Swetha')
+        for i in self.names.get_assignee_names():
+            self.AssigneeCombo.addItem(i)
         self.AssigneeCombo.activated[str].connect(self.readAssignee)
         self.AssigneeCombo.setFixedWidth(120)
 
@@ -95,9 +95,8 @@ class Statistics_Window(QWidget):
 
         self.DomianCombo = QComboBox(self)
         self.DomianCombo.setFont(QFont('Arial', 10))
-        self.DomianCombo.addItem('Audio')
-        self.DomianCombo.addItem('Camera')
-        self.DomianCombo.addItem('Video')
+        for i in self.names.get_domain_names():
+            self.DomianCombo.addItem(i)
         self.DomianCombo.activated[str].connect(self.readDomain)
         self.DomianCombo.setFixedWidth(120)
 
