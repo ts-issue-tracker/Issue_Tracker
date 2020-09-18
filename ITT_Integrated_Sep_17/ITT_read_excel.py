@@ -6,6 +6,7 @@ def read_new_no():
         reader1 = csv.reader(f, delimiter=',')
         data1 = list(reader1)
         current_row = len(data1)
+        print(current_row)
         current_cr_num = int(data1[current_row - 1][0]) + 1
         print(current_cr_num)
         f.close()

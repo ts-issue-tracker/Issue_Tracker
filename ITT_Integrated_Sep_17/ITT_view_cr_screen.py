@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt
 import sys
+
 from ITT_read_excel import *
 
 class view_cr_window(QWidget):
@@ -44,6 +45,26 @@ class view_cr_window(QWidget):
         # grid cr entry
         self.gridLayout.addWidget(self.crno_entry, 0, 1)
 
+        # label title
+        self.title_label = QLabel("Title")
+        self.title_label.setFont(QFont('Arial', 10))
+        # entry title
+        self.title_entry = QTextEdit()
+        self.title = read_title_with_cr(self.cr_index)
+        self.title_entry.setPlainText(self.title)
+        self.title_entry.setReadOnly(True)
+        self.title_entry.setFont(QFont('Arial', 10))
+        self.title_entry.setFixedHeight(50)
+        self.title_entry.setStyleSheet("QTextEdit"
+                                       "{"
+                                       "background-color: #DBDBDB;"
+                                       "}")
+
+        # grid label title
+        self.gridLayout.addWidget(self.title_label, 1, 0)
+        # grid entry assignee
+        self.gridLayout.addWidget(self.title_entry, 1, 1)
+
         # label assignee
         self.assignee_label = QLabel("Assignee")
         self.assignee_label.setFont(QFont('Arial', 10))
@@ -63,26 +84,24 @@ class view_cr_window(QWidget):
         # grid entry assignee
         self.gridLayout.addWidget(self.assignee_entry, 1, 1)
 
-        # label title
-        self.title_label = QLabel("Title")
-        self.title_label.setFont(QFont('Arial', 10))
-        # entry title
-        self.title_entry = QTextEdit()
-        self.title = read_title_with_cr(self.cr_index)
-        self.title_entry.setPlainText(self.title)
-        self.title_entry.setReadOnly(True)
-        self.title_entry.setFont(QFont('Arial', 10))
-        self.title_entry.setFixedHeight(50)
-        self.title_entry.setStyleSheet("QTextEdit"
-                                          "{"
-                                          "background-color: #DBDBDB;"
-                                          "}")
-
-        # grid label title
-        self.gridLayout.addWidget(self.title_label, 2, 0)
-        # grid entry assignee
-        self.gridLayout.addWidget(self.title_entry, 2, 1)
-
+        # label Description
+        self.des_label = QLabel("Description")
+        self.des_label.setFont(QFont('Arial', 10))
+        # entry Description
+        self.des_entry = QTextEdit(self)
+        self.des_entry.setFixedHeight(130)
+        self.des_entry.setStyleSheet("QTextEdit"
+                                     "{"
+                                     "background-color: #DBDBDB;"
+                                     "}")
+        self.des = read_des_with_cr(self.cr_index)
+        self.des_entry.setFont(QFont('Arial', 10))
+        self.des_entry.setReadOnly(True)
+        self.des_entry.setPlainText(self.des)
+        # grid Description label
+        self.gridLayout.addWidget(self.des_label, 2, 0)
+        # grid Description entry
+        self.gridLayout.addWidget(self.des_entry, 2, 1)
 
         # label cr state
         self.cr_state_label = QLabel("CR State")
@@ -167,25 +186,6 @@ class view_cr_window(QWidget):
         self.issue_reason_entry.setReadOnly(True)
         # grid issue reason
         self.gridLayout.addWidget(self.issue_reason_entry, 6, 1)
-
-        # label Description
-        self.des_label = QLabel("Description")
-        self.des_label.setFont(QFont('Arial', 10))
-        # entry Description
-        self.des_entry = QTextEdit(self)
-        self.des_entry.setFixedHeight(130)
-        self.des_entry.setStyleSheet("QTextEdit"
-                                     "{"
-                                     "background-color: #DBDBDB;"
-                                     "}")
-        self.des = read_des_with_cr(self.cr_index)
-        self.des_entry.setFont(QFont('Arial', 10))
-        self.des_entry.setReadOnly(True)
-        self.des_entry.setPlainText(self.des)
-        # grid Description label
-        self.gridLayout.addWidget(self.des_label, 7, 0)
-        # grid Description entry
-        self.gridLayout.addWidget(self.des_entry, 7, 1)
 
         # domain
         self.domain_label = QLabel("Domain")
@@ -305,7 +305,8 @@ class view_cr_window(QWidget):
         frame.move(int((self.width()-self.frame.width()) / 2), int((self.height()-self.frame.height()) / 2))
 
     def exit_clicked(self):
-        self.w = Main_window()
+        from itt_main_ui import main_window
+        self.w = main_window()
         self.w.show()
         self.hide()
 

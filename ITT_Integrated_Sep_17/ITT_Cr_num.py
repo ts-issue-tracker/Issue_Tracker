@@ -11,6 +11,7 @@ class Enter_cr(QWidget):
         super().__init__()
         self.setMinimumWidth(700)
         self.setMinimumHeight(700)
+        self.setWindowTitle("View")
         self.frame = QFrame(self)
         self.frame.setFixedSize(330, 250)
         # self.frame.setFrameShape(QFrame.StyledPanel)

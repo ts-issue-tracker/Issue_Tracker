@@ -11,7 +11,7 @@ from ITT_read_excel import *
 class view_window(QWidget):
     def __init__(self):
         super().__init__()
-        self.title = "View"
+        self.title = "View Screen"
         self.setWindowTitle(self.title)
         self.setMinimumWidth(600)
         self.setMinimumHeight(600)
@@ -25,7 +25,7 @@ class view_window(QWidget):
 
     def view_screen(self):
         # label crno
-        self.crno_label = QLabel("Cr.no:")
+        self.crno_label = QLabel("Cr.no")
         self.crno_label.setFont(QFont('Arial', 10))
 
         # entry crno
@@ -44,7 +44,7 @@ class view_window(QWidget):
         self.gridLayout.addWidget(self.crno_entry, 0, 1)
 
         # label assignee
-        self.assignee_label = QLabel("Assignee:")
+        self.assignee_label = QLabel("Assignee")
         self.assignee_label.setFont(QFont('Arial', 10))
         # entry assignee
         self.assignee_entry = QLineEdit()
@@ -63,15 +63,16 @@ class view_window(QWidget):
         self.gridLayout.addWidget(self.assignee_entry, 1, 1)
 
         # label title
-        self.title_label = QLabel("Title:")
+        self.title_label = QLabel("Title")
         self.title_label.setFont(QFont('Arial', 10))
         # entry title
-        self.title_entry = QLineEdit()
+        self.title_entry = QTextEdit()
         self.title = read_last_title()
-        self.title_entry.setText(self.title)
+        self.title_entry.setPlainText(self.title)
         self.title_entry.setReadOnly(True)
         self.title_entry.setFont(QFont('Arial', 10))
-        self.title_entry.setStyleSheet("QLineEdit"
+        self.title_entry.setFixedHeight(50)
+        self.title_entry.setStyleSheet("QTextEdit"
                                           "{"
                                           "background-color: #DBDBDB;"
                                           "}")
@@ -83,7 +84,7 @@ class view_window(QWidget):
 
 
         # label cr state
-        self.cr_state_label = QLabel("Cr State:")
+        self.cr_state_label = QLabel("CR State")
         self.cr_state_label.setFont(QFont('Arial', 10))
         # entry_cr_state
         self.cr_state_entry = QLineEdit(self)
@@ -120,7 +121,7 @@ class view_window(QWidget):
         #self.gridLayout.addWidget(self.si_state_entry, 4, 1)
 
         # label Si state
-        self.si_label = QLabel("SI:")
+        self.si_label = QLabel("SI state")
         self.si_label.setFont(QFont('Arial', 10))
         # entry_si_state
         self.si_entry = QLineEdit(self)
@@ -139,7 +140,7 @@ class view_window(QWidget):
         self.gridLayout.addWidget(self.si_entry, 3, 1)
 
         # label Issue type
-        self.issuetype_label = QLabel("Issue Type:")
+        self.issuetype_label = QLabel("Issue Type")
         self.issuetype_label.setFont(QFont('Arial', 10))
         # entry Issue type
         self.issuetype_entry = QLineEdit(self)
@@ -167,7 +168,7 @@ class view_window(QWidget):
         self.gridLayout.addWidget(self.issue_reason_entry, 6, 1)
 
         # label Description
-        self.des_label = QLabel("Description:")
+        self.des_label = QLabel("Description")
         self.des_label.setFont(QFont('Arial', 10))
         # entry Description
         self.des_entry = QTextEdit(self)
@@ -179,18 +180,14 @@ class view_window(QWidget):
         self.des = read_last_des()
         self.des_entry.setFont(QFont('Arial', 10))
         self.des_entry.setReadOnly(True)
-        self.des_entry.setStyleSheet("QLineEdit"
-                                           "{"
-                                           "background-color: #DBDBDB;"
-                                           "}")
-        self.des_entry.setText(self.des)
+        self.des_entry.setPlainText(self.des)
         # grid Description label
         self.gridLayout.addWidget(self.des_label, 7, 0)
         # grid Description entry
         self.gridLayout.addWidget(self.des_entry, 7, 1)
 
         # domain
-        self.domain_label = QLabel("Domain:")
+        self.domain_label = QLabel("Domain")
         self.domain_label.setFont(QFont('Arial', 10))
         # domain entry
         self.domain_entry = QLineEdit(self)
@@ -207,7 +204,7 @@ class view_window(QWidget):
         self.gridLayout.addWidget(self.domain_entry, 8, 1)
 
         # git/gerrit
-        self.git_label = QLabel("Git/Gerrit link:")
+        self.git_label = QLabel("Git/Gerrit link")
         self.git_label.setFont(QFont('Arial', 10))
         # git entry
         self.git_entry = QLineEdit(self)
@@ -224,7 +221,7 @@ class view_window(QWidget):
         self.gridLayout.addWidget(self.git_entry, 9, 1)
 
         # build id
-        self.build_label = QLabel("Build Id:")
+        self.build_label = QLabel("Build Id")
         self.build_label.setFont(QFont('Arial', 10))
         # build entry
         self.build_entry = QLineEdit(self)
@@ -242,7 +239,7 @@ class view_window(QWidget):
         self.gridLayout.addWidget(self.build_entry, 10, 1)
 
         # Create on
-        self.createon_label = QLabel("Created on:")
+        self.createon_label = QLabel("Created on")
         self.createon_label.setFont(QFont('Arial', 10))
         # create_On entry
         self.createon_entry = QLineEdit(self)
@@ -260,7 +257,7 @@ class view_window(QWidget):
         self.gridLayout.addWidget(self.createon_entry, 11, 1)
 
         # last modified
-        self.lastmodi_label = QLabel("Last Modified: ")
+        self.lastmodi_label = QLabel("Last Modified ")
         self.lastmodi_label.setFont(QFont('Arial', 10))
         # last modified entry
         self.lastmodi_entry = QLineEdit(self)
@@ -283,8 +280,21 @@ class view_window(QWidget):
         self.exit.clicked.connect(self.exit_clicked)
 
         # grid button
-        self.gridLayout.addWidget(self.exit, 13, 2)
+        self.gridLayout.addWidget(self.exit, 13, 3)
+
+        self.continuebt = QPushButton()
+        self.continuebt.setText("Create CR")
+        self.continuebt.clicked.connect(self.continuebt_clicked)
+
+        # grid button
+        self.gridLayout.addWidget(self.continuebt, 13, 1)
         self.show()
+
+    def continuebt_clicked(self):
+        from ITT_create_issue import Create_cr
+        self.w = Create_cr()
+        self.w.show()
+        self.hide()
 
     def resizeEvent(self, event):
         self.centerOnScreen(self.frame)

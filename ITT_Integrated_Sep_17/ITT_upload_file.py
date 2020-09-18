@@ -1,7 +1,8 @@
 from PyQt5 import QtWidgets,QtCore
-from PyQt5.QtWidgets import QApplication, QWidget,QFrame,QGridLayout,QPushButton,QFileDialog
+from PyQt5.QtWidgets import QApplication, QWidget,QFrame,QGridLayout,QPushButton,QFileDialog,QLabel
 import sys
 import shutil
+
 
 class Upload(QWidget):
     def __init__(self):
@@ -10,7 +11,7 @@ class Upload(QWidget):
         self.setMinimumWidth(700)
         self.setMinimumHeight(700)
         self.frame = QFrame(self)
-        self.frame.setFixedSize(330, 250)
+        self.frame.setFixedSize(330, 700)
         # self.frame.setFrameShape(QFrame.StyledPanel)
 
         self.gridLayout = QGridLayout(self.frame)
@@ -32,7 +33,7 @@ class Upload(QWidget):
         self.exit.clicked.connect(self.exit_click)
 
         # grid button
-        self.gridLayout.addWidget(self.upload, 2, 1)
+        self.gridLayout.addWidget(self.exit, 2, 0)
         self.show()
 
     def exit_click(self):
@@ -42,10 +43,16 @@ class Upload(QWidget):
         self.hide()
 
     def upload_click(self):
-        destpath = "resources"
-        filename = QFileDialog.getOpenFileName()
-        path = filename[0]
-        shutil.copy(path,destpath)
+        destpath = "C:\\Users\\lenovo\\Desktop"
+
+        try:
+            filename = QFileDialog.getOpenFileName()
+            self.label = QLabel(filename[0])
+            self.gridLayout.addWidget(self.label,1,1)
+            path = filename[0]
+            shutil.copy(path,destpath)
+        except FileNotFoundError:
+            print("Wrong file or file path")
 
     def resizeEvent(self, event):
         self.centerOnScreen(self.frame)

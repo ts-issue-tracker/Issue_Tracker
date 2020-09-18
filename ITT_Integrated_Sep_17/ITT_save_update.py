@@ -4,8 +4,9 @@ import os
 
 def save_data(combo_dict,index):
     print("in save excel")
+    print(combo_dict)
     field_names = ['CR', 'Title', 'Description', 'Assignee', 'State', 'Software Image',
-                       'Domain', 'Issue Type', 'GIT/Gerrit link',
+                       'Domain', 'Issue Type', 'GIT commit id/Gerrit link',
                        'Build ID', 'Create On', 'Last Modified On', 'History']
 
     with open("otemp.csv", "w",newline="") as f_out:
