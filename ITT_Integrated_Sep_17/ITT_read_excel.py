@@ -1,5 +1,13 @@
 import csv
 
+def read_index_cr():
+    with open('cr_list_entry.csv') as f:
+        reader1 = csv.reader(f, delimiter=',')
+        data1 = list(reader1)
+        current_row = len(data1)
+        print(current_row)
+        return current_row
+
 def read_new_no():
     print("reading excel")
     with open('cr_list_entry.csv') as f:

@@ -5,7 +5,7 @@ from PyQt5.QtGui import QFont
 from PyQt5.QtCore import QDateTime
 
 import sys
-import textwrap
+import shutil
 
 from ITT_validate import *
 from ITT_save_excel import save_in_excel
@@ -25,6 +25,7 @@ class Create_cr(QWidget):
 
         self.gridLayout = QGridLayout(self.frame)
         self.gridLayout.setContentsMargins(20, 20, 20, 20)
+        self.path = ""
         self.create_an_issue()
 
     def create_an_issue(self):
@@ -97,9 +98,9 @@ class Create_cr(QWidget):
         self.cr_state_entry.addItem("Open")
 
         #grid cr state label
-        self.gridLayout.addWidget(self.cr_state_label,4,0)
+        self.gridLayout.addWidget(self.cr_state_label,5,0)
         #grid cr state entry
-        self.gridLayout.addWidget(self.cr_state_entry,4,1)
+        self.gridLayout.addWidget(self.cr_state_entry,5,1)
 
         # label Si state
         self.si_label = QLabel("SI state")
@@ -109,9 +110,9 @@ class Create_cr(QWidget):
         self.si_entry.setFont(QFont('Arial', 10))
         self.si_entry.addItem("Open")
         # grid si state label
-        self.gridLayout.addWidget(self.si_label, 5, 0)
+        self.gridLayout.addWidget(self.si_label, 4, 0)
         # grid si state entry
-        self.gridLayout.addWidget(self.si_entry, 5, 1)
+        self.gridLayout.addWidget(self.si_entry, 4, 1)
 
         # domain
         self.domain_label = QLabel("Domain")
@@ -259,11 +260,19 @@ class Create_cr(QWidget):
         frame.move(int((self.width()-self.frame.width()) / 2), int((self.height()-self.frame.height()) / 2))
 
     def Upload_but_clicked(self):
-        from ITT_upload_file import Upload
-        print("Upload_but_clicked")
-        self.w = Upload()
-        self.w.show()
-        self.hide()
+        #from ITT_upload_file import Upload
+        #print("Upload_but_clicked")
+        #self.w = Upload()
+        #self.w.show()
+        #self.hide()
+
+        try:
+            filename = QFileDialog.getOpenFileName()
+            self.label = QLabel(filename[0])
+            self.gridLayout.addWidget(self.label,14,1)
+            self.path = filename[0]
+        except FileNotFoundError:
+            print("Wrong file or file path")
 
     def Exit_but_clicked(self):
         from itt_main_ui import main_window
@@ -314,9 +323,12 @@ class Create_cr(QWidget):
             print("main", des_ret[0], des_ret[1])
             build_ret = bt_build_validate(build_id)
             print("main", build_ret[0], build_ret[1])
-            dis_ret = display(title_ret,des_ret,build_ret,assignee_ret)
+            dis_ret = display_create(title_ret,des_ret,build_ret,assignee_ret)
             if(dis_ret == True):
-                save_in_excel(combo_dict)
+                print("saving")
+                if(len(self.path) == 0):
+                    self.path = ""
+                save_in_excel(combo_dict,self.path)
                 print("save")
                 self.open_view_screen()
                 print("Open view screen")

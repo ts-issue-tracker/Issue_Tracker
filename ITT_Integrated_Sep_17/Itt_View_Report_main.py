@@ -166,9 +166,6 @@ class View_Report(QWidget):
 
         # using all() + dictionary comprehension
         # Check if all values are 0 in dictionary
-        #openfile(3)
-        #openfile(1)
-        #openfile(2)
         res = all(x == "None" for x in self.selectedFilter.values())
         if (res == 1):
             QMessageBox.about(self, 'Information', "No selection made!")
@@ -185,7 +182,7 @@ class View_Report(QWidget):
             ret = getCr(self.flist[0])
             self.w = Windowfinal(ret)
             self.w.show()
-            #self.hide()
+            self.hide()
 
         elif(self.flag == -4):
             msg = "Search not available. "+self.flist[0]+" not found"

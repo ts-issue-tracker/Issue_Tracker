@@ -2,7 +2,7 @@ from PyQt5 import QtWidgets,QtCore
 from PyQt5.QtWidgets import QApplication, QWidget,QFrame,QGridLayout,QPushButton,QFileDialog,QLabel
 import sys
 import shutil
-
+from ITT_save_excel import *
 
 class Upload(QWidget):
     def __init__(self):
@@ -23,7 +23,7 @@ class Upload(QWidget):
         #submit button
         self.upload=QPushButton()
         self.upload.setText("Browse")
-        self.upload.clicked.connect(self.upload_click)
+        self.path = self.upload.clicked.connect(self.upload_click)
 
         #grid button
         self.gridLayout.addWidget(self.upload,1,0)
@@ -51,6 +51,7 @@ class Upload(QWidget):
             self.gridLayout.addWidget(self.label,1,1)
             path = filename[0]
             shutil.copy(path,destpath)
+            save_path(path)
         except FileNotFoundError:
             print("Wrong file or file path")
 
@@ -59,6 +60,7 @@ class Upload(QWidget):
 
     def centerOnScreen(self,frame):
         frame.move(int((self.width()-self.frame.width()) / 2), int((self.height()-self.frame.height()) / 2))
+
 
 if __name__ == "__main__":
     app =QApplication(sys.argv)

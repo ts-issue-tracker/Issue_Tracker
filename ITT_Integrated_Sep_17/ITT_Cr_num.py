@@ -64,7 +64,7 @@ class Enter_cr(QWidget):
             self.w.show()
             self.close()
         else:
-            print("NO cr exist")
+            print("No cr exist")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

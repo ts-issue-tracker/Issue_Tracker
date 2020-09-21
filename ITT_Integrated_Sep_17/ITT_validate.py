@@ -4,6 +4,177 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QMessageBox
 from itt_utils import *
 
+def git_validate(git):
+    mymsg = ""
+    if (len(git) == 0):
+        print("vt1")
+        ck = False
+        if (mymsg != ""):
+            mymsg += ","
+        mymsg += "Please enter the Git Id"
+        print(mymsg)
+        ret = [mymsg,ck]
+        print("ret ,", ret)
+        return ret
+
+def bt_cr_validate(cr_prev,cr_new):
+    mymsg = ""
+    if (cr_prev == "Closed"):
+        if (cr_new == "Reopen" or cr_new == "Open"):
+            print("si1.0")
+            ck = False
+            if (mymsg != ""):
+                mymsg += ","
+            mymsg += "CR state is selected"
+            print(mymsg)
+            ret = [mymsg, True]
+            print("ret ,", ret)
+            return ret
+        else:
+                print("si1.0")
+                ck = False
+                if (mymsg != ""):
+                    mymsg += ","
+                mymsg += "CR state should be Reopen only"
+                print(mymsg)
+                ret = [mymsg, ck]
+                print("ret ,", ret)
+                return ret
+
+def bt_si_validate(prev_si,new_si,cr_new):
+    print("build si")
+    mymsg = ""
+    print(prev_si,new_si,cr_new)
+    if(prev_si == new_si):
+        print("si")
+        ck = False
+        if (mymsg != ""):
+            mymsg += ","
+        mymsg += "SI state Selected"
+        print(mymsg)
+        ret = [mymsg, True]
+        print("ret ,", ret)
+        return ret
+
+    if(prev_si == "Open"):
+        if(new_si != "Analysis"):
+            print("si1.0")
+            ck = False
+            if (mymsg != ""):
+                mymsg += ","
+            mymsg += "SI state should be analysis only"
+            print(mymsg)
+            ret = [mymsg, ck]
+            print("ret ,", ret)
+            return ret
+        else:
+            print("vt1.1")
+            ck = False
+            if (mymsg != ""):
+                mymsg += ","
+            mymsg += "SI state is selected"
+            print(mymsg)
+            ret = [mymsg, True]
+            print("ret ,", ret)
+            return ret
+    if(prev_si == "Analysis"):
+        if(new_si == "Fix"):
+            print("vt2.0")
+            ck = False
+            if (mymsg != ""):
+                mymsg += ","
+            mymsg += "SI state is selected"
+            print(mymsg)
+            ret = [mymsg, True]
+            print("ret ,", ret)
+            return ret
+        if(new_si =="Withdrawn" or new_si == "Duplicate"):
+            print("vt2.0")
+            ck = False
+            if (mymsg != ""):
+                mymsg += ","
+            mymsg += "SI state is selected"
+            print(mymsg)
+            ret = [mymsg, True]
+            print("ret ,", ret)
+            return ret
+        else:
+            print("vt2.1")
+            ck = False
+            if (mymsg != ""):
+                mymsg += ","
+            mymsg += "SI state should be Fix/Withdrawn/Duplicate only"
+            print(mymsg)
+            ret = [mymsg, ck]
+            print("ret ,", ret)
+            return ret
+
+    if(prev_si == "Withdrawn" or prev_si == "Duplicate"):
+        if(cr_new == "Reopen" or cr_new == "Open"):
+            print("vt2.1")
+            ck = False
+            if (mymsg != ""):
+                mymsg += ","
+            mymsg += "SI state selected"
+            print(mymsg)
+            ret = [mymsg, True]
+            print("ret ,", ret)
+            return ret
+            return ret
+        else:
+            print("vt2.1")
+            ck = False
+            if (mymsg != ""):
+                mymsg += ","
+            mymsg += "SI state move to any state"
+            print(mymsg)
+            ret = [mymsg, ck]
+            print("ret ,", ret)
+            return ret
+
+    if(prev_si == "Fix"):
+        if(new_si == "Ready"):
+            print("vt3.0")
+            ck = False
+            if (mymsg != ""):
+                mymsg += ","
+            mymsg += "SI state is selected"
+            print(mymsg)
+            ret = [mymsg, True]
+            print("ret ,", ret)
+            return ret
+        else:
+            print("vt2.0")
+            ck = False
+            if (mymsg != ""):
+                mymsg += ","
+            mymsg += "SI state should be Ready only"
+            print(mymsg)
+            ret = [mymsg, False]
+            print("ret ,", ret)
+            return ret
+    if(prev_si == "Ready"):
+        if(new_si == "Built"):
+            print("vt2.0")
+            ck = False
+            if (mymsg != ""):
+                mymsg += ","
+            mymsg += "SI state is selected"
+            print(mymsg)
+            ret = [mymsg, True]
+            print("ret ,", ret)
+            return ret
+        else:
+            print("vt2.0")
+            ck = False
+            if (mymsg != ""):
+                mymsg += ","
+            mymsg += "SI state should be Built only"
+            print(mymsg)
+            ret = [mymsg, True]
+            print("ret ,", ret)
+            return ret
+
 def bt_title_validate(title):
     mymsg = ""
     ck = False
@@ -14,6 +185,8 @@ def bt_title_validate(title):
     if (len(title) == 0):
         print("vt1")
         ck = False
+        if (mymsg != ""):
+            mymsg += ","
         mymsg += "Title is Empty"
         print(mymsg)
         ret = [mymsg,ck]
@@ -89,7 +262,7 @@ def bt_des_validate(des):
         print("d3")
         if (mymsg != ""):
             mymsg += ","
-        mymsg += "Valid Description only alphanumeric are allowed"
+        mymsg += "Valid Description"
         print(mymsg)
         ret = [mymsg, True]
         print("ret ,", ret)
@@ -156,7 +329,50 @@ def bt_assignee_validate(assignee):
             print(mymsg)
             ret = [mymsg, False]
             print("ret ,", ret)
+            return ret
 
+def bt_build_validate_update(old,new):
+    print(new)
+    ck = False
+    regex = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
+    mymsg = ""
+    if (regex.search(new) != None):
+        if (mymsg != ""):
+            print("b1")
+            mymsg += ","
+        mymsg += "Invalid build I'd only alphanumeric are allowed"
+        print(mymsg)
+        ret = [mymsg, ck]
+        print("ret ,", ret)
+        return ret
+
+    if (len(new) == 0):
+        if (mymsg != ""):
+            print("b2")
+            mymsg += ","
+        mymsg += "Build I'd is Empty"
+        print(mymsg)
+        ret = [mymsg, ck]
+        print("ret ,", ret)
+        return ret
+
+    if(new == old):
+        if (mymsg != ""):
+            print("b3")
+            mymsg += ","
+        mymsg += "Build id should not same as the one given when the CR is created."
+        print(mymsg)
+        ret = [mymsg, ck]
+        print("ret ,", ret)
+        return ret
+
+    else:
+        print("b4")
+        mymsg += "Valid build I'd"
+        print(mymsg)
+        ret = [mymsg, True]
+        print("ret ,", ret)
+        return ret
 
 def bt_build_validate(buildid):
     print(buildid)
@@ -253,7 +469,7 @@ def validate_cr_list(crno):
         msg.setWindowTitle("Information")
         msg.setText("No Cr exist Please create a new Cr")
         x = msg.exec_()
-        return False
+        return ck
     else:
         return ck
 

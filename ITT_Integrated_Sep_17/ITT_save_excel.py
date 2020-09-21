@@ -10,10 +10,11 @@ def append_dict_as_row(file_name, dict_of_elem, field_names):
         dict_writer.writerow(dict_of_elem)
         write_obj.close()
 
-def save_in_excel(combo_dict):
+def save_in_excel(combo_dict,path):
         print("in write excel file")
         mylist = [ ]
         global field_names
+
         field_names =['CR', 'Title', 'Description','Assignee','State','Software Image',
                          'Domain','Issue Type','GIT commit id/Gerrit link',
                        'Build ID','Create On','Last Modified On','History']
@@ -21,12 +22,16 @@ def save_in_excel(combo_dict):
         file = 'cr_list_entry.csv'
         combo_dict = dict(combo_dict)
         #mylist = list(combo_dict.values())
-        mylist = ["Created by " + combo_dict['Assignee'] + "on" + combo_dict['Create On']]
+        if(len(path) > 0):
+         mylist = ["Created by " + combo_dict['Assignee'] + " and log file location is " + path + " on " + combo_dict['Create On']]
+        else:
+            mylist = [
+                "Created by " + combo_dict['Assignee'] + " on " + combo_dict['Create On']]
         combo_dict.update({'History':mylist})
         print(combo_dict)
         append_dict_as_row(file, combo_dict, field_names)
 
-def save_update_info(combo_dict1,cr,index,history_dict):
+def save_update_info(combo_dict1,cr,index,history_dict,path):
     print("update file")
     print(history_dict)
     field_names = ['CR', 'Title', 'Description', 'Assignee', 'State', 'Software Image',
@@ -38,7 +43,7 @@ def save_update_info(combo_dict1,cr,index,history_dict):
     print("old",history_dict)
     print("old",olddata)
     #newdata = list(combo_dict1.values())
-    newdata = collect_newdata(history_dict,combo_dict1)
+    newdata = collect_newdata(history_dict,combo_dict1,path)
     olddata.extend(newdata)
     combo_dict1.update({'History': olddata})
     print("new",combo_dict1)
@@ -46,7 +51,7 @@ def save_update_info(combo_dict1,cr,index,history_dict):
     save_data(combo_dict1,index)
     print("complete")
 
-def collect_newdata(history_dict,combo_dict):
+def collect_newdata(history_dict,combo_dict,path):
     main_list = [ ]
     last_date = ["on",history_dict['last date']]
     history_dict = dict(history_dict)
@@ -59,6 +64,11 @@ def collect_newdata(history_dict,combo_dict):
         assignee = combo_dict['Assignee']
     name = [assignee]
     print(name,type(name))
+    if(len(path) > 0):
+        path_add = ["Attached log file " + path]
+        main_list.extend(path_add)
+        print("path",main_list)
+
     if 'title' in history_dict.keys():
         title_list = [" modified title to"+history_dict['title']]
         main_list.extend(title_list)
@@ -90,6 +100,7 @@ def collect_newdata(history_dict,combo_dict):
         print("description", main_list)
 
     if 'issue type' in history_dict.keys():
+        print("issue")
         issue_list = [" changed issue type to " + history_dict['issue type'] + " because "+ history_dict['issue Reason']]
         main_list.extend(issue_list)
         print("issue type", main_list)

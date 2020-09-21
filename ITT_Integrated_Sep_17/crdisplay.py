@@ -2,7 +2,7 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import QDateTime
-import re
+
 class Windowfinal(QWidget):
 
     def __init__(self,ret):
@@ -164,8 +164,8 @@ class Windowfinal(QWidget):
         self.Issuetypebox.setReadOnly(True)
 
         # entering GIT details
-        #self.git = self.details["GIT commit id/Gerrit link"]#GIT commit id/Gerrit link"]
-        self.Gitbox.setText("samplegit")#self.git)
+        self.git = self.details["GIT commit id/Gerrit link"]
+        self.Gitbox.setText(self.git)
         self.Gitbox.setReadOnly(True)
 
         # entering BID
@@ -174,9 +174,9 @@ class Windowfinal(QWidget):
         self.Bibox.setReadOnly(True)
 
         # entering Createdon
-        #print(self.details["Created on"])#Created on"])
-        #self.Createdon = str(self.details["Created on"])# Created on"])
-        self.Createdonbox.setText("date")#"#(self.Createdon))
+        print(self.details["Created on"])
+        self.Createdon = str(self.details["Created on"])
+        self.Createdonbox.setText((self.Createdon))
         self.Createdonbox.setReadOnly(True)
 
         # entering Last modified
@@ -200,8 +200,6 @@ class Windowfinal(QWidget):
         self.history = self.history.replace('"[','')
         self.history = self.history.replace(']','')
         self.history = self.history.replace("'", '')
-        self.history = self.history.replace('\\', '')
-        #re.sub('[^A-Za-z0-9]+', "Hello $#! People   Whitespace 7331")
 
         self.changes = self.history.split(",")
         for line in self.changes:

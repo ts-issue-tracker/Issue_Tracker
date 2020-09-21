@@ -43,24 +43,6 @@ class view_window(QWidget):
         # grid cr entry
         self.gridLayout.addWidget(self.crno_entry, 0, 1)
 
-        # label assignee
-        self.assignee_label = QLabel("Assignee")
-        self.assignee_label.setFont(QFont('Arial', 10))
-        # entry assignee
-        self.assignee_entry = QLineEdit()
-        self.assignee = read_last_assignee()
-        self.assignee_entry.setText(self.assignee)
-        self.assignee_entry.setReadOnly(True)
-        self.assignee_entry.setFont(QFont('Arial', 10))
-        self.assignee_entry.setStyleSheet("QLineEdit"
-                                    "{"
-                                    "background-color: #DBDBDB;"
-                                    "}")
-
-        # grid label assignee
-        self.gridLayout.addWidget(self.assignee_label, 1, 0)
-        # grid entry assignee
-        self.gridLayout.addWidget(self.assignee_entry, 1, 1)
 
         # label title
         self.title_label = QLabel("Title")
@@ -78,10 +60,47 @@ class view_window(QWidget):
                                           "}")
 
         # grid label title
-        self.gridLayout.addWidget(self.title_label, 2, 0)
+        self.gridLayout.addWidget(self.title_label, 1, 0)
         # grid entry assignee
-        self.gridLayout.addWidget(self.title_entry, 2, 1)
+        self.gridLayout.addWidget(self.title_entry, 1, 1)
 
+        # label Description
+        self.des_label = QLabel("Description")
+        self.des_label.setFont(QFont('Arial', 10))
+        # entry Description
+        self.des_entry = QTextEdit(self)
+        self.des_entry.setFixedHeight(130)
+        self.des_entry.setStyleSheet("QTextEdit"
+                                     "{"
+                                     "background-color: #DBDBDB;"
+                                     "}")
+        self.des = read_last_des()
+        self.des_entry.setFont(QFont('Arial', 10))
+        self.des_entry.setReadOnly(True)
+        self.des_entry.setPlainText(self.des)
+        # grid Description label
+        self.gridLayout.addWidget(self.des_label, 2, 0)
+        # grid Description entry
+        self.gridLayout.addWidget(self.des_entry, 2, 1)
+
+        # label assignee
+        self.assignee_label = QLabel("Assignee")
+        self.assignee_label.setFont(QFont('Arial', 10))
+        # entry assignee
+        self.assignee_entry = QLineEdit()
+        self.assignee = read_last_assignee()
+        self.assignee_entry.setText(self.assignee)
+        self.assignee_entry.setReadOnly(True)
+        self.assignee_entry.setFont(QFont('Arial', 10))
+        self.assignee_entry.setStyleSheet("QLineEdit"
+                                          "{"
+                                          "background-color: #DBDBDB;"
+                                          "}")
+
+        # grid label assignee
+        self.gridLayout.addWidget(self.assignee_label, 3, 0)
+        # grid entry assignee
+        self.gridLayout.addWidget(self.assignee_entry, 3, 1)
 
         # label cr state
         self.cr_state_label = QLabel("CR State")
@@ -98,9 +117,9 @@ class view_window(QWidget):
         self.cr_state_entry.setText(self.cr_state)
 
         # grid cr state label
-        self.gridLayout.addWidget(self.cr_state_label, 4, 0)
+        self.gridLayout.addWidget(self.cr_state_label, 5, 0)
         # grid cr state entry
-        self.gridLayout.addWidget(self.cr_state_entry, 4, 1)
+        self.gridLayout.addWidget(self.cr_state_entry, 5, 1)
 
         # label Si state
         #self.si_state_label = QLabel("SI State:")
@@ -135,56 +154,9 @@ class view_window(QWidget):
         self.si_entry.setReadOnly(True)
 
         # grid si state label
-        self.gridLayout.addWidget(self.si_label, 3, 0)
+        self.gridLayout.addWidget(self.si_label, 4, 0)
         # grid si state entry
-        self.gridLayout.addWidget(self.si_entry, 3, 1)
-
-        # label Issue type
-        self.issuetype_label = QLabel("Issue Type")
-        self.issuetype_label.setFont(QFont('Arial', 10))
-        # entry Issue type
-        self.issuetype_entry = QLineEdit(self)
-        self.issuetype_entry.setFont(QFont('Arial', 10))
-        self.issuetype = read_last_issuetype()
-        self.issuetype_entry.setText(self.issuetype)
-        self.issuetype_entry.setStyleSheet("QLineEdit"
-                                          "{"
-                                          "background-color: #DBDBDB;"
-                                          "}")
-        # grid Issue type label
-        self.gridLayout.addWidget(self.issuetype_label, 5, 0)
-        # grid issue type entry
-        self.gridLayout.addWidget(self.issuetype_entry, 5, 1)
-
-        # issue reason entry
-        self.issue_reason_entry = QLineEdit(self)
-        self.issue_reason_entry.setFont(QFont('Arial', 10))
-        self.issue_reason_entry.setStyleSheet("QLineEdit"
-                                              "{"
-                                              "background-color: #DBDBDB;"
-                                              "}")
-        self.issue_reason_entry.setReadOnly(True)
-        # grid issue reason
-        self.gridLayout.addWidget(self.issue_reason_entry, 6, 1)
-
-        # label Description
-        self.des_label = QLabel("Description")
-        self.des_label.setFont(QFont('Arial', 10))
-        # entry Description
-        self.des_entry = QTextEdit(self)
-        self.des_entry.setFixedHeight(130)
-        self.des_entry.setStyleSheet("QTextEdit"
-                                     "{"
-                                     "background-color: #DBDBDB;"
-                                     "}")
-        self.des = read_last_des()
-        self.des_entry.setFont(QFont('Arial', 10))
-        self.des_entry.setReadOnly(True)
-        self.des_entry.setPlainText(self.des)
-        # grid Description label
-        self.gridLayout.addWidget(self.des_label, 7, 0)
-        # grid Description entry
-        self.gridLayout.addWidget(self.des_entry, 7, 1)
+        self.gridLayout.addWidget(self.si_entry, 4, 1)
 
         # domain
         self.domain_label = QLabel("Domain")
@@ -195,13 +167,42 @@ class view_window(QWidget):
         self.domain = read_last_domain()
         self.domain_entry.setText(self.domain)
         self.domain_entry.setStyleSheet("QLineEdit"
-                                    "{"
-                                    "background-color: #DBDBDB;"
-                                    "}")
+                                        "{"
+                                        "background-color: #DBDBDB;"
+                                        "}")
         # grid domain label
-        self.gridLayout.addWidget(self.domain_label, 8, 0)
+        self.gridLayout.addWidget(self.domain_label, 6, 0)
         # grid domain entry
-        self.gridLayout.addWidget(self.domain_entry, 8, 1)
+        self.gridLayout.addWidget(self.domain_entry, 6, 1)
+
+        # label Issue type
+        self.issuetype_label = QLabel("Issue Type")
+        self.issuetype_label.setFont(QFont('Arial', 10))
+        # entry Issue type
+        self.issuetype_entry = QLineEdit(self)
+        self.issuetype_entry.setFont(QFont('Arial', 10))
+        self.issuetype = read_last_issuetype()
+        self.issuetype_entry.setText(self.issuetype)
+        self.issuetype_entry.setStyleSheet("QLineEdit"
+                                           "{"
+                                           "background-color: #DBDBDB;"
+                                           "}")
+        # grid Issue type label
+        self.gridLayout.addWidget(self.issuetype_label, 7, 0)
+        # grid issue type entry
+        self.gridLayout.addWidget(self.issuetype_entry, 7, 1)
+
+        # issue reason entry
+        self.issue_reason_entry = QLineEdit(self)
+        self.issue_reason_entry.setFont(QFont('Arial', 10))
+        self.issue_reason_entry.setStyleSheet("QLineEdit"
+                                              "{"
+                                              "background-color: #DBDBDB;"
+                                              "}")
+        self.issue_reason_entry.setReadOnly(True)
+        # grid issue reason
+        self.gridLayout.addWidget(self.issue_reason_entry,8 , 1)
+
 
         # git/gerrit
         self.git_label = QLabel("Git/Gerrit link")

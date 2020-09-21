@@ -1,11 +1,9 @@
 import xlwt
 from datetime import datetime
-from Itt_fileopen import *
 
 import xlrd
 # Give the location of the file
-
-file_location = "cr_list_entry.xlsx"#("projectexecl.xlsx")
+file_location = ("projectexecl.xlsx")
 
 wb1 = xlrd.open_workbook(file_location)
 sheet = wb1.sheet_by_index(0)
@@ -13,11 +11,9 @@ sheet = wb1.sheet_by_index(0)
 print(sheet.nrows)
 print(sheet.ncols)
 
-#sheet = openfile(1)
 wb = xlwt.Workbook()
 ws = wb.add_sheet('My Sheet',cell_overwrite_ok=True)
 def getCr2(cr):
-#    sheet = openfile(1)
     print("before int conv")
     print("type of real cr",type(cr))
     typein = int(cr)
