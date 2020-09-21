@@ -3,10 +3,11 @@ from crdisplay import *
 from Itt_Download import *
 ENTRY_NOT_FOUND = -4
 from itt_mail_sending import *
-
 import pandas as pd
+from Itt_fileopen import *
 import numpy as np
 
+"""
 # Reading the csv file
 df_new = pd.read_csv('cr_list_entry.csv')
 
@@ -22,6 +23,10 @@ file_location = "cr_list_entry.xlsx"
 
 wb = xlrd.open_workbook(file_location)
 sheet = wb.sheet_by_index(0)
+"""
+#sheet = openfile(1)
+#namesheet = openfile(2)
+
 row = 0
 col = 0
 result_list = []
@@ -29,6 +34,7 @@ names = []
 bientries = []
 sientries = []
 filters = {"CR":'nil',"Title":'nil',"Assignee":'nil',"State":'nil',"Software Image":'nil',"Domain":'nil',"Issue Type":'nil',"GIT commit ID/Gerrit Link":'nil',"Build ID":'nil',"Created on":'nil',"Last Modified":'nil',"History":'nil'}
+credential = {"Username":'nil',"Password":'nil'}
 filrow = 0
 
 
@@ -159,7 +165,9 @@ class App1(QWidget):
         self.backFilter.clicked.connect(self.on_backfilter)
 
     def on_backfilter(self):
+        #openfile(3)
         from Itt_View_Report_main import View_Report
+
         self.w = View_Report()
         self.w.show()
         self.hide()
@@ -176,6 +184,7 @@ class App1(QWidget):
         self.v = Windowfinal(ret)
         self.v.show()
         #self.hide()
+
     def cell_was_clicked(self, row, column):
         print("Row %d and Column %d was clicked" % (row, column))
         item = self.tableWidget.itemAt(row, column)
@@ -202,6 +211,10 @@ class App1(QWidget):
 
 
 def getcols():
+    global sheet
+    global namesheet
+    sheet = openfile(1)
+    namesheet = openfile(2)
     for key, value in filters.items():
         for i in range(sheet.ncols):
             if (key == sheet.cell_value(filrow,i)):
@@ -210,11 +223,21 @@ def getcols():
     for key, value in filters.items():
         print(key,value)
 
+    for key1, value1 in credential.items():
+        for i in range(namesheet.ncols):
+            print("namesheetcols")
+            print(namesheet.ncols,namesheet.cell_value(filrow,i))
+            if (key1 == namesheet.cell_value(filrow, i)):
+                print("inside namesheet true")
+                credential[key1] = i
+
 def namelist():
-    index = filters["Assignee"]
+    #index = filters["Assignee"]
+    #index = filters["Username"]#"Username"]
+    index = credential["Username"]
     list1 = []
-    for i in range(sheet.nrows):
-        list1.append(sheet.cell_value(i,index))
+    for i in range(namesheet.nrows):
+        list1.append(namesheet.cell_value(i,index))
     [names.append(x) for x in list1 if x not in names]
 
 def bilist():
@@ -225,6 +248,7 @@ def bilist():
     [bientries.append(x) for x in list1 if x not in bientries]
 
 def getCr(cr):
+    global sheet
     print("before int conv")
     print("type of real cr",type(cr))
     typein = int(cr)
