@@ -7,7 +7,7 @@ import pandas as pd
 from Itt_fileopen import *
 import numpy as np
 
-"""
+
 # Reading the csv file
 df_new = pd.read_csv('cr_list_entry.csv')
 
@@ -23,7 +23,7 @@ file_location = "cr_list_entry.xlsx"
 
 wb = xlrd.open_workbook(file_location)
 sheet = wb.sheet_by_index(0)
-"""
+
 #sheet = openfile(1)
 #namesheet = openfile(2)
 
@@ -213,7 +213,7 @@ class App1(QWidget):
 def getcols():
     global sheet
     global namesheet
-    sheet = openfile(1)
+#    sheet = openfile(1)
     namesheet = openfile(2)
     for key, value in filters.items():
         for i in range(sheet.ncols):
