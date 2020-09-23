@@ -1,6 +1,7 @@
 import csv
 from csv import DictWriter
 import os
+import shutil
 
 def save_data(combo_dict,index):
     print("in save excel")
@@ -35,4 +36,7 @@ def save_data(combo_dict,index):
     os.remove("cr_list_entry.csv")
     print("renaming")
     os.rename("otemp.csv", "cr_list_entry.csv")
+    print("copying")
+    shutil.copyfile("cr_list_entry.csv","cr_list.csv")
     print("complete")
+

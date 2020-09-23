@@ -14,18 +14,24 @@ class view_window(QWidget):
         self.title = "View Screen"
         self.setWindowTitle(self.title)
         self.setMinimumWidth(600)
-        self.setMinimumHeight(600)
+        self.setMinimumHeight(800)
         self.frame = QFrame(self)
-        self.frame.setFixedSize(500, 700)
+        self.frame.setFixedSize(500, 800)
         # self.frame.setFrameShape(QFrame.StyledPanel)
 
         self.gridLayout = QGridLayout(self.frame)
         self.gridLayout.setContentsMargins(20, 20, 20, 20)
+
+        self.frame_three = QFrame(self)
+        self.gridLayout_three = QGridLayout(self.frame_three)
+        self.frame_three.setFixedSize(450, 50)
+        self.gridLayout.addWidget(self.frame_three, 14, 0)
+
         self.view_screen()
 
     def view_screen(self):
         # label crno
-        self.crno_label = QLabel("Cr.no")
+        self.crno_label = QLabel("CR")
         self.crno_label.setFont(QFont('Arial', 10))
 
         # entry crno
@@ -38,6 +44,8 @@ class view_window(QWidget):
                                           "{"
                                           "background-color: #DBDBDB;"
                                           "}")
+        self.crno_entry.setFixedWidth(200)
+
         # grid cr label
         self.gridLayout.addWidget(self.crno_label, 0, 0)
         # grid cr entry
@@ -281,14 +289,15 @@ class view_window(QWidget):
         self.exit.clicked.connect(self.exit_clicked)
 
         # grid button
-        self.gridLayout.addWidget(self.exit, 13, 3)
+        self.gridLayout_three.addWidget(self.exit, 13, 3)
 
         self.continuebt = QPushButton()
         self.continuebt.setText("Create CR")
         self.continuebt.clicked.connect(self.continuebt_clicked)
 
         # grid button
-        self.gridLayout.addWidget(self.continuebt, 13, 1)
+        self.gridLayout_three.addWidget(self.continuebt, 13, 1)
+
         self.show()
 
     def continuebt_clicked(self):

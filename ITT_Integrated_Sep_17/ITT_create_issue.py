@@ -4,8 +4,10 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import QDateTime
 
+from PyQt5.QtGui import QPalette,QImage,QPageSize,QBrush
+from PyQt5.QtCore import QSize
+
 import sys
-import shutil
 
 from ITT_validate import *
 from ITT_save_excel import save_in_excel
@@ -18,19 +20,31 @@ class Create_cr(QWidget):
         super().__init__()
         self.setWindowTitle("Create Issue")
         self.setMinimumWidth(600)
-        self.setMinimumHeight(600)
+        self.setMinimumHeight(800)
         self.frame = QFrame(self)
-        self.frame.setFixedSize(500, 700)
+        self.frame.setFixedSize(500, 800)
         #self.frame.setFrameShape(QFrame.StyledPanel)
 
         self.gridLayout = QGridLayout(self.frame)
         self.gridLayout.setContentsMargins(20, 20, 20, 20)
+
+        oImage = QImage("image2.jpg")
+        sImage = oImage.scaled(QSize(1000, 1000))  # resize Image to widgets size
+        palette = QPalette()
+        palette.setBrush(QPalette.Window, QBrush(sImage))
+        self.setPalette(palette)
+
+        self.frame_three = QFrame(self)
+        self.gridLayout_three = QGridLayout(self.frame_three)
+        self.frame_three.setFixedSize(450, 50)
+        self.gridLayout.addWidget(self.frame_three, 14, 0)
+
         self.path = ""
         self.create_an_issue()
 
     def create_an_issue(self):
         # label crno
-        self.crno_label = QLabel("Cr.no")
+        self.crno_label = QLabel("CR")
         self.crno_label.setFont(QFont('Arial', 10))
 
         # entry crno
@@ -38,6 +52,7 @@ class Create_cr(QWidget):
         self.cr_no = read_new_no()
         self.crno_entry.setText(self.cr_no)
         self.crno_entry.setReadOnly(True)
+        self.crno_entry.setFixedWidth(200)
         self.crno_entry.setStyleSheet("QLineEdit"
                                      "{"
                                      "background-color: #DBDBDB;"
@@ -235,21 +250,21 @@ class Create_cr(QWidget):
         self.submit.clicked.connect(self.submit_click)
 
         #grid button
-        self.gridLayout.addWidget(self.submit,13,0)
+        self.gridLayout_three.addWidget(self.submit,0,0)
 
         #view button
         self.Upload_but = QPushButton()
         self.Upload_but.setText("Upload")
         self.Upload_but.clicked.connect(self.Upload_but_clicked)
         #grid view button
-        self.gridLayout.addWidget(self.Upload_but,13,1)
+        self.gridLayout_three.addWidget(self.Upload_but,0,1)
 
         #view button
         self.Exit_but = QPushButton()
         self.Exit_but.setText("Exit")
         self.Exit_but.clicked.connect(self.Exit_but_clicked)
         #grid view button
-        self.gridLayout.addWidget(self.Exit_but,13,2)
+        self.gridLayout_three.addWidget(self.Exit_but,0,2)
 
         self.show()
 
@@ -269,7 +284,7 @@ class Create_cr(QWidget):
         try:
             filename = QFileDialog.getOpenFileName()
             self.label = QLabel(filename[0])
-            self.gridLayout.addWidget(self.label,14,1)
+            self.gridLayout.addWidget(self.label,15,1)
             self.path = filename[0]
         except FileNotFoundError:
             print("Wrong file or file path")

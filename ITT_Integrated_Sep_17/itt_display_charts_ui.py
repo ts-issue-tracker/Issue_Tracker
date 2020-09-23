@@ -271,6 +271,7 @@ class Statistics_Window(QWidget):
         frame.move((self.width() - self.frame.width()) / 2, (self.height() - self.frame.height()) / 2)
 
     def readType(self, text):
+        sheet_update()
         self.init_msg()
         self.msg_format_for_display("Type",text)
         if self.ChartTypeCombo.currentText()=="Pie Chart":
@@ -285,6 +286,7 @@ class Statistics_Window(QWidget):
         pass
 
     def readDomain(self, text):
+        sheet_update()
         type = self.TypeCombo.currentText()
         domain = self.DomianCombo.currentText()
         self.init_msg()
@@ -296,6 +298,7 @@ class Statistics_Window(QWidget):
         self.msg_txt.setText(self.get_filter_msg())
 
     def readAssignee(self, text):
+        sheet_update()
         type = self.TypeCombo.currentText()
         assignee = self.AssigneeCombo.currentText()
         self.init_msg()
@@ -420,6 +423,7 @@ class Statistics_Window(QWidget):
 
 
     def pie_chart_for_specified_type(self, text):
+        sheet_update()
         self.init_msg()
         self.msg_format_for_display("Type", text)
         canvas = Canvas(self, width=8, height=4)

@@ -1,19 +1,25 @@
 import xlwt
 from datetime import datetime
+from Itt_fileopen import *
 
 import xlrd
 # Give the location of the file
-file_location = ("projectexecl.xlsx")
+"""
+file_location = "cr_list_entry.xlsx"#("projectexecl.xlsx")
 
 wb1 = xlrd.open_workbook(file_location)
 sheet = wb1.sheet_by_index(0)
 
 print(sheet.nrows)
 print(sheet.ncols)
-
+"""
+#sheet = openfile(1)
 wb = xlwt.Workbook()
 ws = wb.add_sheet('My Sheet',cell_overwrite_ok=True)
 def getCr2(cr):
+
+    sheet2 = openfile(1)
+    sheetdata2 = sheet2#list(sheet2)
     print("before int conv")
     print("type of real cr",type(cr))
     typein = int(cr)
@@ -21,14 +27,15 @@ def getCr2(cr):
     print("called data")
     result_list1=[]
     dict1 = {}
-    for n in range(sheet.nrows):
-        if sheet.cell_value(n, 0) == typein:
-            for i in range(sheet.ncols):
-                data = sheet.cell_value(n, i)
+    for n in range(len(sheetdata2)):#sheet.nrows):
+        if sheetdata2[n][0]==str(typein):#sheet.cell_value(n, 0) == typein:
+            for i in range(13):#sheet.ncols):
+                data = sheetdata2[n][i]#sheet.cell_value(n, i)
                 result_list1.append(data)
                 print("getcr",data)
-                dict1[sheet.cell_value(0,i)]=data
+                dict1[sheetdata2[0][i]]=data#sheet.cell_value(0,i)]=data
     print(result_list1)
+    openfile(3)
     return dict1
 
 def saveCrsData(crlist):

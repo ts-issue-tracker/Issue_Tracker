@@ -7,6 +7,8 @@ from itt_register_ui import *
 import itt_credentials_file_access as file_access
 from validations import itt_validations
 from itt_utils import *
+from PyQt5.QtGui import QPalette,QImage,QPageSize,QBrush
+from PyQt5.QtCore import QSize
 
 credentials_file = "Credentials.csv"
 
@@ -22,12 +24,18 @@ class login_window(QWidget):
         self.lb_list=["Usename","Password"]
         self.non_exising_user=False
         self.setWindowTitle(self.title)
-        self.setMinimumWidth(700)
-        self.setMinimumHeight(700)
+        self.setMinimumWidth(600)
+        self.setMinimumHeight(800)
         self.frame = QFrame(self)
         # self.frame.setAttribute(Qt.WA_TranslucentBackground)
         self.frame.setFixedSize(280, 200)
         # self.frame.setFrameShape(QFrame.StyledPanel)
+
+        oImage = QImage("image2.jpg")
+        sImage = oImage.scaled(QSize(1000, 1000))  # resize Image to widgets size
+        palette = QPalette()
+        palette.setBrush(QPalette.Window, QBrush(sImage))
+        self.setPalette(palette)
 
         self.gridLayout = QGridLayout(self.frame)
         self.gridLayout.setContentsMargins(20, 20, 20, 20)

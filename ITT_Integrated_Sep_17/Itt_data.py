@@ -3,10 +3,11 @@ from crdisplay import *
 from Itt_Download import *
 ENTRY_NOT_FOUND = -4
 from itt_mail_sending import *
-
 import pandas as pd
+from Itt_fileopen import *
 import numpy as np
 
+"""
 # Reading the csv file
 df_new = pd.read_csv('cr_list_entry.csv')
 
@@ -22,6 +23,10 @@ file_location = "cr_list_entry.xlsx"
 
 wb = xlrd.open_workbook(file_location)
 sheet = wb.sheet_by_index(0)
+"""
+#sheet = openfile(1)
+#namesheet = openfile(2)
+
 row = 0
 col = 0
 result_list = []
@@ -29,6 +34,7 @@ names = []
 bientries = []
 sientries = []
 filters = {"CR":'nil',"Title":'nil',"Assignee":'nil',"State":'nil',"Software Image":'nil',"Domain":'nil',"Issue Type":'nil',"GIT commit ID/Gerrit Link":'nil',"Build ID":'nil',"Created on":'nil',"Last Modified":'nil',"History":'nil'}
+credential = {"Username":'nil',"Password":'nil'}
 filrow = 0
 
 
@@ -37,7 +43,7 @@ class CustomDialog(QDialog):
     def __init__(self, *args, **kwargs):
         super(CustomDialog, self).__init__(*args, **kwargs)
 
-        self.setWindowTitle("HELLO!")
+        self.setWindowTitle("Email Sending")
 
         #QBtn = QDialogButtonBox.Ok | QDialogButtonBox.Cancel
         self.sendButton = QPushButton("Send",self)
@@ -107,6 +113,7 @@ class App1(QWidget):
         super().__init__()
         self.crs = crlist
         self.title = 'CR Filtered List'
+        """
         self.left = 400
         self.top = 100
         self.width =600
@@ -126,6 +133,49 @@ class App1(QWidget):
         self.layout.addWidget(self.emailbutton)
         self.layout.addWidget(self.backFilter)
         self.setLayout(self.layout)
+        """
+        #adding frame to qvbox layout
+        self.setMinimumWidth(700)
+        self.setMinimumHeight(700)
+        self.frame = QFrame(self)
+        self.frame.setFixedSize(900, 700)
+        #self.frame.setFrameShape(QFrame.StyledPanel)
+
+        self.layout = QGridLayout(self.frame)
+        self.layout.setSpacing(0)
+        #self.layout.setContentsMargins(40, 40, 40, 40)
+        #self.layout.heightForWidth(0)
+
+
+        self.frame_one = QFrame(self)
+        self.frame_one.setFrameShape(QFrame.StyledPanel)
+        self.vLayout_one = QVBoxLayout(self.frame_one)
+        self.frame_one.setFixedSize(700, 600)
+        self.frame_one.setContentsMargins(0, 0, 0, 0)
+        self.layout.addWidget(self.frame_one)
+
+        self.createTable()
+        self.downloadButton()
+        self.sendmailButton()
+        self.backbuttonFilter()
+        self.tableWidget.itemSelectionChanged.connect(self.itemSelectionChangedCallback)
+
+        self.vLayout_one.addWidget(self.tableWidget)
+
+        self.frame_two = QFrame(self)
+        self.frame_two.setFrameShape(QFrame.StyledPanel)
+        self.vLayout_two = QHBoxLayout(self.frame_two)
+        self.frame_two.setFixedSize(700, 80)
+        self.frame_two.setContentsMargins(0,0,0,0)
+        self.layout.addWidget(self.frame_two)
+
+        self.vLayout_two.addWidget(self.dbutton)
+        self.vLayout_two.addWidget(self.emailbutton)
+        self.vLayout_two.addWidget(self.backFilter)
+
+        self.setLayout(self.layout)
+        self.setGeometry(250, 40, 900, 900)
+        self.setWindowTitle("CR Search Results")
 
         # Show window
         self.show()
@@ -159,6 +209,7 @@ class App1(QWidget):
         self.backFilter.clicked.connect(self.on_backfilter)
 
     def on_backfilter(self):
+        #openfile(3)
         from Itt_View_Report_main import View_Report
         self.w = View_Report()
         self.w.show()
@@ -176,6 +227,7 @@ class App1(QWidget):
         self.v = Windowfinal(ret)
         self.v.show()
         #self.hide()
+
     def cell_was_clicked(self, row, column):
         print("Row %d and Column %d was clicked" % (row, column))
         item = self.tableWidget.itemAt(row, column)
@@ -202,29 +254,63 @@ class App1(QWidget):
 
 
 def getcols():
+    #global sheet
+    #global namesheet
+    #global data_cols
+    data_cols = 13
+    #openfile(3)
+    #openfile(4)
+    sheet = openfile(1)
+    namesheet = openfile(2)
+    #global sheetdata
+    sheetdata = sheet#list(sheet)
+    #global namesheetdata
+    namesheetdata = namesheet#list(namesheet)
     for key, value in filters.items():
-        for i in range(sheet.ncols):
-            if (key == sheet.cell_value(filrow,i)):
+        for i in range(data_cols):#sheet.ncols):
+            if (key == sheetdata[filrow][i]):#sheet.cell_value(filrow,i)):
                 filters[key] = i
 
     for key, value in filters.items():
         print(key,value)
 
+    for key1, value1 in credential.items():
+        for i in range(2):#len(namesheetdata)):
+            print("namesheetcols")
+            #print(namesheet.ncols,namesheet.cell_value(filrow,i))
+            if (key1 == namesheetdata[filrow][i]):#namesheet.cell_value(filrow, i)):
+                print("inside namesheet true")
+                credential[key1] = i
+    openfile(3)
+    openfile(4)
+
 def namelist():
-    index = filters["Assignee"]
+    #index = filters["Assignee"]
+    #index = filters["Username"]#"Username"]
+    namesheet = openfile(2)
+    namesheetdata = namesheet#list(namesheet)
+    index = credential["Username"]
     list1 = []
-    for i in range(sheet.nrows):
-        list1.append(sheet.cell_value(i,index))
+    for i in range(len(namesheetdata)):#namesheet.nrows):
+        list1.append(namesheetdata[i][index])#namesheet.cell_value(i,index))
     [names.append(x) for x in list1 if x not in names]
+    openfile(4)
 
 def bilist():
+    sheet = openfile(1)
+    sheetdata = sheet#list(sheet)
     index = filters["Build ID"]
     list1 = []
-    for i in range(sheet.nrows):
-        list1.append(sheet.cell_value(i,index))
+    for i in range(len(sheetdata)):#sheet.nrows):
+        list1.append(sheetdata[i][index])#sheet.cell_value(i,index))
     [bientries.append(x) for x in list1 if x not in bientries]
+    openfile(3)
 
 def getCr(cr):
+    #global sheet
+    sheet = openfile(1)
+    sheetdata = sheet#list(sheet)
+    data_cols = 13
     print("before int conv")
     print("type of real cr",type(cr))
     typein = int(cr)
@@ -232,14 +318,17 @@ def getCr(cr):
     print("called data")
     result_list=[]
     dict = {}
-    for n in range(sheet.nrows):
-        if sheet.cell_value(n, 0) == typein:
-            for i in range(sheet.ncols):
-                data = sheet.cell_value(n, i)
+
+    for n in range(len(sheetdata)):#sheet.nrows):
+        print(type(sheetdata[n][0]))
+        if sheetdata[n][0]==str(typein):#sheet.cell_value(n, 0) == typein:
+            for i in range(data_cols):#sheet.ncols):
+                data = sheetdata[n][i]#sheet.cell_value(n, i)
                 result_list.append(data)
                 print("getcr",data)
-                dict[sheet.cell_value(0,i)]=data
+                dict[sheetdata[0][i]]=data#sheet.cell_value(0,i)]=data
     print(result_list)
+    openfile(3)
     return dict
 
 
@@ -282,38 +371,43 @@ def search(userFilter):
 def searchCr(field,entry):
     global l1
     global l2
+    sheet = openfile(1)
+    sheetdata = sheet#list(sheet)
     index = filters[field]
     crindx = filters["CR"]
     print("called searchCr")
     if field == "CR":
         print("in field")
-        for n in range(sheet.nrows):
-            print("n and indeex and entry and sheet.cell_value(n,index)",n,index,type(entry),type(sheet.cell_value(n, index)))
-            if sheet.cell_value(n, index) == float(entry):
-                l1.append(int(sheet.cell_value(n,crindx)))
+        for n in range(len(sheetdata)):#sheet.nrows):
+            #print("n and indeex and entry and sheet.cell_value(n,index)",n,index,type(entry),type(sheet.cell_value(n, index)))
+            if sheetdata[n][index] == float(entry):#sheet.cell_value(n, index) == float(entry):
+                l1.append(int(sheetdata[n][crindx]))#sheet.cell_value(n,crindx)))
                 return
         #getCr(entry)
 
     if len(l1) == 0:
         print("in l1")
-        for n in range(sheet.nrows):
-            print("n and indeex and entry and sheet.cell_value(n,index)",n,index,type(entry),type(sheet.cell_value(n, index)))
-            if sheet.cell_value(n, index) == entry:
-                l1.append(int(sheet.cell_value(n,crindx)))
+        for n in range(len(sheetdata)):#sheet.nrows):
+            #print("n and indeex and entry and sheet.cell_value(n,index)",n,index,type(entry),type(sheet.cell_value(n, index)))
+            if sheetdata[n][index] == entry:#sheet.cell_value(n, index) == entry:
+                l1.append(int(sheetdata[n][crindx]))#sheet.cell_value(n,crindx)))
     else:
         print("in loop l1")
-        for n in range(sheet.nrows):
+        for n in range(len(sheetdata)):#sheet.nrows):
             print(n)
-            if sheet.cell_value(n, index) == entry:
-                print(sheet.cell_value(n, index))
-                crVar=int(sheet.cell_value(n, crindx))
+            if sheetdata[n][index] == entry:#sheet.cell_value(n, index) == entry:
+                #print(sheet.cell_value(n, index))
+                crVar=int((sheetdata[n][crindx]))#sheet.cell_value(n, crindx))
                 searchInl1(crVar)
 
         l2 = list(dict.fromkeys(l2))
         l1 = list(l2)
         l2.clear()
+
+    openfile(3)
     if len(l1) == 0:
         return 0
+
     print("before l1")
     print(l1)
 

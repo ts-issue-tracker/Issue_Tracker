@@ -2,7 +2,7 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import QDateTime
-
+import re
 class Windowfinal(QWidget):
 
     def __init__(self,ret):
@@ -127,6 +127,8 @@ class Windowfinal(QWidget):
         self.show()
 
     def fill(self):
+        self.details = dict(self.details)
+        #print("created on print", self.details.keys())
         #entering cr
         self.cr_no = int(self.details["CR"])
         self.crbox.setText(str(self.cr_no))
@@ -164,7 +166,7 @@ class Windowfinal(QWidget):
         self.Issuetypebox.setReadOnly(True)
 
         # entering GIT details
-        self.git = self.details["GIT commit id/Gerrit link"]
+        self.git = self.details["GIT commit id/Gerrit link"]#GIT commit id/Gerrit link"]
         self.Gitbox.setText(self.git)
         self.Gitbox.setReadOnly(True)
 
@@ -174,8 +176,11 @@ class Windowfinal(QWidget):
         self.Bibox.setReadOnly(True)
 
         # entering Createdon
-        print(self.details["Created on"])
-        self.Createdon = str(self.details["Created on"])
+        #print(self.details["Created on"])#Created on"])
+        #self.Createdon = str(self.details["Created on"])# Created on"])
+        self.details = dict(self.details)
+        print("created on print",self.details.keys())
+        self.Createdon = self.details["   Created    on"]
         self.Createdonbox.setText((self.Createdon))
         self.Createdonbox.setReadOnly(True)
 
@@ -200,6 +205,8 @@ class Windowfinal(QWidget):
         self.history = self.history.replace('"[','')
         self.history = self.history.replace(']','')
         self.history = self.history.replace("'", '')
+        self.history = self.history.replace('\\', '')
+        #re.sub('[^A-Za-z0-9]+', "Hello $#! People   Whitespace 7331")
 
         self.changes = self.history.split(",")
         for line in self.changes:

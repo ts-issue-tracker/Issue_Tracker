@@ -119,6 +119,7 @@ def build_validate_update(buildid,newid):
         msg.setText("Please enter Build I'd")
         x = msg.exec_()
         return False
+
     if(buildid == newid):
         print("b4")
         msg = QMessageBox()
@@ -126,6 +127,7 @@ def build_validate_update(buildid,newid):
         msg.setText("Build id should not same as the one given when the CR is created.")
         x = msg.exec_()
         return False
+
     else:
         print("b3")
         return True
@@ -144,3 +146,55 @@ def git_validate_update(git):
     else:
         print("g2")
         return True
+
+def issue_reason_validate_update(reason):
+    regex = re.compile('[@!#$%^&*()<>?/\|}{~:]')
+    if (regex.search(reason) != None):
+        print("t3")
+        ck = True
+        msg = QMessageBox()
+        msg.setWindowTitle("Information")
+        msg.setText("reason in valid")
+        x = msg.exec_()
+        return False
+    else:
+        return True
+
+def bt_build_validate_new(buildid,new):
+        print(buildid)
+        ck = False
+        regex = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
+        mymsg = ""
+        if(buildid == new):
+            print("b0")
+            if (mymsg != ""):
+                mymsg += ","
+            mymsg += "Build id should not be same Please change"
+            print(mymsg)
+            ret = [mymsg, ck]
+            print("ret ,", ret)
+            return ret
+        if (regex.search(buildid) != None):
+            print("b1")
+            if (mymsg != ""):
+                mymsg += ","
+            mymsg += "Invalid build I'd only alphanumeric are allowed"
+            print(mymsg)
+            ret = [mymsg, ck]
+            print("ret ,", ret)
+            return ret
+
+        if (len(buildid) == 0):
+            print("b2")
+            mymsg += "Build I'd is Empty"
+            print(mymsg)
+            ret = [mymsg, ck]
+            print("ret ,", ret)
+            return ret
+        else:
+            print("b3")
+            mymsg += "Valid build I'd"
+            print(mymsg)
+            ret = [mymsg, True]
+            print("ret ,", ret)
+            return ret

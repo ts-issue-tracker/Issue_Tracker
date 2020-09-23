@@ -15,14 +15,20 @@ class Update(QWidget):
         super().__init__()
         self.setWindowTitle("Update Screen")
         self.setMinimumWidth(600)
-        self.setMinimumHeight(600)
+        self.setMinimumHeight(800)
         self.frame = QFrame(self)
-        self.frame.setFixedSize(500, 700)
+        self.frame.setFixedSize(500, 800)
         # self.frame.setFrameShape(QFrame.StyledPanel)
-        self.history_dict = { }
+
         self.gridLayout = QGridLayout(self.frame)
         self.gridLayout.setContentsMargins(20, 20, 20, 20)
 
+        self.frame_three = QFrame(self)
+        self.gridLayout_three = QGridLayout(self.frame_three)
+        self.frame_three.setFixedSize(450, 50)
+        self.gridLayout.addWidget(self.frame_three, 14, 0)
+
+        self.history_dict = {}
         self.cr_index = cr_index
         self.cr = read_cr_by_index(cr_index)
         self.si_new = ""
@@ -30,11 +36,15 @@ class Update(QWidget):
         self.si_prev = ""
         self.si_new = ""
         self.path = ""
+
+        self.cr_ret = ["",True]
         self.git_ret = ["",True]
+        self.issue_reason_ret = ["",True]
+
         self.update()
 
     def update(self):
-        self.crno_label = QLabel("Cr.no")
+        self.crno_label = QLabel("CR")
         self.crno_label.setFont(QFont('Arial', 10))
 
         # entry crno
@@ -46,6 +56,7 @@ class Update(QWidget):
                                       "background-color: #DBDBDB;"
                                       "}")
         self.crno_entry.setFont(QFont('Arial', 10))
+        self.crno_entry.setFixedWidth(200)
 
         # grid cr label
         self.gridLayout.addWidget(self.crno_label, 0, 0)
@@ -99,7 +110,7 @@ class Update(QWidget):
         self.gridLayout.addWidget(self.assignee_entry, 3, 1)
 
         # label cr state
-        self.cr_state_label = QLabel("Cr State")
+        self.cr_state_label = QLabel("CR State")
         self.cr_state_label.setFont(QFont('Arial', 10))
         # entry_cr_state
         self.cr_state_entry = QComboBox(self)
@@ -149,6 +160,8 @@ class Update(QWidget):
         #grid for si state
         self.gridLayout.addWidget(self.si_state_label,4,0)
         self.gridLayout.addWidget(self.si_state,4,1)
+        if(self.si_state.currentText() == "Built"):
+            self.si_state.setEnabled(False)
 
         # domain
         self.domain_label = QLabel("Domain/Tech Area")
@@ -213,6 +226,9 @@ class Update(QWidget):
         self.git_label.setFont(QFont('Arial', 10))
         # git entry
         self.git_entry = QLineEdit(self)
+        self.git = read_git_with_cr(self.cr_index)
+        self.git_entry.setReadOnly(True)
+        self.git_entry.setText(self.git)
         if (self.si_state.currentText() == 'Fix'):
             self.git = read_git_with_cr(self.cr_index)
             self.git_entry.textChanged.connect(self.git_change)
@@ -243,7 +259,7 @@ class Update(QWidget):
                                           "{"
                                           "background-color: #DBDBDB;"
                                           "}")
-        self.build_entry.textChanged.connect(self.build_change)
+        self.build_entry.editingFinished.connect(self.build_change)
         # grid git label
         self.gridLayout.addWidget(self.build_label, 10, 0)
         # grid git entry
@@ -291,24 +307,28 @@ class Update(QWidget):
         # submit button
         self.submit = QPushButton()
         self.submit.setText("Submit")
+        self.submit.setFixedWidth(100)
         self.submit.clicked.connect(self.submit_click)
 
         # grid button
-        self.gridLayout.addWidget(self.submit, 13, 0)
+        self.gridLayout_three.addWidget(self.submit, 0, 0)
 
         # view button
         self.Upload_but = QPushButton()
         self.Upload_but.setText("Upload")
+        self.Upload_but.setFixedWidth(100)
+
         self.Upload_but.clicked.connect(self.Upload_but_clicked)
         # grid view button
-        self.gridLayout.addWidget(self.Upload_but, 13, 1)
+        self.gridLayout_three.addWidget(self.Upload_but, 0, 1)
 
         # view button
         self.Exit_but = QPushButton()
         self.Exit_but.setText("Exit")
+        self.Exit_but.setFixedWidth(100)
         self.Exit_but.clicked.connect(self.Exit_but_clicked)
         # grid view button
-        self.gridLayout.addWidget(self.Exit_but, 13, 2)
+        self.gridLayout_three.addWidget(self.Exit_but, 0, 2)
 
         self.show()
 
@@ -327,7 +347,7 @@ class Update(QWidget):
         try:
             filename = QFileDialog.getOpenFileName()
             self.label = QLabel(filename[0])
-            self.gridLayout.addWidget(self.label,14,1)
+            self.gridLayout.addWidget(self.label,15,1)
             self.path = filename[0]
         except FileNotFoundError:
             print("Wrong file or file path")
@@ -346,11 +366,10 @@ class Update(QWidget):
         self.cr_prev = prev_state
         self.cr_new = state
 
-        self.cr_ret = ["",True]
         self.history_dict.update({"cr state":state})
         if(prev_state == "Closed"):
             self.cr_ret = bt_cr_validate(self.cr_prev, self.cr_new)
-            print("main",self.cr_ret)
+            print("CR main",self.cr_ret)
             if(state == "Reopen"):
                 self.si_state.setCurrentIndex(0)
                 self.cr_state_entry.setCurrentIndex(0)
@@ -371,6 +390,13 @@ class Update(QWidget):
     def build_change(self):
         self.build_val = self.build_entry.text()
         ret = build_validate_update(self.build_val,self.build_new_val)
+        print(self.build_val,self.build_new_val)
+        if(self.build_val == self.build_new_val):
+            msg = QMessageBox()
+            msg.setWindowTitle("Information")
+            msg.setText("Please change the build id")
+            x = msg.exec_()
+
         print("build validation")
         if ret == True:
             self.history_dict.update({'buildid':self.build_val})
@@ -406,6 +432,10 @@ class Update(QWidget):
                                                           "{"
                                                           "background-color: white;"
                                                           "}")
+                msg = QMessageBox()
+                msg.setWindowTitle("Information")
+                msg.setText("Please give the reason for change")
+                x = msg.exec_()
                 self.issue_reason_entry.textChanged.connect(self.issue_reason_changed)
 
             if (state == "Blacklisting"):
@@ -414,6 +444,10 @@ class Update(QWidget):
                                                           "{"
                                                           "background-color: white;"
                                                           "}")
+                    msg = QMessageBox()
+                    msg.setWindowTitle("Information")
+                    msg.setText("Please give the reason for change")
+                    x = msg.exec_()
                     self.issue_reason_entry.textChanged.connect(self.issue_reason_changed)
 
         if (prev_state == "Bug"):
@@ -423,6 +457,10 @@ class Update(QWidget):
                                                       "{"
                                                       "background-color: white;"
                                                       "}")
+                msg = QMessageBox()
+                msg.setWindowTitle("Information")
+                msg.setText("Please give the reason for change")
+                x = msg.exec_()
                 self.issue_reason_entry.textChanged.connect(self.issue_reason_changed)
 
             if(state == "Blacklisting"):
@@ -431,10 +469,18 @@ class Update(QWidget):
                                                       "{"
                                                       "background-color: white;"
                                                       "}")
+                msg = QMessageBox()
+                msg.setWindowTitle("Information")
+                msg.setText("Please give the reason for change")
+                x = msg.exec_()
                 self.issue_reason_entry.textChanged.connect(self.issue_reason_changed)
+        if(prev_state == "Blacklisting"):
+            if(state == "bug" or state == "Internal"):
+                pass
 
     def issue_reason_changed(self):
         self.issue_reason = self.issue_reason_entry.text()
+        ret = issue_reason_validate_update(self.issue_reason)
         self.history_dict.update({"issue Reason":self.issue_reason})
 
     def onChanged(self):
@@ -512,6 +558,10 @@ class Update(QWidget):
                                              "background-color: white;"
                                              "}")
                 self.build_new_val = self.build_entry.text()
+                msg = QMessageBox()
+                msg.setWindowTitle("Information")
+                msg.setText("Please change the build id")
+                x = msg.exec_()
                 print("built")
                 self.cr_state_entry.setEnabled(False)
                 print("complete build")
@@ -567,9 +617,10 @@ class Update(QWidget):
         print("calling")
         print(self.si_prev,self.si_new,self.cr_new)
         si_ret = bt_si_validate(self.si_prev,self.si_new,self.cr_new)
+        print(si_ret)
         print("main",si_ret[0],si_ret[1])
         print("main",self.git_ret[0],self.git_ret[1])
-
+        print(type(self.cr_ret))
         dis_ret = display(title_ret, des_ret, build_ret, assignee_ret,si_ret,self.cr_ret,self.git_ret)
         if (len(self.path) == 0):
             self.path = ""

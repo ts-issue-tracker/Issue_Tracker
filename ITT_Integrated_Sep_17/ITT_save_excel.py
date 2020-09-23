@@ -3,12 +3,14 @@ import csv
 from ITT_read_excel import *
 import os
 from ITT_save_update import *
+import shutil
 
 def append_dict_as_row(file_name, dict_of_elem, field_names):
     with open(file_name, 'a+', newline='') as write_obj:
         dict_writer = DictWriter(write_obj, fieldnames=field_names)
         dict_writer.writerow(dict_of_elem)
         write_obj.close()
+    shutil.copyfile(file_name,'cr_list.csv')
 
 def save_in_excel(combo_dict,path):
         print("in write excel file")
@@ -44,6 +46,7 @@ def save_update_info(combo_dict1,cr,index,history_dict,path):
     print("old",olddata)
     #newdata = list(combo_dict1.values())
     newdata = collect_newdata(history_dict,combo_dict1,path)
+    print("newdata",newdata)
     olddata.extend(newdata)
     combo_dict1.update({'History': olddata})
     print("new",combo_dict1)
@@ -101,6 +104,7 @@ def collect_newdata(history_dict,combo_dict,path):
 
     if 'issue type' in history_dict.keys():
         print("issue")
+        print(history_dict['issue type'])
         issue_list = [" changed issue type to " + history_dict['issue type'] + " because "+ history_dict['issue Reason']]
         main_list.extend(issue_list)
         print("issue type", main_list)

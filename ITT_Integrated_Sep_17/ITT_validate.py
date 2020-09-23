@@ -11,9 +11,9 @@ def git_validate(git):
         ck = False
         if (mymsg != ""):
             mymsg += ","
-        mymsg += "Please enter the Git Id"
+        mymsg += "Valid Git Id "
         print(mymsg)
-        ret = [mymsg,ck]
+        ret = [mymsg,True]
         print("ret ,", ret)
         return ret
 
@@ -45,8 +45,19 @@ def bt_si_validate(prev_si,new_si,cr_new):
     print("build si")
     mymsg = ""
     print(prev_si,new_si,cr_new)
+    if(new_si == "Open" and cr_new == "Open"):
+        print("sinew ")
+        ck = False
+        if (mymsg != ""):
+            mymsg += ","
+        mymsg += "SI state Selected"
+        print(mymsg)
+        ret = [mymsg, True]
+        print("ret ,", ret)
+        return ret
+
     if(prev_si == new_si):
-        print("si")
+        print("si0.0")
         ck = False
         if (mymsg != ""):
             mymsg += ","
@@ -119,7 +130,6 @@ def bt_si_validate(prev_si,new_si,cr_new):
             print(mymsg)
             ret = [mymsg, True]
             print("ret ,", ret)
-            return ret
             return ret
         else:
             print("vt2.1")
@@ -332,6 +342,7 @@ def bt_assignee_validate(assignee):
             return ret
 
 def bt_build_validate_update(old,new):
+    print(old,new,"in validate ")
     print(new)
     ck = False
     regex = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
