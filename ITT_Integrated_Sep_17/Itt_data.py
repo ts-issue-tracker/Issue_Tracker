@@ -1,4 +1,4 @@
-import xlrd
+from PyQt5.QtCore import QDateTime, Qt, QTimer
 from crdisplay import *
 from Itt_Download import *
 ENTRY_NOT_FOUND = -4
@@ -6,26 +6,9 @@ from itt_mail_sending import *
 import pandas as pd
 from Itt_fileopen import *
 import numpy as np
+from PyQt5.QtGui import QPalette,QImage,QPageSize,QBrush
+from PyQt5.QtCore import QSize
 
-"""
-# Reading the csv file
-df_new = pd.read_csv('cr_list_entry.csv')
-
-# saving xlsx file
-GFG = pd.ExcelWriter('cr_list_entry.xlsx')
-df_new.to_excel(GFG, index=False)
-
-GFG.save()
-# Give the location of the file
-file_location = "cr_list_entry.xlsx"
-# Give the location of the file
-#file_location = ("projectexecl.xlsx")
-
-wb = xlrd.open_workbook(file_location)
-sheet = wb.sheet_by_index(0)
-"""
-#sheet = openfile(1)
-#namesheet = openfile(2)
 
 row = 0
 col = 0
@@ -45,12 +28,9 @@ class CustomDialog(QDialog):
 
         self.setWindowTitle("Email Sending")
 
-        #QBtn = QDialogButtonBox.Ok | QDialogButtonBox.Cancel
         self.sendButton = QPushButton("Send",self)
         self.credential()
-        #self.buttonBox = QDialogButtonBox(QBtn)
-        #self.buttonBox.accepted.connect(self.accept)
-        #self.buttonBox.rejected.connect(self.reject)
+
         self.sendButton.clicked.connect(self.send_clicked)
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.senderidLabel)
@@ -60,11 +40,14 @@ class CustomDialog(QDialog):
         self.layout.addWidget(self.receiverIdLabel)
         self.layout.addWidget(self.receiverId)
         self.layout.addWidget(self.sendButton)
+        oImage = QImage("image2.jpg")
+        sImage = oImage.scaled(QSize(1000, 1000))  # resize Image to widgets size
+        palette = QPalette()
+        palette.setBrush(QPalette.Window, QBrush(sImage))
+        self.setPalette(palette)
         self.setLayout(self.layout)
 
     def credential(self):
-        #self.senderid = QLineEdit()
-        #self.nameCompleter()
         self.senderid = QLineEdit()
         self.senderid.setEchoMode(QLineEdit.Normal)
         #self.senderid.setCompleter(self.completer)
@@ -97,8 +80,6 @@ class CustomDialog(QDialog):
 
     def send_clicked(self):
 
-        #sending_mail(self.senderid, self.senderpswd, self.receiverId, msgtxt, subject)
-        #send_mail(self.senderid.text(),self.senderpswd.text(),self.receiverId.text())
         self.mailmsg = "PFA of filtered data"
         self.subject = "[Issue Tracker Tool] Filtered data"
         print("send clicked")
@@ -113,44 +94,21 @@ class App1(QWidget):
         super().__init__()
         self.crs = crlist
         self.title = 'CR Filtered List'
-        """
-        self.left = 400
-        self.top = 100
-        self.width =600
-        self.height = 600
-
-        self.setWindowTitle(self.title)
-        self.setGeometry(self.left, self.top, self.width, self.height)
-
-        self.createTable()
-        self.downloadButton()
-        self.sendmailButton()
-        self.backbuttonFilter()
-        self.tableWidget.itemSelectionChanged.connect(self.itemSelectionChangedCallback)
-        self.layout = QVBoxLayout()
-        self.layout.addWidget(self.tableWidget)
-        self.layout.addWidget(self.dbutton)
-        self.layout.addWidget(self.emailbutton)
-        self.layout.addWidget(self.backFilter)
-        self.setLayout(self.layout)
-        """
         #adding frame to qvbox layout
-        self.setMinimumWidth(700)
-        self.setMinimumHeight(700)
+        self.setMinimumWidth(600)
+        self.setMinimumHeight(800)
         self.frame = QFrame(self)
-        self.frame.setFixedSize(900, 700)
-        #self.frame.setFrameShape(QFrame.StyledPanel)
+        self.frame.setFixedSize(600, 600)
+
 
         self.layout = QGridLayout(self.frame)
         self.layout.setSpacing(0)
-        #self.layout.setContentsMargins(40, 40, 40, 40)
-        #self.layout.heightForWidth(0)
 
 
         self.frame_one = QFrame(self)
         self.frame_one.setFrameShape(QFrame.StyledPanel)
         self.vLayout_one = QVBoxLayout(self.frame_one)
-        self.frame_one.setFixedSize(700, 600)
+        self.frame_one.setFixedSize(600, 600)
         self.frame_one.setContentsMargins(0, 0, 0, 0)
         self.layout.addWidget(self.frame_one)
 
@@ -165,7 +123,7 @@ class App1(QWidget):
         self.frame_two = QFrame(self)
         self.frame_two.setFrameShape(QFrame.StyledPanel)
         self.vLayout_two = QHBoxLayout(self.frame_two)
-        self.frame_two.setFixedSize(700, 80)
+        self.frame_two.setFixedSize(600, 80)
         self.frame_two.setContentsMargins(0,0,0,0)
         self.layout.addWidget(self.frame_two)
 
@@ -173,8 +131,17 @@ class App1(QWidget):
         self.vLayout_two.addWidget(self.emailbutton)
         self.vLayout_two.addWidget(self.backFilter)
 
+        oImage = QImage("image2.jpg")
+        sImage = oImage.scaled(QSize(1000, 1000))  # resize Image to widgets size
+        palette = QPalette()
+        palette.setBrush(QPalette.Window, QBrush(sImage))
+        self.setPalette(palette)
+
+        verticalSpacer = QSpacerItem(20,20, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.layout.addItem(verticalSpacer, 3, 0, Qt.AlignCenter)
+
         self.setLayout(self.layout)
-        self.setGeometry(250, 40, 900, 900)
+        self.setGeometry(330, 35, 700, 700)
         self.setWindowTitle("CR Search Results")
 
         # Show window
@@ -254,17 +221,12 @@ class App1(QWidget):
 
 
 def getcols():
-    #global sheet
-    #global namesheet
-    #global data_cols
     data_cols = 13
-    #openfile(3)
-    #openfile(4)
     sheet = openfile(1)
     namesheet = openfile(2)
-    #global sheetdata
+
     sheetdata = sheet#list(sheet)
-    #global namesheetdata
+
     namesheetdata = namesheet#list(namesheet)
     for key, value in filters.items():
         for i in range(data_cols):#sheet.ncols):
@@ -285,8 +247,6 @@ def getcols():
     openfile(4)
 
 def namelist():
-    #index = filters["Assignee"]
-    #index = filters["Username"]#"Username"]
     namesheet = openfile(2)
     namesheetdata = namesheet#list(namesheet)
     index = credential["Username"]
@@ -307,7 +267,7 @@ def bilist():
     openfile(3)
 
 def getCr(cr):
-    #global sheet
+
     sheet = openfile(1)
     sheetdata = sheet#list(sheet)
     data_cols = 13
@@ -388,7 +348,6 @@ def searchCr(field,entry):
     if len(l1) == 0:
         print("in l1")
         for n in range(len(sheetdata)):#sheet.nrows):
-            #print("n and indeex and entry and sheet.cell_value(n,index)",n,index,type(entry),type(sheet.cell_value(n, index)))
             if sheetdata[n][index] == entry:#sheet.cell_value(n, index) == entry:
                 l1.append(int(sheetdata[n][crindx]))#sheet.cell_value(n,crindx)))
     else:
@@ -396,7 +355,6 @@ def searchCr(field,entry):
         for n in range(len(sheetdata)):#sheet.nrows):
             print(n)
             if sheetdata[n][index] == entry:#sheet.cell_value(n, index) == entry:
-                #print(sheet.cell_value(n, index))
                 crVar=int((sheetdata[n][crindx]))#sheet.cell_value(n, crindx))
                 searchInl1(crVar)
 

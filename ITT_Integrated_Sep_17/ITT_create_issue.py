@@ -39,6 +39,12 @@ class Create_cr(QWidget):
         self.frame_three.setFixedSize(450, 50)
         self.gridLayout.addWidget(self.frame_three, 14, 0)
 
+        self.frame_1 = QFrame(self)
+        self.gridLayout_1 = QGridLayout(self.frame_1)
+        self.frame_1.setFixedSize(450, 60)
+        self.gridLayout.addWidget(self.frame_1, 15, 0)
+
+
         self.path = ""
         self.create_an_issue()
 
@@ -284,7 +290,8 @@ class Create_cr(QWidget):
         try:
             filename = QFileDialog.getOpenFileName()
             self.label = QLabel(filename[0])
-            self.gridLayout.addWidget(self.label,15,1)
+            self.label.setWordWrap(True)
+            self.gridLayout_1.addWidget(self.label,1,1)
             self.path = filename[0]
         except FileNotFoundError:
             print("Wrong file or file path")

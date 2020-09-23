@@ -4,18 +4,10 @@ from PyQt5.QtGui import *
 import sys
 from Itt_data import *
 from View_Report_Validation import *
+from PyQt5.QtGui import QPalette,QImage,QPageSize,QBrush
+from PyQt5.QtCore import QSize
 
-"""
-class StackedWidget(QStackedWidget):
-    def __init__(self, parent=None):
-        QStackedWidget.__init__(self, parent=parent)
-        #QPaintEvent()
 
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        painter.drawPixmap(self.rect(), QPixmap("picture.png"))
-        QStackedWidget.paintEvent(self, event)
-"""
 class View_Report(QWidget):
     def __init__(self, parent=None):
         #super(View_Report, self).__init__(parent)
@@ -25,9 +17,9 @@ class View_Report(QWidget):
         self.Exitbutton()
 
         self.setMinimumWidth(700)
-        self.setMinimumHeight(700)
+        self.setMinimumHeight(800)
         self.frame = QFrame(self)
-        self.frame.setFixedSize(900, 700)
+        self.frame.setFixedSize(600, 800)
         #self.frame.setFrameShape(QFrame.StyledPanel)
 
         self.mainLayout = QGridLayout(self.frame)
@@ -35,23 +27,12 @@ class View_Report(QWidget):
         self.mainLayout.setContentsMargins(40, 40, 40, 40)
         self.mainLayout.heightForWidth(0)
 
-        #mainLayout.setSizeConstraint(QLayout.SetFixedSize)
-        """n
-        mainLayout.addLayout(self.topLayout, 0, 0,Qt.AlignCenter)
-        #mainLayout.addLayout(self.topform, 0, 0, 1, 2)
-        mainLayout.addLayout(self.secLayout, 1, 0,Qt.AlignCenter)
-        mainLayout.addWidget(self.button,2,0,Qt.AlignCenter)
-        #mainLayout.setRowStretch(1, 2)
-        #mainLayout.setRowStretch(2, 1)
-        #mainLayout.setColumnStretch(0, 1)
-        #mainLayout.setColumnStretch(1, 1)
-        """
         self.frame_one = QFrame(self)
         self.frame_one.setFrameShape(QFrame.StyledPanel)
         self.gridLayout_one = QGridLayout(self.frame_one)
-        self.frame_one.setFixedSize(700, 80)
+        self.frame_one.setFixedSize(600, 80)
         #self.frame_one.setContentsMargins(0, 0, 0, 0)
-        self.mainLayout.addWidget(self.frame_one, 2, 0)
+        self.mainLayout.addWidget(self.frame_one, 1, 0)
 
         self.gridLayout_one.addWidget(self.crsearchboxLabel, 0, 0)
         self.gridLayout_one.addWidget(self.crsearchbox, 0, 1)
@@ -61,9 +42,9 @@ class View_Report(QWidget):
         self.frame_two = QFrame(self)
         self.frame_two.setFrameShape(QFrame.StyledPanel)
         self.gridLayout_two = QGridLayout(self.frame_two)
-        self.frame_two.setFixedSize(700, 80)
+        self.frame_two.setFixedSize(600, 80)
         #self.frame_two.setContentsMargins(0,0,0,0)
-        self.mainLayout.addWidget(self.frame_two, 3, 0)
+        self.mainLayout.addWidget(self.frame_two, 2, 0)
 
         self.gridLayout_two.addWidget(self.domainLabel, 0, 0)
         self.gridLayout_two.addWidget(self.domainComboBox, 0, 1)
@@ -73,9 +54,8 @@ class View_Report(QWidget):
         self.frame_three = QFrame(self)
         self.frame_three.setFrameShape(QFrame.StyledPanel)
         self.gridLayout_three = QGridLayout(self.frame_three)
-        self.frame_three.setFixedSize(700, 80)
-        #self.frame_two.setContentsMargins(0,0,0,0)
-        self.mainLayout.addWidget(self.frame_three, 4, 0)
+        self.frame_three.setFixedSize(600, 80)
+        self.mainLayout.addWidget(self.frame_three, 3, 0)
 
         self.gridLayout_three.addWidget(self.assigneeboxLabel, 0, 0)
         self.gridLayout_three.addWidget(self.assigneebox, 0, 1)
@@ -88,51 +68,24 @@ class View_Report(QWidget):
         self.frame_four = QFrame(self)
         self.frame_four.setFrameShape(QFrame.StyledPanel)
         self.gridLayout_four = QGridLayout(self.frame_four)
-        self.frame_four.setFixedSize(700, 80)
+        self.frame_four.setFixedSize(600, 80)
         #self.frame_two.setContentsMargins(0,0,0,0)
         self.mainLayout.addWidget(self.frame_four, 5, 0)
         self.gridLayout_four.addWidget(self.button, 0, 0)
         self.gridLayout_four.addWidget(self.exitbutton, 0, 3)
         self.gridLayout_four.setHorizontalSpacing(10)
         self.gridLayout_four.setRowStretch(0,0)
-        """
-        self.gridLayout_three.addWidget(self.issuetypeLabel, 3, 0)
-        self.gridLayout_three.addWidget(self.issuetypeComboBox, 3, 1)
-        self.gridLayout_three.addWidget(self.assigneeboxLabel, 4, 0)
-        self.gridLayout_three.addWidget(self.assigneebox, 4, 1)
-        self.gridLayout_three.addWidget(self.biboxLabel, 5, 0)
-        self.gridLayout_three.addWidget(self.bibox, 5, 1)
-        self.gridLayout_three.addWidget(self.button, 6, 0)
-        self.gridLayout_three.addWidget(self.exitbutton, 6, 1)
-        """
-        """
-        self.mainLayout.addWidget(self.crsearchboxLabel,0,0)
-        self.mainLayout.addWidget(self.crsearchbox,0,1)
-        self.mainLayout.addWidget(self.statusLabel,1,0)
-        self.mainLayout.addWidget(self.statusComboBox,1,1)
-        self.mainLayout.addWidget(self.domainLabel,2,0)
-        self.mainLayout.addWidget(self.domainComboBox,2,1)
-        self.mainLayout.addWidget(self.issuetypeLabel,3,0)
-        self.mainLayout.addWidget(self.issuetypeComboBox,3,1)
-        self.mainLayout.addWidget(self.assigneeboxLabel,4,0)
-        self.mainLayout.addWidget(self.assigneebox, 4, 1)
-        self.mainLayout.addWidget(self.biboxLabel, 5, 0)
-        self.mainLayout.addWidget(self.bibox, 5, 1)
-        self.mainLayout.addWidget(self.button,6,0)
-        self.mainLayout.addWidget(self.exitbutton,6,1)
-        """
-        #verticalSpacer = QSpacerItem(20,20, QSizePolicy.Minimum, QSizePolicy.Expanding)
-        #self.mainLayout.addItem(verticalSpacer, 3, 0, Qt.AlignCenter)
-        self.mainLayout.heightForWidth(10)
-        self.setLayout(self.mainLayout)
-        self.setGeometry(250,40,900,900)
-        self.setWindowTitle("CR View Report")
-        #self.setStyleSheet("{background-image: url(picture.png);}")
 
-        # Create widget
-        #label = QLabel(self)
-        #pixmap = QPixmap('picture.png')
-        #label.setPixmap(pixmap)
+        oImage = QImage("image2.jpg")
+        sImage = oImage.scaled(QSize(1000, 1000))  # resize Image to widgets size
+        palette = QPalette()
+        palette.setBrush(QPalette.Window, QBrush(sImage))
+        self.setPalette(palette)
+        self.mainLayout.heightForWidth(0)
+        self.setLayout(self.mainLayout)
+        self.setGeometry(330,35,700,700)
+        self.setWindowTitle("CR View Report")
+
         self.selectedFilter = {"CR":"None","Assignee":"None","State":"None","Domain":"None","Issue Type":"None","Build ID":"None"}
 
 
@@ -155,10 +108,8 @@ class View_Report(QWidget):
 
     def on_exit(self):
         from itt_main_ui import main_window
-        from crdisplay import Windowfinal
         self.w = main_window()
         self.w.show()
-        #Windowfinal().hide()
         self.hide()
 
 
@@ -253,7 +204,6 @@ class View_Report(QWidget):
         self.issuetypeComboBox.addItem('Blacklisting')
 
         self.issuetypeComboBox.activated[str].connect(self.readIssuetype)
-        #self.issuetypeComboBox.setGeometry(0, 0, 80, 20)
         self.issuetypeLabel = QLabel("IssueType")
         self.issuetypeLabel.setBuddy(self.issuetypeComboBox)
 
@@ -303,19 +253,13 @@ class View_Report(QWidget):
         self.biCompleter()
         self.bibox = QLineEdit()
         self.bibox.setEchoMode(QLineEdit.Normal)
-        #self.bibox.textChanged.connect(self.bi_entry)
         self.bibox.setCompleter(self.bicompleter)
         self.bibox.editingFinished.connect(self.view_bi)
         self.biboxLabel = QLabel("BuildImage")
         self.biboxLabel.setBuddy(self.bibox)
-
         self.bibox.setFixedWidth(130)
-        #self.bibox(QFont('Arial', 10))
-        #self.bibox.move(50, 0)
-
         self.biboxLabel.setFixedWidth(80)
-        #self.biboxLabel(QFont('Arial', 10))
-        #self.biboxLabel.move(50, 0)
+
 
     def nameCompleter(self):
         self.completer = QCompleter(names)
