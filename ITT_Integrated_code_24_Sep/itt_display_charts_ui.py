@@ -3,6 +3,7 @@ import sys
 from PyQt5.QtWidgets import *
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
+from PyQt5.QtCore import Qt
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 from itt_mail_sending import *
@@ -69,7 +70,8 @@ class Statistics_Window(QWidget):
         self.frame_three = QFrame(self)
         #self.frame_three.setFrameShape(QFrame.StyledPanel)
         self.gridLayout_three = QGridLayout(self.frame_three)
-        self.frame_three.setFixedSize(400, 200)
+        self.frame_three.setFixedSize(700, 200)
+        self.frame_three.setContentsMargins(300,2,10,2)
         self.gridLayout.addWidget(self.frame_three, 3, 0)
         self.names=resource_names()
 
@@ -132,9 +134,8 @@ class Statistics_Window(QWidget):
 
         self.mail_txt = QLineEdit()
         self.mail_txt.setFont(QFont('Arial', 10))
-        self.mail_txt.setFixedWidth(200)
+        self.mail_txt.setFixedWidth(235)
         self.mail_txt.editingFinished.connect(lambda: self.email_validation(email_lb1.text(),0))
-        #self.mail_txt.setFixedWidth(250)
 
         email_pwd = QLabel("Password")
         email_pwd.setFont(QFont('Arial', 10))
@@ -142,9 +143,8 @@ class Statistics_Window(QWidget):
         self.pwd_txt = QLineEdit()
         self.pwd_txt.setFont(QFont('Arial', 10))
         self.pwd_txt.editingFinished.connect(self.password_validation)
-        #self.pwd_txt.setFixedWidth(250)
         self.pwd_txt.setEchoMode(QLineEdit.Password)
-        self.pwd_txt.setFixedWidth(200)
+        self.pwd_txt.setFixedWidth(235)
 
         rx_email_lb = QLabel("Recipient Mail ID")
         rx_email_lb.setFixedWidth(165)
@@ -153,7 +153,7 @@ class Statistics_Window(QWidget):
         self.rx_email_txt = QLineEdit()
         self.rx_email_txt.setFont(QFont('Arial', 10))
         self.rx_email_txt.editingFinished.connect(lambda: self.email_validation(rx_email_lb.text(),2))
-        self.rx_email_txt.setFixedWidth(200)
+        self.rx_email_txt.setFixedWidth(235)
 
         send_mail_btn = QPushButton()
         send_mail_btn.setText("Send Mail")
@@ -358,7 +358,7 @@ class Statistics_Window(QWidget):
     def read_assignee_or_domain_for_bar_char(self,type,assignee_or_domain,text):
         canvas = Canvas(self, width=8, height=6)
         self.gridLayout_canvas.addWidget(canvas, 1, 1)
-        ax = canvas.figure.add_subplot(111)
+
         col = return_col_of_specified_col_name(assignee_or_domain)
         label_list = []
         label_list.extend(return_label_list(type))
@@ -366,73 +366,80 @@ class Statistics_Window(QWidget):
         list = []
         list.extend(list_to_display_on_pie_for_assignee(col, assignee_or_domain, type))
         self.list_to_send.extend(list)
-        pos = list[0]
-        width = 0.1
-        color_list = ['b', 'g', 'r', 'y', 'm']
-        for i, j, k in zip(list, color_list, range(0, len(list))):
-            ax.bar(pos + width * k, i, width, alpha=0.5, color=j, label=assignee_or_domain)
+        if len(list)!=0:
+            ax = canvas.figure.add_subplot(111)
+            pos = list[0]
+            width = 0.1
+            color_list = ['b', 'g', 'r', 'y', 'm']
+            for i, j, k in zip(list, color_list, range(0, len(list))):
+                ax.bar(pos + width * k, i, width, alpha=0.5, color=j)
 
-        # Set the y axis label
-        ax.set_ylabel('Count')
+            # Set the y axis label
+            ax.set_ylabel('CR Count')
 
-        # Set the chart's title
-        ax.set_title(type)
+            # Set the chart's title
+            #ax.set_title(type)
 
-        # Set the position of the x ticks
-        ax.set_xticks([pos + 1.5 * width])
+            # Set the position of the x ticks
+            ax.set_xticks([pos + 1.5 * width])
 
-        # Set the labels for the x ticks
-        list2 = [assignee_or_domain]
-        ax.set_xticklabels(list2)
-        # Setting the x-axis and y-axis limits
-        plt.xlim(pos - width, pos + width * 3)
+            # Set the labels for the x ticks
+            list2 = [assignee_or_domain]
+            ax.set_xticklabels(list2)
+            # Setting the x-axis and y-axis limits
+            plt.xlim(pos - width, pos + width * 3)
 
-        k = 0
-        for i in list:
-            k += i
-        plt.ylim([0, k])
-        ax.yaxis.set_major_locator(ticker.MultipleLocator(1))
+            k = 0
+            for i in list:
+                k += i
+            plt.ylim([0, k])
+            ax.yaxis.set_major_locator(ticker.MultipleLocator(1))
 
-        # Adding the legend and showing the plot
-        ax.legend(label_list, loc='upper left')
-        ax.grid()
+            # Adding the legend and showing the plot
+            ax.legend(label_list, loc='upper left')
+            ax.grid()
     def bar_chart_for_specified_type(self,text):
         canvas = Canvas(self, width=8, height=6)
         self.gridLayout_canvas.addWidget(canvas, 1, 1)
-        ax = canvas.figure.add_subplot(111)
         label_list = []
         label_list.extend(return_label_list(text))
         self.list_of_labels_to_send.extend(label_list)
         list = []
         list.extend(list_to_display_on_pie(text))
         self.list_to_send.extend(list)
-        pos = list[0]
-        width = 0.1
-        color_list = ['b', 'g', 'r', 'y', 'm']
-        for i, j, k in zip(list, color_list, range(0, len(list))):
-            ax.bar(pos + width * k, i, width, alpha=1, color=j)
+        if len(list)!=0:
+            ax = canvas.figure.add_subplot(111)
+            pos = list[0]
+            width = 0.1
+            color_list = ['b', 'g', 'r', 'y', 'm']
+            for i, j, k in zip(list, color_list, range(0, len(list))):
+                ax.bar(pos + width * k, i, width, alpha=1, color=j)
 
-        # Set the y axis label
-        ax.set_ylabel('Count')
+            # Set the y axis label
+            ax.set_ylabel('CR Count')
 
-        # Set the chart's title
-        ax.set_title(text)
+            # Set the chart's title
+            #ax.set_title(text)
 
-        # Set the position of the x ticks
-        ax.set_xticks([pos + 1.5 * width])
+            # Set the position of the x ticks
+            ax.set_xticks([pos + 1.5 * width])
 
-        # Setting the x-axis and y-axis limits
-        plt.xlim(pos - width, pos + width * 3)
+            # Set the labels for the x ticks
+            list2 = [text]
+            ax.set_xticklabels(list2)
 
-        k = 0
-        for i in list:
-            k += i
-        plt.ylim([0, k])
-        ax.yaxis.set_major_locator(ticker.MultipleLocator(1))
+            # Setting the x-axis and y-axis limits
+            plt.xlim(pos - width, pos + width * 3)
 
-        # Adding the legend and showing the plot
-        ax.legend(label_list, loc='upper left')
-        ax.grid()
+            k = 0
+            for i in list:
+                k += i
+            plt.ylim([0, k])
+            ax.yaxis.set_major_locator(ticker.MultipleLocator(1))
+
+            # Adding the legend and showing the plot
+            ax.legend(label_list, loc='upper left')
+            ax.grid()
 
 
     def pie_chart_for_specified_type(self, text):
