@@ -109,7 +109,7 @@ class Windowfinal(QWidget):
         self.setMinimumWidth(600)
         self.setMinimumHeight(800)
         self.frame = QFrame(self)
-        self.frame.setFixedSize(500, 800)
+        self.frame.setFixedSize(500, 700)
         # self.frame.setFrameShape(QFrame.StyledPanel)
 
         self.layout = QGridLayout(self.frame)
@@ -120,7 +120,7 @@ class Windowfinal(QWidget):
         self.frame_one = QFrame(self)
         #self.frame_one.setFrameShape(QFrame.StyledPanel)
         self.vLayout_one = QGridLayout(self.frame_one)
-        self.frame_one.setFixedSize(500, 800)
+        self.frame_one.setFixedSize(500, 700)
         self.frame_one.setContentsMargins(0, 0, 0, 0)
         self.layout.addWidget(self.frame_one)
 

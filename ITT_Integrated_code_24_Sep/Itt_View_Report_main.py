@@ -29,51 +29,51 @@ class View_Report(QWidget):
         self.frame_one = QFrame(self)
         #self.frame_one.setFrameShape(QFrame.StyledPanel)
         self.gridLayout_one = QGridLayout(self.frame_one)
-        self.frame_one.setFixedSize(500, 80)
+        self.frame_one.setFixedSize(500, 500)
         #self.frame_one.setContentsMargins(0, 0, 0, 0)
-        self.mainLayout.addWidget(self.frame_one, 1, 0)
+        self.mainLayout.addWidget(self.frame_one, 0, 0)
 
         self.gridLayout_one.addWidget(self.crsearchboxLabel, 0, 0)
         self.gridLayout_one.addWidget(self.crsearchbox, 0, 1)
-        self.gridLayout_one.addWidget(self.statusLabel, 0, 2)
-        self.gridLayout_one.addWidget(self.statusComboBox, 0, 3)
+        self.gridLayout_one.addWidget(self.statusLabel, 1, 0)
+        self.gridLayout_one.addWidget(self.statusComboBox, 1, 1)
 
         self.frame_two = QFrame(self)
         #self.frame_two.setFrameShape(QFrame.StyledPanel)
         self.gridLayout_two = QGridLayout(self.frame_two)
         self.frame_two.setFixedSize(500, 80)
         #self.frame_two.setContentsMargins(0,0,0,0)
-        self.mainLayout.addWidget(self.frame_two, 2, 0)
+        #self.mainLayout.addWidget(self.frame_two, 2, 0)
 
-        self.gridLayout_two.addWidget(self.domainLabel, 0, 0)
-        self.gridLayout_two.addWidget(self.domainComboBox, 0, 1)
-        self.gridLayout_two.addWidget(self.issuetypeLabel, 0, 2)
-        self.gridLayout_two.addWidget(self.issuetypeComboBox, 0, 3)
+        self.gridLayout_one.addWidget(self.domainLabel, 2, 0)
+        self.gridLayout_one.addWidget(self.domainComboBox, 2, 1)
+        self.gridLayout_one.addWidget(self.issuetypeLabel, 3, 0)
+        self.gridLayout_one.addWidget(self.issuetypeComboBox, 3, 1)
 
         self.frame_three = QFrame(self)
         #self.frame_three.setFrameShape(QFrame.StyledPanel)
         self.gridLayout_three = QGridLayout(self.frame_three)
         self.frame_three.setFixedSize(500, 80)
-        self.mainLayout.addWidget(self.frame_three, 3, 0)
+        #self.mainLayout.addWidget(self.frame_three, 3, 0)
 
-        self.gridLayout_three.addWidget(self.assigneeboxLabel, 0, 0)
-        self.gridLayout_three.addWidget(self.assigneebox, 0, 1)
-        self.gridLayout_three.addWidget(self.biboxLabel, 0, 2)
-        self.gridLayout_three.addWidget(self.bibox, 0, 3)
-        self.gridLayout_three.addWidget(self.button, 1, 0)
-        self.gridLayout_three.addWidget(self.exitbutton, 1, 1)
+        self.gridLayout_one.addWidget(self.assigneeboxLabel, 4, 0)
+        self.gridLayout_one.addWidget(self.assigneebox, 4, 1)
+        self.gridLayout_one.addWidget(self.biboxLabel, 5, 0)
+        self.gridLayout_one.addWidget(self.bibox, 5, 1)
+        #self.gridLayout_one.addWidget(self.button, 6, 0)
+        #self.gridLayout_one.addWidget(self.exitbutton, 6, 1)
         #self.gridLayout_three.setContentsMargins(0,0,0,0)
 
         self.frame_four = QFrame(self)
         #self.frame_four.setFrameShape(QFrame.StyledPanel)
         self.gridLayout_four = QGridLayout(self.frame_four)
-        self.frame_four.setFixedSize(500, 80)
+        self.frame_four.setFixedSize(500, 100)
         #self.frame_two.setContentsMargins(0,0,0,0)
-        self.mainLayout.addWidget(self.frame_four, 5, 0)
-        self.gridLayout_four.addWidget(self.button, 0, 0)
-        self.gridLayout_four.addWidget(self.exitbutton, 0, 3)
-        self.gridLayout_four.setHorizontalSpacing(10)
-        self.gridLayout_four.setRowStretch(0,0)
+        self.mainLayout.addWidget(self.frame_four, 9, 0)
+        self.gridLayout_four.addWidget(self.button, 9, 0)
+        self.gridLayout_four.addWidget(self.exitbutton, 9, 1)
+        self.gridLayout_four.setHorizontalSpacing(0)
+        #self.gridLayout_four.setRowStretch(0,0)
 
         oImage = QImage("image2.jpg")
         sImage = oImage.scaled(QSize(1000, 1000))  # resize Image to widgets size
@@ -96,14 +96,21 @@ class View_Report(QWidget):
 
     def Searchbutton(self):
         self.button = QPushButton("Search",self)
-        self.button.setToolTip("example")
-        self.button.setGeometry(10,80,6,1)
+        #self.button.setToolTip("example")
+        self.button.setGeometry(10,50,9,0)
+        self.button.setFixedHeight(30)
+        self.button.setFixedWidth(120)
+        self.button.setFont(QFont('Arial',10))
         self.button.clicked.connect(self.on_click)
 
     def Exitbutton(self):
         self.exitbutton = QPushButton("Exit",self)
-        self.exitbutton.setToolTip("example")
+        #self.exitbutton.setToolTip("example")
+        self.exitbutton.setGeometry(10,50,9,1)
+        self.exitbutton.setFixedWidth(120)
+        self.exitbutton.setFont(QFont('Arial',10))
         self.exitbutton.clicked.connect(self.on_exit)
+        self.exitbutton.setFixedHeight(30)
 
     def on_exit(self):
         from itt_main_ui import main_window
@@ -140,7 +147,7 @@ class View_Report(QWidget):
             #self.hide()
 
         elif(self.flag == -4):
-            msg = "Search not available. "+self.flist[0]+" not found"
+            msg = "Selected filter have no matching results.\n"+"Change "+self.flist[0]#+" not found"
             QMessageBox.about(self, 'Information', msg)
 
         else:
@@ -153,7 +160,9 @@ class View_Report(QWidget):
         getcols()
         namelist()
         bilist()
+
         self.statusComboBox = QComboBox(self)
+        self.statusComboBox.setFont(QFont('Arial',15))
         self.statusComboBox.addItem('None')
         self.statusComboBox.addItem('Open')
         self.statusComboBox.addItem('Analysis')
@@ -168,13 +177,14 @@ class View_Report(QWidget):
         self.statusLabel = QLabel("Status")
         self.statusLabel.setBuddy(self.statusComboBox)
 
-        self.statusComboBox.setFixedWidth(130)
-        #self.statusComboBox(QFont('Arial', 10))
+        self.statusComboBox.setFixedWidth(200)
+        self.statusComboBox.setFont(QFont('Arial', 15))
         #self.statusComboBox.move(50, 0)
-
-        self.statusLabel.setFixedWidth(80)
+        self.statusComboBox.setFixedHeight(50)
+        #self.statusComboBox(QFont('Arial', 15))
+        self.statusLabel.setFixedWidth(120)
         #self.statusLabel.resize(10,1)
-        #self.statusLabel(QFont('Arial', 10))
+        self.statusLabel.setFont(QFont('Arial', 15))
         #self.statusLabel.move(50, 0)
 
         self.domainComboBox = QComboBox(self)
@@ -188,12 +198,13 @@ class View_Report(QWidget):
         self.domainLabel = QLabel("Domain")
         self.domainLabel.setBuddy(self.domainComboBox)
 
-        self.domainComboBox.setFixedWidth(130)
-        #self.domainComboBox(QFont('Arial', 10))
+        self.domainComboBox.setFixedWidth(200)
+        self.domainComboBox.setFixedHeight(50)
+        self.domainComboBox.setFont(QFont('Arial', 15))
         #self.domainComboBox.move(50, 0)
 
-        self.domainLabel.setFixedWidth(80)
-        #self.domainLabel(QFont('Arial', 10))
+        self.domainLabel.setFixedWidth(120)
+        self.domainLabel.setFont(QFont('Arial', 15))
         #self.domainLabel.move(50, 0)
 
         self.issuetypeComboBox = QComboBox(self)
@@ -206,12 +217,13 @@ class View_Report(QWidget):
         self.issuetypeLabel = QLabel("Issue Type")
         self.issuetypeLabel.setBuddy(self.issuetypeComboBox)
 
-        self.issuetypeComboBox.setFixedWidth(130)
-        #self.issuetypeComboBox(QFont('Arial', 10))
+        self.issuetypeComboBox.setFixedWidth(200)
+        self.issuetypeComboBox.setFixedHeight(50)
+        self.issuetypeComboBox.setFont(QFont('Arial', 15))
         #self.issuetypeComboBox.move(50, 0)
 
-        self.issuetypeLabel.setFixedWidth(80)
-        #self.issuetypeLabel(QFont('Arial', 10))
+        self.issuetypeLabel.setFixedWidth(120)
+        self.issuetypeLabel.setFont(QFont('Arial', 15))
         #self.issuetypeLabel.move(50, 0)
 
         global topLayout
@@ -222,15 +234,19 @@ class View_Report(QWidget):
         self.crsearchbox.setEchoMode(QLineEdit.Normal)
         self.crsearchbox.editingFinished.connect(self.View_Enter)
         self.crsearchboxLabel = QLabel("CR No.")
-        self.crsearchboxLabel.setFixedWidth(80)
+        self.crsearchboxLabel.setFixedWidth(120)
         self.crsearchboxLabel.setBuddy(self.crsearchbox)
 
-        self.crsearchbox.setFixedWidth(130)
-        #self.crsearchbox(QFont('Arial', 10))
+        self.crsearchbox.setFixedWidth(200)
+        self.crsearchbox.setFixedHeight(50)
+        self.crsearchbox.setFont(QFont('Arial', 15))
+
+        #self.crsearchbox.setFixedWidth(130)
+        #self.crsearchbox.setFont(QFont('Arial', 10))
         #self.crsearchbox.move(50, 0)
 
-        self.crsearchboxLabel.setFixedWidth(80)
-        #self.crsearchboxLabel(QFont('Arial', 10))
+        self.crsearchboxLabel.setFixedWidth(120)
+        self.crsearchboxLabel.setFont(QFont('Arial', 15))
         #self.crsearchboxLabel.move(50, 0)
 
         self.nameCompleter()
@@ -241,12 +257,14 @@ class View_Report(QWidget):
         self.assigneeboxLabel = QLabel("Assignee")
         self.assigneeboxLabel.setBuddy(self.assigneebox)
 
-        self.assigneebox.setFixedWidth(130)
+        self.assigneebox.setFixedWidth(200)
+        self.assigneebox.setFixedHeight(50)
+        self.assigneebox.setFont(QFont('Arial', 15))
         #self.assigneebox(QFont('Arial', 10))
         #self.assigneebox.move(50, 0)
 
-        self.assigneeboxLabel.setFixedWidth(80)
-        #self.assigneeboxLabel(QFont('Arial', 10))
+        self.assigneeboxLabel.setFixedWidth(120)
+        self.assigneeboxLabel.setFont(QFont('Arial', 15))
         #self.assigneeboxLabel.move(50, 0)
 
         self.biCompleter()
@@ -254,10 +272,13 @@ class View_Report(QWidget):
         self.bibox.setEchoMode(QLineEdit.Normal)
         self.bibox.setCompleter(self.bicompleter)
         self.bibox.editingFinished.connect(self.view_bi)
-        self.biboxLabel = QLabel("Build Id")
+        self.biboxLabel = QLabel("Build ID")
         self.biboxLabel.setBuddy(self.bibox)
-        self.bibox.setFixedWidth(130)
-        self.biboxLabel.setFixedWidth(80)
+        self.bibox.setFixedWidth(200)
+        self.biboxLabel.setFixedWidth(120)
+        self.bibox.setFixedHeight(50)
+        self.bibox.setFont(QFont('Arial', 10))
+        self.biboxLabel.setFont(QFont('Arial',15))
 
 
     def nameCompleter(self):
@@ -307,9 +328,11 @@ class View_Report(QWidget):
         elif result == -3:
             self.selectedFilter["CR"] = "None"
         elif result == -2:
-            QMessageBox.about(self, 'Information', "Invalid entry,Only numbers are accepted")
+            QMessageBox.about(self, 'Information', "Invalid CR No.,Only numbers are accepted")
+            self.crsearchbox.clear()
         elif result == -1:
-            QMessageBox.about(self, 'Information', "Maximum limit is 6 numbers")
+            QMessageBox.about(self, 'Information', "CR No. Maximum limit is 6 numbers")
+            self.crsearchbox.clear()
 
     def assignee_Entry(self,text):
         self.selectedFilter["Assignee"] = text
@@ -318,15 +341,21 @@ class View_Report(QWidget):
     def view_assignee(self):
         print("in view assignee")
         assigneeText = self.assigneebox.text()
-        result = assigneename_check(assigneeText)
-        if result == 0:
-            self.selectedFilter["Assignee"] = assigneeText
-        elif result == -3:
-            self.selectedFilter["Assignee"] = "None"
-        elif result == -2:
-            QMessageBox.about(self, 'Information', "Invalid entry only alphabets are allowed")
-        elif result == -1:
-            QMessageBox.about(self, 'Information', "Maximum limit is 15 characters")
+        if assigneeText in names:
+            result = assigneename_check(assigneeText)
+            if result == 0:
+                self.selectedFilter["Assignee"] = assigneeText
+            elif result == -3:
+                self.selectedFilter["Assignee"] = "None"
+            elif result == -2:
+                QMessageBox.about(self, 'Information', "Invalid Assignee,only alphabets are allowed")
+                self.assigneebox.clear()
+            elif result == -1:
+                QMessageBox.about(self, 'Information', "Maximum limit is 15 characters for Assignee")
+                self.assigneebox.clear()
+        else:
+            QMessageBox.about(self, 'Information', "Assignee is not a registered member")
+            self.assigneebox.clear()
 
     def si_entry(self,text):
         self.siName=text
@@ -346,9 +375,11 @@ class View_Report(QWidget):
         elif result == -3:
             self.selectedFilter["Build ID"] = "None"
         elif result == -2:
-            QMessageBox.about(self, 'Information', "Invalid entry")
+            QMessageBox.about(self, 'Information', "Invalid Build ID")
+            self.bibox.clear()
         elif result == -1:
-            QMessageBox.about(self, 'Information', "Maximum limit is 6")
+            QMessageBox.about(self, 'Information', "Maximum limit is 6 for Build ID")
+            self.bibox.clear()
 
     def resizeEvent(self, event):
         self.centerOnScreen(self.frame)
