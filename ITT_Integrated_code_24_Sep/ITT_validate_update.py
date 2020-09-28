@@ -143,13 +143,11 @@ def build_validate_update(buildid,newid):
         return True
 
 def git_validate_update(git):
-    regex = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
-
     if(len(git) == 0):
         print("g1")
         msg = QMessageBox()
         msg.setWindowTitle("Information")
-        msg.setText("Build id should not same as the one given when the CR is created.")
+        msg.setText("Enter GIT id")
         x = msg.exec_()
         return False
 
@@ -158,13 +156,11 @@ def git_validate_update(git):
         return True
 
 def issue_reason_validate_update(reason):
-    regex = re.compile('[@!#$%^&*()<>?/\|}{~:]')
-    if (regex.search(reason) != None):
-        print("t3")
-        ck = True
+    if(len(reason) == 0):
+        print("i4")
         msg = QMessageBox()
         msg.setWindowTitle("Information")
-        msg.setText("reason in valid")
+        msg.setText("Please enter reason")
         x = msg.exec_()
         return False
     else:

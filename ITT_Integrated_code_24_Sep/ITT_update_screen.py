@@ -53,7 +53,8 @@ class Update(QWidget):
 
         self.cr_ret = ["",True]
         self.git_ret = ["",True]
-        self.issue_reason_ret = ["",True]
+        self.issue_ret= ["",True]
+        self.buildid = ["",True]
 
         self.update()
 
@@ -369,12 +370,16 @@ class Update(QWidget):
             print("Wrong file or file path")
 
     def git_change(self):
+        print("changing git id")
         self.git_val = self.git_entry.text()
+        print(self.git_val)
         ret = git_validate_update(self.git_val)
         if(ret == True):
             self.history_dict.update({"git/gerrit":self.git_val})
         else:
             print("enter valid git link")
+        self.git_ret = git_validate(self.issue_reason_entry.text())
+        print("after validate",self.git_ret)
 
     def cronChanged(self):
         prev_state = self.prev_cr_state
@@ -408,20 +413,23 @@ class Update(QWidget):
             print("No Assignee")
 
     def build_change(self):
-        self.build_val = self.build_entry.text()
-        ret = build_validate_update(self.build_val,self.build_new_val)
-        print(self.build_val,self.build_new_val)
-        if(self.build_val == self.build_new_val):
+        self.build_prev = read_build_with_cr(self.cr_index)
+        self.build_new_val = self.build_entry.text()
+        ret = build_validate_update(self.build_prev,self.build_new_val)
+        print(self.build_prev,self.build_new_val)
+        if(self.build_prev == self.build_new_val):
             msg = QMessageBox()
             msg.setWindowTitle("Information")
             msg.setText("Please change the build id")
             x = msg.exec_()
-
         print("build validation")
         if ret == True:
-            self.history_dict.update({'buildid':self.build_val})
+            self.history_dict.update({'buildid':self.build_new_val})
         else:
             print("Build id is not valid")
+        print("button build validate")
+        self.buildid = bt_build_validate_update(self.build_prev,self.build_new_val)
+        print(self.buildid)
 
     def title_change(self):
         self.title_val = self.title_entry.toPlainText()
@@ -495,13 +503,44 @@ class Update(QWidget):
                 x = msg.exec_()
                 self.issue_reason_entry.textChanged.connect(self.issue_reason_changed)
         if(prev_state == "Blacklisting"):
-            if(state == "bug" or state == "Internal"):
-                pass
+            if(state == "bug"):
+                self.issue_reason_entry.setReadOnly(False)
+                self.issue_reason_entry.setStyleSheet("QLineEdit"
+                                                      "{"
+                                                      "background-color: white;"
+                                                      "}")
+                msg = QMessageBox()
+                msg.setWindowTitle("Information")
+                msg.setText("Please give the reason for change")
+                x = msg.exec_()
+                self.issue_reason_entry.textChanged.connect(self.issue_reason_changed)
+            else:
+                self.issue_reason_entry.setReadOnly(False)
+                self.issue_reason_entry.setStyleSheet("QLineEdit"
+                                                      "{"
+                                                      "background-color: white;"
+                                                      "}")
+                msg = QMessageBox()
+                msg.setWindowTitle("Information")
+                msg.setText("Please give the reason for change")
+                x = msg.exec_()
+                self.issue_reason_entry.textChanged.connect(self.issue_reason_changed)
+        self.issue_ret = bt_issue_reason_validate(self.issue_reason_entry.text())
+        print(self.issue_ret,"at up")
 
     def issue_reason_changed(self):
+        print("issue change 1")
         self.issue_reason = self.issue_reason_entry.text()
+        print("issue reason",self.issue_reason)
         ret = issue_reason_validate_update(self.issue_reason)
-        self.history_dict.update({"issue Reason":self.issue_reason})
+        if(ret == True):
+            self.history_dict.update({"issue Reason":self.issue_reason})
+        else:
+            print("Issue at reason change")
+        print("button validate issue reason")
+        self.issue_ret = bt_issue_reason_validate(self.issue_reason_entry.text())
+        print(self.issue_ret)
+        print("issue complete")
 
     def onChanged(self):
         state = self.si_state.currentText()
@@ -534,11 +573,8 @@ class Update(QWidget):
                 msg.setText("Please enter GIT id")
                 x = msg.exec_()
                 self.cr_state_entry.setEnabled(False)
-                self.git_ret = git_validate(self.git_entry.text())
-                if(self.git_ret == False):
-                    print("issue in git")
-                else:
-                    print("valid git")
+                #self.git_ret = git_validate(self.issue_reason_entry.text())
+                self.git_entry.textChanged.connect(self.git_change)
 
             elif(state == "Withdrawn" or state == "Duplicate"):
                 self.cr_state_entry.setEnabled(True)
@@ -581,12 +617,15 @@ class Update(QWidget):
                                              "{"
                                              "background-color: white;"
                                              "}")
+                self.build_prev_val = read_build_with_cr(self.cr_index)
                 self.build_new_val = self.build_entry.text()
-                msg = QMessageBox()
-                msg.setWindowTitle("Information")
-                msg.setText("Please change the build id")
-                x = msg.exec_()
-                print("built")
+                if(self.build_new_val == self.build_prev_val):
+                    msg = QMessageBox()
+                    msg.setWindowTitle("Information")
+                    msg.setText("Please change the build id")
+                    x = msg.exec_()
+                    print("built")
+                    self.buildid = bt_build_validate_new(self.build_prev_val,self.build_new_val)
                 self.cr_state_entry.setEnabled(False)
                 print("complete build")
 
@@ -595,6 +634,7 @@ class Update(QWidget):
                 msg.setWindowTitle("Information")
                 msg.setText("Si state can move only to Built")
                 x = msg.exec_()
+
 
         self.history_dict.update({"si state": state})
 
@@ -647,7 +687,9 @@ class Update(QWidget):
         print(type(self.cr_ret))
         domain_ret = bt_domain_validate(self.domain_entry.currentText())
         print("domain",des_ret)
-        dis_ret = display(title_ret, des_ret, build_ret, assignee_ret,si_ret,self.cr_ret,self.git_ret,domain_ret)
+        print("git at save",self.git_ret[0],self.git_ret[1])
+
+        dis_ret = display(title_ret, des_ret, build_ret, assignee_ret,si_ret,self.cr_ret,self.git_ret,domain_ret,self.issue_ret,self.buildid)
         if (len(self.path) == 0):
             self.path = ""
         if(dis_ret == True):

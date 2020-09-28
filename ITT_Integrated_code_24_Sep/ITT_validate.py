@@ -4,6 +4,28 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QMessageBox
 from itt_utils import *
 
+def bt_issue_reason_validate(reason):
+    mymsg = ""
+    print(reason, len(reason))
+    if (len(reason) == 0):
+        print("vt1")
+        if (mymsg != ""):
+            mymsg += ","
+        mymsg += "Please enter Reason for change"
+        print(mymsg)
+        ret = [mymsg, False]
+        print("ret ,", ret)
+        return ret
+    else:
+        print("vt1")
+        if (mymsg != ""):
+            mymsg += ","
+        mymsg += "Valid reason"
+        print(mymsg)
+        ret = [mymsg, True]
+        print("ret ,", ret)
+        return ret
+
 def bt_domain_validate(domain):
     mymsg = ""
     if (len(domain) == "Select"):
@@ -28,6 +50,7 @@ def bt_domain_validate(domain):
 
 def git_validate(git):
     mymsg = ""
+    print(git,len(git))
     if (len(git) == 0):
         print("vt1")
         ck = False
@@ -36,6 +59,16 @@ def git_validate(git):
         mymsg += "Please enter Git Id "
         print(mymsg)
         ret = [mymsg,True]
+        print("ret ,", ret)
+        return ret
+    else:
+        print("vt1")
+        ck = False
+        if (mymsg != ""):
+            mymsg += ","
+        mymsg += "Valid Git"
+        print(mymsg)
+        ret = [mymsg, True]
         print("ret ,", ret)
         return ret
 
@@ -105,7 +138,7 @@ def bt_si_validate(prev_si,new_si,cr_new):
             ck = False
             if (mymsg != ""):
                 mymsg += ","
-            mymsg += "SI state is selected"
+            mymsg += "Valid SI state"
             print(mymsg)
             ret = [mymsg, True]
             print("ret ,", ret)
@@ -116,7 +149,7 @@ def bt_si_validate(prev_si,new_si,cr_new):
             ck = False
             if (mymsg != ""):
                 mymsg += ","
-            mymsg += "SI state is selected"
+            mymsg += "Valid SI state"
             print(mymsg)
             ret = [mymsg, True]
             print("ret ,", ret)
@@ -126,7 +159,7 @@ def bt_si_validate(prev_si,new_si,cr_new):
             ck = False
             if (mymsg != ""):
                 mymsg += ","
-            mymsg += "SI state is selected"
+            mymsg += "Valid SI state"
             print(mymsg)
             ret = [mymsg, True]
             print("ret ,", ret)
@@ -148,7 +181,7 @@ def bt_si_validate(prev_si,new_si,cr_new):
             ck = False
             if (mymsg != ""):
                 mymsg += ","
-            mymsg += "SI state selected"
+            mymsg += "Valid SI state"
             print(mymsg)
             ret = [mymsg, True]
             print("ret ,", ret)
@@ -170,7 +203,7 @@ def bt_si_validate(prev_si,new_si,cr_new):
             ck = False
             if (mymsg != ""):
                 mymsg += ","
-            mymsg += "SI state is selected"
+            mymsg += "Valid SI state"
             print(mymsg)
             ret = [mymsg, True]
             print("ret ,", ret)
@@ -191,7 +224,7 @@ def bt_si_validate(prev_si,new_si,cr_new):
             ck = False
             if (mymsg != ""):
                 mymsg += ","
-            mymsg += "SI state is selected"
+            mymsg += "Valid SI state"
             print(mymsg)
             ret = [mymsg, True]
             print("ret ,", ret)

@@ -4,10 +4,7 @@ from Itt_Download import *
 ENTRY_NOT_FOUND = -4
 from itt_mail_sending import *
 import pandas as pd
-import itt_display_charts_ui as displaycharts
 from Itt_fileopen import *
-from itt_utils import *
-from itt_validations import *
 import numpy as np
 from PyQt5.QtGui import QPalette,QImage,QPageSize,QBrush
 from PyQt5.QtCore import QSize
@@ -22,6 +19,7 @@ sientries = []
 filters = {"CR":'nil',"Title":'nil',"Assignee":'nil',"State":'nil',"Software Image":'nil',"Domain":'nil',"Issue Type":'nil',"GIT commit ID/Gerrit Link":'nil',"Build ID":'nil',"Created on":'nil',"Last Modified":'nil',"History":'nil'}
 credential = {"Username":'nil',"Password":'nil'}
 filrow = 0
+
 
 class CustomDialog(QDialog):
 
@@ -56,8 +54,6 @@ class CustomDialog(QDialog):
         self.senderid.editingFinished.connect(self.view_senderid)
         self.senderidLabel = QLabel("User Email-ID")
         self.senderidLabel.setBuddy(self.senderid)
-        displayclass = displaycharts.Statistics_Window()
-        #self.senderid.editingFinished.connect(lambda: displaycharts.Statistics_Window.email_validation_filter(displayclass, self.senderidLabel.text(), 0,self.senderid.text()))  # (self.view_senderid)
 
         self.senderpswd = QLineEdit()
         self.senderpswd.setEchoMode(QLineEdit.Password)
@@ -70,79 +66,28 @@ class CustomDialog(QDialog):
         self.receiverId.setEchoMode(QLineEdit.Normal)
         # self.senderid.setCompleter(self.completer)
         self.receiverId.editingFinished.connect(self.view_receiver)
-        self.receiverIdLabel = QLabel("Recipient Email-ID")
+        self.receiverIdLabel = QLabel("Receiver Email-ID")
         self.receiverIdLabel.setBuddy(self.receiverId)
-        #self.receiverId.editingFinished.connect(lambda: displaycharts.Statistics_Window.email_validation_filter(displayclass,self.receiverIdLabel.text(), 2,self.receiverId.text()))
 
     def view_senderid(self):
-        self.smailid= self.senderid.text()
-        ret = email_id_check(self.smailid)
-
-        if ret == INVALID_INPUT_ERR:
-            QMessageBox.about(self,'Information',"Sender Mail-ID is invalid")
-            self.senderid.clear()
-        elif ret == SUCCESS:
-            if(len(self.smailid)) == 0:
-                QMessageBox.about(self, 'Information', "Sender Mail-ID is empty")
-                self.senderid.clear()
-
         print("sender id is ",self.senderid.text())
 
     def view_password(self):
         print("password is ",self.senderpswd.text())
-        self.pswd = self.senderpswd.text()
-        if(len(self.pswd)==0):
-            QMessageBox.about(self, 'Information', "Password is empty")
 
     def view_receiver(self):
         print("receiver is ",self.receiverId.text())
-        self.rmailid = self.receiverId.text()
-        ret = email_id_check(self.rmailid)
-
-        if ret == INVALID_INPUT_ERR:
-            QMessageBox.about(self, 'Information', "Receiver Mail-ID is invalid")
-            self.receiverId.clear()
-        elif ret == SUCCESS:
-            if (len(self.rmailid)) == 0:
-                QMessageBox.about(self, 'Information', "Receiver Mail-ID is empty")
-                self.receiverId.clear()
 
     def send_clicked(self):
-        mail_deliver_msg = ""
+
         self.mailmsg = "PFA of filtered data"
         self.subject = "[Issue Tracker Tool] Filtered data"
         print("send clicked")
         sId = self.senderid.text()
         sPwd = self.senderpswd.text()
         rId = self.receiverId.text()
-        #self.util = utils()
-        #listaccess = displaycharts.Statistics_Window()
-        ######
-        #msg = self.util.empty_fields_message(listaccess.list, listaccess.label)
-        #msg += self.util.display_statastics_invalid_fields_message(listaccess.list, listaccess.label)
-        #if msg != "":
-        #    QMessageBox.about(self, 'Information', msg)
-        #print(self.list)
-        #print(msg_to_send)
-        #print(msg)
-        #if len(self.mailmsg) != 0 and len(msg) == 0:
-        #    if listaccess.list[0] == value_chk.valid.value and listaccess.list[1] == value_chk.valid.value \
-        #            and listaccess.list[2] == value_chk.valid.value:
-        #self.view_senderid()
-        #self.view_receiver()
-        #self.view_password()
-        ret = email_id_check(rId)
-        if len(sId) == 0 or len(rId) == 0 or len(sPwd) == 0:
-            QMessageBox.about(self, 'Information', "Please fill all details")
-        elif (ret == INVALID_INPUT_ERR) or len(rId)==0:
-            QMessageBox.about(self, 'Information', "Please enter correct receiver ID")
-            self.receiverId.clear()
-        else:
-            mail_deliver_msg += sending_mail_with_attachment(sId, sPwd, rId, self.mailmsg,self.subject )#sending_mail(mail_id, pwd, rx_mail_id, msg_to_send, subject)
-            QMessageBox.about(self, 'Information', mail_deliver_msg)
-            ######
-        #status = sending_mail_with_attachment(sId, sPwd, rId, self.mailmsg,self.subject )
-        #print(status)
+        status = sending_mail_with_attachment(sId, sPwd, rId, self.mailmsg,self.subject )
+        print(status)
 
 class App1(QWidget):
     def __init__(self,crlist):
@@ -153,7 +98,7 @@ class App1(QWidget):
         self.setMinimumWidth(600)
         self.setMinimumHeight(800)
         self.frame = QFrame(self)
-        self.frame.setFixedSize(500, 700)
+        self.frame.setFixedSize(500, 800)
 
 
         self.layout = QGridLayout(self.frame)
@@ -163,7 +108,7 @@ class App1(QWidget):
         self.frame_one = QFrame(self)
         #self.frame_one.setFrameShape(QFrame.StyledPanel)
         self.vLayout_one = QVBoxLayout(self.frame_one)
-        self.frame_one.setFixedSize(500, 600)
+        self.frame_one.setFixedSize(500, 700)
         self.frame_one.setContentsMargins(0, 0, 0, 0)
         self.layout.addWidget(self.frame_one)
 
@@ -206,7 +151,6 @@ class App1(QWidget):
     def downloadButton(self):
         self.dbutton = QPushButton("Download",self)
         self.dbutton.clicked.connect(self.on_download_click)
-        self.dbutton.setFixedHeight(40)
 
     def on_download_click(self):
         print("download clicked")
@@ -215,7 +159,6 @@ class App1(QWidget):
     def sendmailButton(self):
         self.emailbutton = QPushButton("Send Mail",self)
         self.emailbutton.clicked.connect(self.on_email_click)
-        self.emailbutton.setFixedHeight(40)
 
     def on_email_click(self):
         print("click")
@@ -230,7 +173,6 @@ class App1(QWidget):
     def backbuttonFilter(self):
         self.backFilter = QPushButton("Back",self)
         #self.exitFilter.setToolTip("example")
-        self.backFilter.setFixedHeight(40)
         self.backFilter.clicked.connect(self.on_backfilter)
 
     def on_backfilter(self):
