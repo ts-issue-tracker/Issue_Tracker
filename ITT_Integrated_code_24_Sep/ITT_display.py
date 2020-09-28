@@ -1,19 +1,19 @@
 from PyQt5.QtWidgets import QMessageBox
 
-def display_create(title_ret,des_ret,build_ret,assignee_ret):
+def display_create(title_ret,des_ret,build_ret,assignee_ret,domain):
     print("in display")
     print(title_ret[0], "1", title_ret[1])
     print(des_ret[0], "1", des_ret[1])
     print(build_ret[0], "1", build_ret[1])
     print(assignee_ret[0], "1", assignee_ret[1])
-    if (title_ret[1] and des_ret[1] and build_ret[1] and assignee_ret[1]):
+    if (title_ret[1] and des_ret[1] and build_ret[1] and assignee_ret[1] and domain[1]):
         print("true")
         return True
 
     else:
         print("any one false")
         msg = ""
-        msg += title_ret[0] + ", " + des_ret[0] + ", " + build_ret[0] + ", " + assignee_ret[0]
+        msg += title_ret[0] + ", " + des_ret[0] + ", " + build_ret[0] + ", " + assignee_ret[0] + ", " + domain[0]
         print(msg)
         Msg = QMessageBox()
         Msg.setWindowTitle("Information")

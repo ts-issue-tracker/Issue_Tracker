@@ -13,6 +13,7 @@ from ITT_validate import *
 from ITT_save_excel import save_in_excel
 from ITT_display import *
 from ITT_read_excel import read_new_no
+from ITT_validate_update import *
 
 class Create_cr(QWidget):
     print("Create")
@@ -146,10 +147,11 @@ class Create_cr(QWidget):
                                         "background-color: white;"
                                         "}")
 
+        self.domain_entry.addItem("Select")
         self.domain_entry.addItem("Audio")
         self.domain_entry.addItem("Camera")
         self.domain_entry.addItem("Video")
-
+        self.domain_entry.currentIndexChanged.connect(self.domainchange)
         # grid domain label
         self.gridLayout.addWidget(self.domain_label, 6, 0)
         # grid domain entry
@@ -190,6 +192,7 @@ class Create_cr(QWidget):
         # git entry
         self.git_entry = QLineEdit(self)
         self.git_entry.setReadOnly(True)
+        self.git_entry.setFont(QFont('Arial', 10))
         self.git_entry.setStyleSheet("QLineEdit"
                                      "{"
                                      "background-color: #DBDBDB	;"
@@ -280,6 +283,17 @@ class Create_cr(QWidget):
     def centerOnScreen(self,frame):
         frame.move(int((self.width()-self.frame.width()) / 2), int((self.height()-self.frame.height()) / 2))
 
+    def domainchange(self):
+        self.domain_val = self.domain_entry.currentText()
+        ret = domain_validate(self.domain_entry.currentText())
+        if ret == True:
+            pass
+        else:
+            msg = QMessageBox()
+            msg.setWindowTitle("Information")
+            msg.setText("Please select any Domain/Techarea")
+            x = msg.exec_()
+
     def Upload_but_clicked(self):
         #from ITT_upload_file import Upload
         #print("Upload_but_clicked")
@@ -345,7 +359,9 @@ class Create_cr(QWidget):
             print("main", des_ret[0], des_ret[1])
             build_ret = bt_build_validate(build_id)
             print("main", build_ret[0], build_ret[1])
-            dis_ret = display_create(title_ret,des_ret,build_ret,assignee_ret)
+            domain_ret = bt_domain_validate(self.domain_entry.currentText())
+            print("main domain",domain_ret)
+            dis_ret = display_create(title_ret,des_ret,build_ret,assignee_ret,domain_ret)
             if(dis_ret == True):
                 print("saving")
                 if(len(self.path) == 0):

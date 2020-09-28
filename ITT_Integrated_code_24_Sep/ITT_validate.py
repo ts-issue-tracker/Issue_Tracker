@@ -27,15 +27,16 @@ def bt_issue_reason_validate(reason):
         return ret
 
 def bt_domain_validate(domain):
+    print("in validation",domain)
     mymsg = ""
-    if (len(domain) == "Select"):
+    if (domain == "Select"):
         print("vt1")
         ck = False
         if (mymsg != ""):
             mymsg += ","
-        mymsg += "InValid Domain"
+        mymsg += "Invalid Domain"
         print(mymsg)
-        ret = [mymsg, False]
+        ret = [mymsg, ck]
         print("ret ,", ret)
         return ret
     else:
@@ -58,7 +59,7 @@ def git_validate(git):
             mymsg += ","
         mymsg += "Please enter Git Id "
         print(mymsg)
-        ret = [mymsg,True]
+        ret = [mymsg,False]
         print("ret ,", ret)
         return ret
     else:

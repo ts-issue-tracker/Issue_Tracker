@@ -35,8 +35,10 @@ def sending_mail(login,password,toaddrs,msgtxt,subject):
 
 def sending_mail_with_attachment(login,password,toaddrs,msgtxt,subject):
     attachment = 'example.xls'
-
+    msg_to_return=""
     msg = MIMEMultipart()
+    SMTPServer = "mail.thundersoft.com"
+    port = 465  # 587
 
     msg['From'] = login
     msg['To'] = toaddrs
@@ -59,7 +61,38 @@ def sending_mail_with_attachment(login,password,toaddrs,msgtxt,subject):
 
     context = ssl.create_default_context()
     s = smtplib.SMTP_SSL('mail.Thundersoft.com', 465, context=context)
-    f = s.login(login, password)
-    print("type of s ", type(f))
-    s.sendmail(login, toaddrs, msg.as_string())
-    s.quit()
+    try:
+        s.login(login,password)
+        s.sendmail(login,toaddrs,msg.as_string())
+    except smtplib.SMTPAuthenticationError:
+        msg_to_return+="Incorrect Sender Mail ID/Password"
+    except smtplib.SMTPRecipientsRefused:
+        msg_to_return += "Incorrect Recipient Mail ID"
+    else:
+        s.ehlo()
+        s.quit()
+        msg_to_return+="Mail Sent Successfully"
+    return msg_to_return
+"""
+    #f = s.login(login, password)
+    #print("type of s ", type(f))
+    #s.sendmail(login, toaddrs, msg.as_string())
+    #s.quit()
+
+    server=smtplib.SMTP_SSL(SMTPServer, port)
+    #use smtplib.SMTP() if port is 587
+    #server.starttls()
+    server.ehlo()
+    try:
+        server.login(login, password)
+        server.send_message(msg)
+    except smtplib.SMTPAuthenticationError:
+        msg_to_return+="Incorrect Mail ID/Password"
+    except smtplib.SMTPRecipientsRefused:
+        msg_to_return += "Incorrect Recipient Mail ID"
+    else:
+        server.ehlo()
+        server.quit()
+        msg_to_return+="Mail Sent Successfully"
+    return msg_to_return
+"""

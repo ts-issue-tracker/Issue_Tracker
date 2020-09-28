@@ -232,6 +232,7 @@ class view_cr_window(QWidget):
         self.git_entry = QLineEdit(self)
         self.git = read_git_with_cr(self.cr_index)
         self.git_entry.setText(self.git)
+        self.git_entry.setFont(QFont('Arial', 10))
         self.git_entry.setReadOnly(True)
         self.git_entry.setStyleSheet("QLineEdit"
                                         "{"

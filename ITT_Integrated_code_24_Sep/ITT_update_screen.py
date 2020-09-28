@@ -131,9 +131,9 @@ class Update(QWidget):
         self.cr_state_entry = QComboBox(self)
         self.cr_state_entry.setFont(QFont('Arial', 10))
         self.cr_state_entry.setStyleSheet("QComboBox"
-                                      "{"
-                                      "background-color: white;"
-                                      "}")
+                                          "{"
+                                          "background-color: white;"
+                                          "}")
         self.cr_state_entry.addItem("Open")
         self.cr_state_entry.addItem("Analysis")
         self.cr_state_entry.addItem("Closed")
@@ -157,9 +157,9 @@ class Update(QWidget):
         #entry
         self.si_state = QComboBox(self)
         self.si_state.setStyleSheet("QComboBox"
-                                          "{"
-                                          "background-color: white;"
-                                          "}")
+                                    "{"
+                                    "background-color: white;"
+                                    "}")
         self.si_state.addItem("Open")
         self.si_state.addItem("Analysis")
         self.si_state.addItem("Fix")
@@ -245,13 +245,13 @@ class Update(QWidget):
         self.git = read_git_with_cr(self.cr_index)
         self.git_entry.setReadOnly(True)
         self.git_entry.setText(self.git)
+        self.git_entry.setFont(QFont('Arial', 10))
         if (self.si_state.currentText() == 'Fix'):
             self.git = read_git_with_cr(self.cr_index)
             self.git_entry.textChanged.connect(self.git_change)
             self.git_entry.setText(self.git)
             self.git_entry.setReadOnly(False)
         else:
-            self.git_entry.setReadOnly(True)
             self.git_entry.setStyleSheet("QLineEdit"
                                          "{"
                                          "background-color: #DBDBDB	;"
@@ -272,9 +272,9 @@ class Update(QWidget):
         self.build_entry.setReadOnly(True)
         self.build_entry.setFont(QFont('Arial', 10))
         self.build_entry.setStyleSheet("QLineEdit"
-                                          "{"
-                                          "background-color: #DBDBDB;"
-                                          "}")
+                                       "{"
+                                       "background-color: #DBDBDB;"
+                                       "}")
         self.build_entry.editingFinished.connect(self.build_change)
         # grid git label
         self.gridLayout.addWidget(self.build_label, 10, 0)
@@ -378,7 +378,9 @@ class Update(QWidget):
             self.history_dict.update({"git/gerrit":self.git_val})
         else:
             print("enter valid git link")
-        self.git_ret = git_validate(self.issue_reason_entry.text())
+        gitid = self.git_entry.text()
+        print("print git",gitid,len(gitid))
+        self.git_ret = git_validate(gitid)
         print("after validate",self.git_ret)
 
     def cronChanged(self):

@@ -229,6 +229,7 @@ class view_window(QWidget):
         self.git = read_git_id()
         self.git_entry.setText(self.git)
         self.git_entry.setReadOnly(True)
+        self.git_entry.setFont(QFont('Arial', 10))
         self.git_entry.setStyleSheet("QLineEdit"
                                         "{"
                                         "background-color: #DBDBDB;"
