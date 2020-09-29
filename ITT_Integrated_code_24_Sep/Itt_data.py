@@ -96,8 +96,19 @@ class CustomDialog(QDialog):
 
     def view_receiver(self):
         print("receiver is ",self.receiverId.text())
+        err=0
+        ret=0
         self.rmailid = self.receiverId.text()
-        ret = email_id_check(self.rmailid)
+        if "," in self.receiverId.text():
+            rIdlist = list(self.rmailid.split(","))
+            for i in rIdlist:
+                res = email_id_check(i)
+                if res is not SUCCESS:
+                    err = 1
+            if err == 1:
+                ret = INVALID_INPUT_ERR
+        else:
+            ret = email_id_check(self.rmailid)
 
         if ret == INVALID_INPUT_ERR:
             QMessageBox.about(self, 'Information', "Receiver Mail-ID is invalid")
@@ -109,8 +120,8 @@ class CustomDialog(QDialog):
 
     def send_clicked(self):
         mail_deliver_msg = ""
-        self.mailmsg = "PFA of filtered data"
-        self.subject = "[Issue Tracker Tool] Filtered data"
+        self.mailmsg = "PFA of CR Data"
+        self.subject = "[Issue Tracker Tool] CR Data"
         print("send clicked")
         sId = self.senderid.text()
         sPwd = self.senderpswd.text()
@@ -131,10 +142,23 @@ class CustomDialog(QDialog):
         #self.view_senderid()
         #self.view_receiver()
         #self.view_password()
-        ret = email_id_check(rId)
+        err = 0
+        ret = 0
+        if "," in self.receiverId.text():
+            rIdlist = list(self.rmailid.split(","))
+            for i in rIdlist:
+                res = email_id_check(i)
+                if res is not SUCCESS:
+                    err = 1
+            if err == 1:
+                ret = INVALID_INPUT_ERR
+        else:
+            ret = email_id_check(self.rmailid)
+        #ret = email_id_check(rId)
         if len(sId) == 0 or len(rId) == 0 or len(sPwd) == 0:
             QMessageBox.about(self, 'Information', "Please fill all details")
         elif (ret == INVALID_INPUT_ERR) or len(rId)==0:
+
             QMessageBox.about(self, 'Information', "Please enter correct receiver ID")
             self.receiverId.clear()
         else:

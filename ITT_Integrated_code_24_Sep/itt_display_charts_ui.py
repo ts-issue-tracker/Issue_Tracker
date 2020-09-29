@@ -231,6 +231,7 @@ class Statistics_Window(QWidget):
             msg_to_return += "Invalid {}".format(mail_label)
             list[index] = value_chk.invalid.value
         return msg_to_return
+
     def init_msg(self):
         self.filtertype=""
         self.filtertype+="FILTER:"
@@ -257,8 +258,8 @@ class Statistics_Window(QWidget):
 
     def send_mail_btn_click(self):
         mail_deliver_msg=""
-        msg_to_send="Hey,..Please find the statistics details mentioned below :)\n\n\n"
-        subject="Issue Tracking Tool: Selected Statistics Information"
+        msg_to_send="Hi, \n Please find the CR Statistics details mentioned below. \nRegards,\n Issue Tracking Tool"#Hey,..Please find the statistics details mentioned below :)\n\n\n"
+        subject="Issue Tracking Tool: CR-Statistics Information"
         msg_to_send+=self.get_filter_msg()
         mail_id=self.mail_txt.text()
         pwd=self.pwd_txt.text()
