@@ -51,10 +51,10 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/PAT_2" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python.itt_main_ui">
+  <component name="RunManager" selected="Python.ITT_create_issue">
     <configuration name="ITT_create_issue" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="ITT_Integrated_code_24_Sep" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -141,10 +141,10 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.itt_main_ui" />
-        <item itemvalue="Python.itt_login_ui" />
-        <item itemvalue="Python.ITT_update_screen" />
         <item itemvalue="Python.ITT_create_issue" />
+        <item itemvalue="Python.itt_main_ui" />
+        <item itemvalue="Python.ITT_update_screen" />
+        <item itemvalue="Python.itt_login_ui" />
       </list>
     </recent_temporary>
   </component>
@@ -176,38 +176,42 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1601266565208" />
-    <state width="1515" height="210" key="GridCell.Tab.0.bottom" timestamp="1601293632019">
+    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1601375583925">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="210" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1601293632019" />
-    <state width="1515" height="210" key="GridCell.Tab.0.center" timestamp="1601293632019">
+    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1601375583925" />
+    <state width="1515" height="210" key="GridCell.Tab.0.bottom" timestamp="1601383947331">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="210" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1601293632019" />
-    <state width="1515" height="210" key="GridCell.Tab.0.left" timestamp="1601293632019">
+    <state width="1515" height="210" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1601383947331" />
+    <state width="1515" height="210" key="GridCell.Tab.0.center" timestamp="1601383947331">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="210" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1601293632019" />
-    <state width="1515" height="210" key="GridCell.Tab.0.right" timestamp="1601293632019">
+    <state width="1515" height="210" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1601383947331" />
+    <state width="1515" height="210" key="GridCell.Tab.0.left" timestamp="1601383947331">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="210" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1601293632019" />
-    <state width="1515" height="261" key="GridCell.Tab.1.bottom" timestamp="1601268637754">
+    <state width="1515" height="210" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1601383947331" />
+    <state width="1515" height="210" key="GridCell.Tab.0.right" timestamp="1601383947331">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="261" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1601268637754" />
-    <state width="1515" height="261" key="GridCell.Tab.1.center" timestamp="1601268637754">
+    <state width="1515" height="210" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1601383947331" />
+    <state width="1515" height="261" key="GridCell.Tab.1.bottom" timestamp="1601380457995">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="261" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1601268637754" />
-    <state width="1515" height="261" key="GridCell.Tab.1.left" timestamp="1601268637754">
+    <state width="1515" height="261" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1601380457995" />
+    <state width="1515" height="261" key="GridCell.Tab.1.center" timestamp="1601380457994">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="261" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1601268637754" />
-    <state width="1515" height="261" key="GridCell.Tab.1.right" timestamp="1601268637754">
+    <state width="1515" height="261" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1601380457994" />
+    <state width="1515" height="261" key="GridCell.Tab.1.left" timestamp="1601380457994">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="261" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1601268637754" />
+    <state width="1515" height="261" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1601380457994" />
+    <state width="1515" height="261" key="GridCell.Tab.1.right" timestamp="1601380457995">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1515" height="261" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1601380457995" />
     <state x="277" y="57" key="SettingsEditor" timestamp="1601266590946">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -216,9 +220,20 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="498" height="446" key="SwitcherDM/0.0.1536.824@0.0.1536.824" timestamp="1601274345537" />
-    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup" timestamp="1601271343713">
+    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup" timestamp="1601383687747">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1601271343713" />
+    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1601383687747" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

@@ -12,6 +12,7 @@ from ITT_display import *
 
 from PyQt5.QtGui import QPalette,QImage,QPageSize,QBrush
 from PyQt5.QtCore import QSize
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Update(QWidget):
     def __init__(self,cr_index):
@@ -19,6 +20,7 @@ class Update(QWidget):
         self.setWindowTitle("Update Screen")
         self.setMinimumWidth(600)
         self.setMinimumHeight(800)
+
         self.frame = QFrame(self)
         self.frame.setFixedSize(500, 800)
         # self.frame.setFrameShape(QFrame.StyledPanel)
@@ -134,16 +136,12 @@ class Update(QWidget):
                                           "{"
                                           "background-color: white;"
                                           "}")
-        self.cr_state_entry.addItem("Open")
-        self.cr_state_entry.addItem("Analysis")
-        self.cr_state_entry.addItem("Closed")
-        self.cr_state_entry.addItem("In-progress")
-        self.cr_state_entry.addItem("Reopen")
+
         self.prev_cr_state = read_cr_with_cr(self.cr_index)
-        self.crindex = self.cr_state_entry.findText(self.prev_cr_state)
-        self.cr_state_entry.setCurrentIndex(self.crindex)
-        self.cr_state_entry.setEnabled(False)
+        self.cr_state_entry.addItem(self.prev_cr_state)
+
         if(self.cr_state_entry.currentText() == "Closed"):
+            self.cr_state_entry.addItem("Reopen")
             self.cr_state_entry.setEnabled(True)
         self.cr_state_entry.currentIndexChanged.connect(self.cronChanged)
 
@@ -160,17 +158,22 @@ class Update(QWidget):
                                     "{"
                                     "background-color: white;"
                                     "}")
-        self.si_state.addItem("Open")
-        self.si_state.addItem("Analysis")
-        self.si_state.addItem("Fix")
-        self.si_state.addItem("Withdrawn")
-        self.si_state.addItem("Duplicate")
-        self.si_state.addItem("Ready")
-        self.si_state.addItem("Built")
+
         self.si_state.setFont(QFont('Arial', 10))
+        #self.si_state.clear()
         self.si_prev_state = read_si_with_cr(self.cr_index)
-        self.si_index = self.si_state.findText(self.si_prev_state)
-        self.si_state.setCurrentIndex(self.si_index)
+        self.si_state.addItem(self.si_prev_state)
+        if(self.si_state.currentText() == "Open"):
+                self.si_state.addItem("Analysis")
+        if(self.si_state.currentText() == "Analysis"):
+            self.si_state.addItem("Fix")
+            self.si_state.addItem("Withdrawn")
+            self.si_state.addItem("Duplicate")
+        if(self.si_state.currentText() == "Fix"):
+            self.si_state.addItem("Ready")
+        if(self.si_state.currentText() == "Ready"):
+            self.si_state.addItem("Built")
+
         self.si_state.currentIndexChanged.connect(self.onChanged)
         #grid for si state
         self.gridLayout.addWidget(self.si_state_label,4,0)
@@ -355,17 +358,20 @@ class Update(QWidget):
         frame.move(int((self.width()-self.frame.width()) / 2), int((self.height()-self.frame.height()) / 2))
 
     def Upload_but_clicked(self):
-        #from ITT_upload_file import Upload
-        #print("Upload_but_clicked")
-        #self.w = Upload()
-        #self.w.show()
-        #self.hide()
         try:
             filename = QFileDialog.getOpenFileName()
-            self.label = QLabel(filename[0])
-            self.label.setWordWrap(True)
-            self.gridLayout_1.addWidget(self.label,1,1)
-            self.path = filename[0]
+            if filename[0].endswith(('.doc','.docx','.txt','.xlsx','.csv','.log')):
+                self.label = QLabel(filename[0])
+                self.label.setWordWrap(True)
+                self.gridLayout_1.addWidget(self.label,1,1)
+                self.path = filename[0]
+            else:
+                print("Does not supports")
+                msg = QMessageBox()
+                msg.setWindowTitle("Information")
+                msg.setText("Only supports '.doc','.docx','.txt','.xlsx','.csv','.log'")
+                x = msg.exec_()
+
         except FileNotFoundError:
             print("Wrong file or file path")
 
@@ -394,9 +400,8 @@ class Update(QWidget):
             self.cr_ret = bt_cr_validate(self.cr_prev, self.cr_new)
             print("CR main",self.cr_ret)
             if(state == "Reopen"):
-                self.si_state.setCurrentIndex(0)
-                self.cr_state_entry.setCurrentIndex(0)
-                self.cr_state_entry.setEnabled(False)
+                self.si_state.clear()
+                self.si_state.addItem("Open")
 
     def domainchange(self):
         self.domain_val = self.domain_entry.currentText()
@@ -549,76 +554,52 @@ class Update(QWidget):
         prev_state = self.si_prev_state
         self.si_prev = prev_state
         self.si_new = state
-
         if(prev_state == "Open"):
             if(state == "Analysis"):
-                self.cr_state_entry.setEnabled(True)
-                self.cr_state_entry.setCurrentIndex(1)
-                self.cr_state_entry.setEnabled(False)
-            else:
-                msg = QMessageBox()
-                msg.setWindowTitle("Information")
-                msg.setText("SI state can move only to Analysis")
-                x = msg.exec_()
+                self.cr_state_entry.clear()
+                self.cr_state_entry.addItem("Analysis")
 
         if(prev_state == "Analysis"):
             if(state == "Fix"):
-                self.cr_state_entry.setEnabled(True)
-                self.cr_state_entry.setCurrentIndex(3)
-                self.git_entry.setReadOnly(False)
-                self.git_entry.setStyleSheet("QLineEdit"
-                                                  "{"
-                                                  "background-color: white;"
-                                                  "}")
+                self.cr_state_entry.clear()
+                self.cr_state_entry.addItem("In-Progress")
                 msg = QMessageBox()
                 msg.setWindowTitle("Information")
                 msg.setText("Please enter GIT id")
                 x = msg.exec_()
-                self.cr_state_entry.setEnabled(False)
+                self.git_entry.setReadOnly(False)
+                self.git_entry.setStyleSheet("QLineEdit"
+                                                      "{"
+                                                      "background-color: white;"
+                                                      "}")
+                #self.cr_state_entry.setEnabled(False)
                 #self.git_ret = git_validate(self.issue_reason_entry.text())
                 self.git_entry.textChanged.connect(self.git_change)
 
             elif(state == "Withdrawn" or state == "Duplicate"):
-                self.cr_state_entry.setEnabled(True)
+                self.cr_state_entry.clear()
+                self.cr_state_entry.addItem("Closed")
                 self.issue_reason_entry.setReadOnly(False)
                 self.issue_reason_entry.setStyleSheet("QLineEdit"
-                                                      "{"
-                                                      "background-color: white;"
-                                                      "}")
-                self.cr_state_entry.setCurrentIndex(2)
-                self.cr_state_entry.setEnabled(False)
+                                             "{"
+                                             "background-color: white;"
+                                             "}")
 
                 if(len(self.issue_reason_entry.text()) == 0):
                     msg = QMessageBox()
                     msg.setWindowTitle("Information")
                     msg.setText("Please enter Reason for Withdrawn or Duplicate")
                     x = msg.exec_()
-            else:
-                    msg = QMessageBox()
-                    msg.setWindowTitle("Information")
-                    msg.setText("Si state can move only to Fix, Withdrawn or Duplicate")
-                    x = msg.exec_()
 
         if(prev_state == "Fix"):
             if(state == "Ready"):
-                self.cr_state_entry.setEnabled(True)
-                self.cr_state_entry.setCurrentIndex(3)
-                self.cr_state_entry.setEnabled(False)
-            else:
-                msg = QMessageBox()
-                msg.setWindowTitle("Information")
-                msg.setText("Si state can move only to Ready")
-                x = msg.exec_()
+                self.cr_state_entry.clear()
+                self.cr_state_entry.addItem("In-Progress")
 
         if(prev_state == "Ready"):
             if(state == "Built"):
-                self.cr_state_entry.setEnabled(True)
-                self.cr_state_entry.setCurrentIndex(2)
-                self.build_entry.setReadOnly(False)
-                self.build_entry.setStyleSheet("QLineEdit"
-                                             "{"
-                                             "background-color: white;"
-                                             "}")
+                self.cr_state_entry.clear()
+                self.cr_state_entry.addItem("Closed")
                 self.build_prev_val = read_build_with_cr(self.cr_index)
                 self.build_new_val = self.build_entry.text()
                 if(self.build_new_val == self.build_prev_val):
@@ -636,8 +617,6 @@ class Update(QWidget):
                 msg.setWindowTitle("Information")
                 msg.setText("Si state can move only to Built")
                 x = msg.exec_()
-
-
         self.history_dict.update({"si state": state})
 
     def Exit_but_clicked(self):

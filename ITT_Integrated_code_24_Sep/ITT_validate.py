@@ -521,6 +521,7 @@ def des_validate(des):
 
 def validate_cr_list(crno):
     ck = -1
+
     with open('cr_list_entry.csv') as g:
         reader1 = csv.reader(g, delimiter=",")
         data1 = list(reader1)
@@ -534,7 +535,7 @@ def validate_cr_list(crno):
     if ck == -1:
         msg = QMessageBox()
         msg.setWindowTitle("Information")
-        msg.setText("No Cr exist Please create a new Cr")
+        msg.setText("CR does not exist")
         x = msg.exec_()
         return ck
     else:

@@ -2,7 +2,7 @@ from PyQt5 import QtWidgets,QtCore
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget,QFrame,QHBoxLayout,QGridLayout
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QFont
-from PyQt5.QtCore import QDateTime
+from PyQt5.QtCore import QDateTime,QFileInfo
 
 from PyQt5.QtGui import QPalette,QImage,QPageSize,QBrush
 from PyQt5.QtCore import QSize
@@ -44,7 +44,6 @@ class Create_cr(QWidget):
         self.gridLayout_1 = QGridLayout(self.frame_1)
         self.frame_1.setFixedSize(450, 50)
         self.gridLayout.addWidget(self.frame_1, 15, 0)
-
 
         self.path = ""
         self.create_an_issue()
@@ -295,18 +294,27 @@ class Create_cr(QWidget):
             x = msg.exec_()
 
     def Upload_but_clicked(self):
-        #from ITT_upload_file import Upload
-        #print("Upload_but_clicked")
-        #self.w = Upload()
-        #self.w.show()
-        #self.hide()
-
         try:
             filename = QFileDialog.getOpenFileName()
-            self.label = QLabel(filename[0])
-            self.label.setWordWrap(True)
-            self.gridLayout_1.addWidget(self.label,1,1)
-            self.path = filename[0]
+            if filename[0].endswith(('.doc','.docx','.txt','.xlsx','.csv','.log')):
+                    info = QFileInfo(filename[0])
+                    size = info.size()
+                    if(size > 35840):
+                        msg = QMessageBox()
+                        msg.setWindowTitle("Information")
+                        msg.setText("Supports upto 35KB")
+                        x = msg.exec_()
+                    else:
+                        self.label = QLabel(filename[0])
+                        self.label.setWordWrap(True)
+                        self.gridLayout_1.addWidget(self.label, 1, 1)
+                        self.path = filename[0]
+            else:
+                print("Does not supports")
+                msg = QMessageBox()
+                msg.setWindowTitle("Information")
+                msg.setText("Only supports '.doc','.docx','.txt','.xlsx','.csv','.log'")
+                x = msg.exec_()
         except FileNotFoundError:
             print("Wrong file or file path")
 
