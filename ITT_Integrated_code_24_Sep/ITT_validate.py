@@ -34,7 +34,7 @@ def bt_domain_validate(domain):
         ck = False
         if (mymsg != ""):
             mymsg += ","
-        mymsg += "Invalid Domain"
+        mymsg += "Please Select Domain/Techarea"
         print(mymsg)
         ret = [mymsg, ck]
         print("ret ,", ret)
@@ -311,7 +311,7 @@ def bt_des_validate(des):
         print("d1")
         mymsg += "Description is Empty"
         print(mymsg)
-        ret = [mymsg, ck]
+        ret = [mymsg, False]
         print("ret ,", ret)
         return ret
 
@@ -521,6 +521,22 @@ def des_validate(des):
 
 def validate_cr_list(crno):
     ck = -1
+    pattern = re.compile(r'^([a-z]+)([a-z]+)*([a-z]+)*$',
+                         re.IGNORECASE)
+
+    if (len(crno) < 6 or len(crno) > 6):
+        msg = QMessageBox()
+        msg.setWindowTitle("Information")
+        msg.setText("Invalid CR number")
+        x = msg.exec_()
+        return ck
+
+    if re.match(pattern, crno) or len(crno) == 0:
+        msg = QMessageBox()
+        msg.setWindowTitle("Information")
+        msg.setText("Invalid CR number")
+        x = msg.exec_()
+        return ck
 
     with open('cr_list_entry.csv') as g:
         reader1 = csv.reader(g, delimiter=",")

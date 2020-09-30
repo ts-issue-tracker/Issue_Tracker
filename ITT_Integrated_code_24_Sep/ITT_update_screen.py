@@ -191,7 +191,6 @@ class Update(QWidget):
                                         "{"
                                         "background-color: white;"
                                         "}")
-        self.domain_entry.addItem("Select")
         self.domain_entry.addItem("Audio")
         self.domain_entry.addItem("Camera")
         self.domain_entry.addItem("Video")
@@ -533,6 +532,10 @@ class Update(QWidget):
                 x = msg.exec_()
                 self.issue_reason_entry.textChanged.connect(self.issue_reason_changed)
         self.issue_ret = bt_issue_reason_validate(self.issue_reason_entry.text())
+        self.issue_reason_entry.setStyleSheet("QLineEdit"
+                                      "{"
+                                      "background-color: white;"
+                                      "}")
         print(self.issue_ret,"at up")
 
     def issue_reason_changed(self):
@@ -573,7 +576,11 @@ class Update(QWidget):
                                                       "background-color: white;"
                                                       "}")
                 #self.cr_state_entry.setEnabled(False)
-                #self.git_ret = git_validate(self.issue_reason_entry.text())
+                self.git_entry.setStyleSheet("QLineEdit"
+                                                      "{"
+                                                      "background-color: white;"
+                                                      "}")
+                self.git_ret = git_validate(self.issue_reason_entry.text())
                 self.git_entry.textChanged.connect(self.git_change)
 
             elif(state == "Withdrawn" or state == "Duplicate"):
@@ -608,15 +615,14 @@ class Update(QWidget):
                     msg.setText("Please change the build id")
                     x = msg.exec_()
                     print("built")
+                    self.build_entry.setReadOnly(False)
+                    self.build_entry.setStyleSheet("QLineEdit"
+                                                 "{"
+                                                 "background-color: white;"
+                                                 "}")
                     self.buildid = bt_build_validate_new(self.build_prev_val,self.build_new_val)
                 self.cr_state_entry.setEnabled(False)
                 print("complete build")
-
-            else:
-                msg = QMessageBox()
-                msg.setWindowTitle("Information")
-                msg.setText("Si state can move only to Built")
-                x = msg.exec_()
         self.history_dict.update({"si state": state})
 
     def Exit_but_clicked(self):
@@ -649,11 +655,11 @@ class Update(QWidget):
                       'Software Image': si,
                       'Domain': domain, 'Issue Type': issue_type, 'GIT commit id/Gerrit link': git_id,
                       'Build ID': build_id, 'Create On': create_on, 'Last Modified On': last_modi, 'History': " "}
-
+        print("combo",combo_dict)
         print("update")
-        assignee_ret = bt_assignee_validate(assignee)
+        assignee_ret = bt_assignee_validate_update(assignee)
         print("main", assignee_ret[0], assignee_ret[1])
-        title_ret = bt_title_validate(title)
+        title_ret = bt_title_validate_update(title)
         print("main", title_ret[0], title_ret[1])
         des_ret = bt_des_validate(des)
         print("main", des_ret[0], des_ret[1])

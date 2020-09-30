@@ -17,7 +17,7 @@ def domain_validate(domain):
 def title_validate_update(title):
     numbers = re.findall('\d+', title)
     regex = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
-    if (len(title) == 0):
+    if (len(title) == 0 or title == '\t'):
         print("t1")
         msg = QMessageBox()
         msg.setWindowTitle("Information")
@@ -204,3 +204,122 @@ def bt_build_validate_new(buildid,new):
             ret = [mymsg, True]
             print("ret ,", ret)
             return ret
+
+def bt_assignee_validate_update(assignee):
+    mymsg = ""
+    ck = False
+    print(assignee)
+    assignee = str(assignee)
+    numbers = re.findall('\d+', assignee)
+    regex = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
+    print("len:", len(assignee))
+    if (len(assignee) == 0):
+        print("a1")
+        if (mymsg != ""):
+            mymsg += ","
+        mymsg += "Assignee is empty"
+        ret = [mymsg, False]
+        print("ret ,", ret)
+        return ret
+
+    if (len(numbers) > 0):
+        print("a2")
+        if (mymsg != ""):
+            mymsg += ","
+        mymsg += "Invalid assignee only alphabets are allowed"
+        print(mymsg)
+        ret = [mymsg, ck]
+        print("ret ,", ret)
+        return ret
+
+    if (regex.search(assignee) != None):
+        print("a3")
+        if (mymsg != ""):
+            mymsg += ","
+        mymsg += "Invalid assignee only alphabets are allowed"
+        print(mymsg)
+        ret = [mymsg, ck]
+        print("ret ,", ret)
+        return ret
+
+    else:
+        print("a4")
+        file = "Credentials.csv"
+        ass_list = [value_chk.empty.value]
+        util = utils()
+        print(util.user_name_validtion(ass_list, file, assignee))
+
+        if (ass_list[0] == value_chk.valid.value):
+            print("a5")
+            if (mymsg != ""):
+                mymsg += ","
+            mymsg += "Valid assignee"
+            print(mymsg)
+            ret = [mymsg, True]
+            print("ret ,", ret)
+            return ret
+        else:
+            if (mymsg != ""):
+                mymsg += ","
+            mymsg += "Assignee is not a registered user"
+            print(mymsg)
+            ret = [mymsg, False]
+            print("ret ,", ret)
+            return ret
+
+def bt_title_validate_update(title):
+    mymsg = ""
+    ck = False
+    ret = []
+    print(type(ret),title,len(title))
+    numbers = re.findall('\d+', title)
+    regex = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
+    if (len(title) == 0 or title == '\t'):
+        print("vt1")
+        if (mymsg != ""):
+            mymsg += ","
+        mymsg += "Title is Empty"
+        print(mymsg)
+        ret = [mymsg, ck]
+        print("ret ,", ret)
+        return ret
+
+    if (len(numbers) > 0):
+        print("vt2")
+        if (mymsg != ""):
+            mymsg += ","
+        mymsg += "Invalid title only alphabets are allowed"
+        print(mymsg)
+        ret = [mymsg, ck]
+        print("ret ,", ret)
+        return ret
+
+    if (regex.search(title) != None):
+        print("vt3")
+        if (mymsg != ""):
+            mymsg += ","
+        mymsg += "Invalid title only alphabets are allowed"
+        print(mymsg)
+        ret = [mymsg, ck]
+        print("ret ,", ret)
+        return ret
+
+    if (len(title) > 80):
+        print("vt4")
+        if (mymsg != ""):
+            mymsg += ","
+        mymsg += "Invalid title max only 80 characters are allowed"
+        print(mymsg)
+        ret = [mymsg, ck]
+        print("ret ,", ret)
+        return ret
+
+    else:
+        print("vt5")
+        if (mymsg != ""):
+            mymsg += ","
+        mymsg += "Valid title"
+        print(mymsg)
+        ret = [mymsg, True]
+        print("ret ,", ret)
+        return ret
