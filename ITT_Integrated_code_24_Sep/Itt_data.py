@@ -120,7 +120,7 @@ class CustomDialog(QDialog):
 
     def send_clicked(self):
         mail_deliver_msg = ""
-        self.mailmsg = "PFA of CR Data"
+        self.mailmsg = "Hi,\n\nPFA of CR Data\n\nRegards,\nIssueTrackingTool"
         self.subject = "[Issue Tracker Tool] CR Data"
         print("send clicked")
         sId = self.senderid.text()
@@ -234,12 +234,16 @@ class App1(QWidget):
 
     def on_download_click(self):
         print("download clicked")
-        saveCrsData(self.crs)
+        ret = saveCrsData(self.crs)
+
+        QMessageBox.about(self, 'Information', "Download success")
+
 
     def sendmailButton(self):
         self.emailbutton = QPushButton("Send Mail",self)
         self.emailbutton.clicked.connect(self.on_email_click)
         self.emailbutton.setFixedHeight(40)
+
 
     def on_email_click(self):
         print("click")

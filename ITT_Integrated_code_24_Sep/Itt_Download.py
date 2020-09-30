@@ -41,7 +41,9 @@ def saveCrsData(crlist):
         indx = indx + 1
         print("indx",indx)
     print("end of writing")
+
     wb.save('CR_Data.xls')
+
 
 def sort(ret):
     print("in sort ")

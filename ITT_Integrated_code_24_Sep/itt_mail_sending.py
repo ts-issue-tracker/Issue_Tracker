@@ -29,7 +29,7 @@ def sending_mail(login,password,toaddrs,msgtxt,subject):
     except smtplib.SMTPAuthenticationError:
         msg_to_return+="Incorrect Mail ID/Password"
     except smtplib.SMTPRecipientsRefused:
-        msg_to_return += "Incorrect Recipient Mail ID"
+        msg_to_return += "Recipient Mail ID do not exist"
     else:
         server.ehlo()
         server.quit()
@@ -71,7 +71,7 @@ def sending_mail_with_attachment(login,password,toaddrs,msgtxt,subject):
     except smtplib.SMTPAuthenticationError:
         msg_to_return+="Incorrect Sender Mail ID/Password"
     except smtplib.SMTPRecipientsRefused:
-        msg_to_return += "Incorrect Recipient Mail ID"
+        msg_to_return += "Recipient Mail ID do not exist"
     else:
         s.ehlo()
         s.quit()

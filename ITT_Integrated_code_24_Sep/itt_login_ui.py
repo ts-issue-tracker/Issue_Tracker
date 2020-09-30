@@ -126,7 +126,7 @@ class login_window(QWidget):
                 if self.list[0]==value_chk.valid.value:
                     pwd = file_access.return_password_for_user(credentials_file, username)
                     if pwd == password :
-                        QMessageBox.about(self, 'Information', "You are successfully Logged In")
+                        QMessageBox.about(self, 'Information', "Logged in as "+username)
                         self.open_main_window()
                         pwd_var=value_chk.valid.value
                     else:

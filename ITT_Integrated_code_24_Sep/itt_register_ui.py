@@ -178,19 +178,44 @@ class register_window(QWidget):
 
     def email_validation(self,mail_label,index):
         if mail_label.__contains__("Recipient"):
-            mail=self.rx_email_txt.text()
+            self.rmailid = self.rx_email_txt.text()
+            self.IDlist = list(self.rmailid.split(","))
+            #mail=self.rx_email_txt.text()
+        else:
+            self.smailid=self.mail_txt.text()
+            #mail=self.mail_txt.text()
+            self.IDlist = list(self.smailid.split(","))
+        """
         else:
             mail=self.mail_txt.text()
+        """
         msg_to_display = ""
-        msg_to_display += self.email_validation_with_msg(self.list, mail,mail_label,index)
+        msg_to_display += self.email_validation_with_msg(self.list, self.IDlist,mail_label,index)
         if len(msg_to_display) != 0:
             QMessageBox.about(self, 'Information', msg_to_display)
 
-    def email_validation_with_msg(self,list,mail_id,mail_label,index):
+    def email_validation_with_msg(self,list,mail_id_list,mail_label,index):
         msg_to_return = ""
-        result = valid.email_id_check(mail_id)
+        #result = valid.email_id_check(mail_id)
+        err = 0
+        result = 0
+        if len(mail_id_list) == 1:
+            result = valid.email_id_check(mail_id_list[0])
+        elif len(mail_id_list) > 1:
+            for i in mail_id_list:
+
+                res = valid.email_id_check(i)
+                if res is not valid.SUCCESS:
+                    err = 1
+            if err == 1:
+                result = valid.INVALID_INPUT_ERR
+            else:
+                result = valid.SUCCESS
+        elif len(mail_id_list) == 0:
+            result = valid.INVALID_INPUT_ERR
+
         if result == valid.SUCCESS:
-            if mail_id == "":
+            if len(mail_id_list) == 0:#if mail_id == "":
                 list[index] = value_chk.empty.value
             else:
                 list[index] = value_chk.valid.value
@@ -229,10 +254,15 @@ class register_window(QWidget):
                         if self.user_txt.text() != "" and self.pwd_txt.text() != '' and self.mail_txt.text() != '':
                             file_access.writing_username_and_pwd(credentials_file, self.user_txt.text(),
                                                                  self.pwd_txt.text())
-                            sending_mail(self.mail_txt.text(),self.mail_pwd_txt.text(),
+                            result_msg=sending_mail(self.mail_txt.text(),self.mail_pwd_txt.text(),
                                                          self.rx_email_txt.text(),msgtxt,subject)
-                            QMessageBox.about(self, 'Information', "You have successfully registered\nPlease click on Continue to Login")
-                            self.init_fields()
+                            if result_msg != "Mail Sent Successfully":
+                                QMessageBox.about(self, 'Information', result_msg+",Registered credentials not sent.\nPlease click on Continue to Login")#"You have successfully registered\nPlease click on Continue to Login")
+                                self.init_fields()
+                            else:
+                                QMessageBox.about(self, 'Information',
+                                                  result_msg +",You have successfully registered.\nPlease click on Continue to Login")
+                                self.init_fields()
                         else:
                             QMessageBox.about(self, 'Information', "Username/Password Empty can\'t proceed furthur")
         else:

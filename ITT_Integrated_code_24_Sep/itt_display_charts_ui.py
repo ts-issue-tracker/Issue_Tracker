@@ -173,8 +173,13 @@ class Statistics_Window(QWidget):
         self.msg_txt.setFixedHeight(self.frame_canvas.height()-20)
         self.msg_txt.setReadOnly(True)
 
+        NoteLabel = QLabel("*Note:For more than one combination,choose Type+Assignee/Type+Domain")
+        NoteLabel.setStyleSheet("QLabel {color : red;}")
+        NoteLabel.setFixedWidth(400)
+
         self.gridLayout_canvas.addWidget(self.msg_txt,1,0)
 
+        self.gridLayout_one.addWidget(NoteLabel, 1, 0)
         self.gridLayout_one.addWidget(typeLabel, 0, 0)
         self.gridLayout_one.addWidget(self.TypeCombo,0,1)
 
@@ -211,19 +216,39 @@ class Statistics_Window(QWidget):
 
     def email_validation(self,mail_label,index):
         if mail_label.__contains__("Recipient"):
-            mail=self.rx_email_txt.text()
+            self.rmailid=self.rx_email_txt.text()
+            self.IDlist = list(self.rmailid.split(","))
+            #mail=self.rx_email_txt.text()
         else:
-            mail=self.mail_txt.text()
+            self.smailid=self.mail_txt.text()
+            #mail=self.mail_txt.text()
+            self.IDlist = list(self.smailid.split(","))
         msg_to_display = ""
-        msg_to_display += self.email_validation_with_msg(self.list, mail,mail_label,index)
+        msg_to_display += self.email_validation_with_msg(self.list,self.IDlist,mail_label,index) #mail,mail_label,index)
         if len(msg_to_display) != 0:
             QMessageBox.about(self, 'Information', msg_to_display)
 
-    def email_validation_with_msg(self,list,mail_id,mail_label,index):
+    def email_validation_with_msg(self,list,mail_id_list,mail_label,index):
         msg_to_return = ""
-        result = valid.email_id_check(mail_id)
+        err = 0
+        result = 0
+        if len(mail_id_list) == 1:
+            result = valid.email_id_check(mail_id_list[0])
+        elif len(mail_id_list) > 1:
+            for i in mail_id_list:
+
+                res = valid.email_id_check(i)
+                if res is not valid.SUCCESS:
+                    err = 1
+            if err == 1:
+                result = valid.INVALID_INPUT_ERR
+            else:
+                result = valid.SUCCESS
+        elif len(mail_id_list) == 0:
+            result = valid.INVALID_INPUT_ERR
+
         if result == valid.SUCCESS:
-            if mail_id == "":
+            if len(mail_id_list) == 0: #mail_id == "":
                 list[index] = value_chk.empty.value
             else:
                 list[index] = value_chk.valid.value
@@ -258,7 +283,7 @@ class Statistics_Window(QWidget):
 
     def send_mail_btn_click(self):
         mail_deliver_msg=""
-        msg_to_send="Hi, \n Please find the CR Statistics details mentioned below. \nRegards,\n Issue Tracking Tool"#Hey,..Please find the statistics details mentioned below :)\n\n\n"
+        msg_to_send="Hi, \n\nPlease find the CR Statistics details mentioned below. \n\nRegards,\nIssue Tracking Tool"#Hey,..Please find the statistics details mentioned below :)\n\n\n"
         subject="Issue Tracking Tool: CR-Statistics Information"
         msg_to_send+=self.get_filter_msg()
         mail_id=self.mail_txt.text()
@@ -287,6 +312,7 @@ class Statistics_Window(QWidget):
     def readType(self, text):
         sheet_update()
         self.init_msg()
+
         self.msg_format_for_display("Type",text)
         if self.ChartTypeCombo.currentText()=="Pie Chart":
             self.pie_chart_for_specified_type(text)
