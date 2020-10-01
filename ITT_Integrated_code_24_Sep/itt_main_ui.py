@@ -20,6 +20,25 @@ class main_window(QWidget):
         self.setWindowTitle(self.title)
         self.setMinimumWidth(600)
         self.setMinimumHeight(800)
+
+        self.title_frame = QFrame(self)
+        # self.frame.setAttribute(Qt.WA_TranslucentBackground)
+        self.title_frame.setFixedSize(650, 100)
+        # self.title_frame.setFrameShape(QFrame.StyledPanel)
+
+        self.title_lb = QLabel("ITT MENU")
+
+        self.title_gridLayout = QGridLayout(self.title_frame)
+        self.title_gridLayout.setContentsMargins(20, 20, 20, 20)
+        self.title_gridLayout.addWidget(self.title_lb, 0, 0)
+
+        myFont = QFont()
+        myFont.setBold(True)
+        self.title_lb.setFont(myFont)
+
+        self.title_lb.setAlignment(Qt.AlignCenter)
+        self.title_lb.setFont(QFont('Arial', 30))
+
         self.frame =QFrame(self)
         self.frame.setFixedSize(300, 500)
         #self.frame.setFrameShape(QFrame.StyledPanel)
@@ -101,10 +120,11 @@ class main_window(QWidget):
         self.hide()
 
     def resizeEvent(self, event):
-        self.centerOnScreen(self.frame)
-    def centerOnScreen(self,frame):
-        screen = QDesktopWidget()
-        frame.move((self.width()-self.frame.width()) / 2, (self.height()-self.frame.height()) / 2)
+        self.centerOnScreen(self.frame,self.title_frame)
+
+    def centerOnScreen(self, frame,frame1):
+        frame.move((self.width() - self.frame.width()) / 2, (self.height() - self.frame.height()) / 2)
+        frame1.move((self.width() - self.title_frame.width()) / 2, self.title_frame.height())
 
     def open_create_an_issue_window(self):
         self.w = Create_cr()

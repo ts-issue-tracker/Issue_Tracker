@@ -26,16 +26,35 @@ class login_window(QWidget):
         self.setWindowTitle(self.title)
         self.setMinimumWidth(600)
         self.setMinimumHeight(800)
-        self.frame = QFrame(self)
-        # self.frame.setAttribute(Qt.WA_TranslucentBackground)
-        self.frame.setFixedSize(280, 200)
-        # self.frame.setFrameShape(QFrame.StyledPanel)
 
         oImage = QImage("image2.jpg")
         sImage = oImage.scaled(QSize(1000, 1000))  # resize Image to widgets size
         palette = QPalette()
         palette.setBrush(QPalette.Window, QBrush(sImage))
         self.setPalette(palette)
+
+        self.title_frame = QFrame(self)
+        # self.frame.setAttribute(Qt.WA_TranslucentBackground)
+        self.title_frame.setFixedSize(650, 100)
+        #self.title_frame.setFrameShape(QFrame.StyledPanel)
+
+        self.title_lb = QLabel("ISSUE TRACKING TOOL")
+
+        self.title_gridLayout = QGridLayout(self.title_frame)
+        self.title_gridLayout.setContentsMargins(20, 20, 20, 20)
+        self.title_gridLayout.addWidget(self.title_lb,0,0)
+
+        myFont = QFont()
+        myFont.setBold(True)
+        self.title_lb.setFont(myFont)
+
+        self.title_lb.setAlignment(Qt.AlignCenter)
+        self.title_lb.setFont(QFont('Arial', 30))
+
+        self.frame = QFrame(self)
+        # self.frame.setAttribute(Qt.WA_TranslucentBackground)
+        self.frame.setFixedSize(280, 200)
+        # self.frame.setFrameShape(QFrame.StyledPanel)
 
         self.gridLayout = QGridLayout(self.frame)
         self.gridLayout.setContentsMargins(20, 20, 20, 20)
@@ -91,10 +110,11 @@ class login_window(QWidget):
         self.show()
 
     def resizeEvent(self, event):
-        self.centerOnScreen(self.frame)
+        self.centerOnScreen(self.frame,self.title_frame)
 
-    def centerOnScreen(self, frame):
+    def centerOnScreen(self, frame,frame1):
         frame.move((self.width() - self.frame.width()) / 2, (self.height() - self.frame.height()) / 2)
+        frame1.move((self.width() - self.title_frame.width()) / 2, self.title_frame.height())
 
     def open_register_window(self):
         from itt_register_ui import register_window

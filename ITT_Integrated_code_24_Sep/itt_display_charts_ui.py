@@ -16,6 +16,7 @@ from itt_resource_names import *
 
 from PyQt5.QtGui import QPalette,QImage,QPageSize,QBrush
 from PyQt5.QtCore import QSize
+import textwrap
 
 class Statistics_Window(QWidget):
     def __init__(self):
@@ -49,14 +50,14 @@ class Statistics_Window(QWidget):
 
         self.frame_one = QFrame(self)
         #self.frame_one.setFrameShape(QFrame.StyledPanel)
-        self.frame_one.setFixedSize(950, 60)
+        self.frame_one.setFixedSize(950, 90)
 
         self.gridLayout_one = QGridLayout(self.frame_one)
         self.gridLayout.addWidget(self.frame_one,0,0)
 
         self.frame_two = QFrame(self)
         #self.frame_two.setFrameShape(QFrame.StyledPanel)
-        self.frame_two.setFixedSize(850, 60)
+        self.frame_two.setFixedSize(850, 80)
 
         self.frame_canvas=QFrame(self)
         #self.frame_canvas.setFrameShape(QFrame.StyledPanel)
@@ -174,8 +175,9 @@ class Statistics_Window(QWidget):
         self.msg_txt.setReadOnly(True)
 
         NoteLabel = QLabel("*Note:For more than one combination,choose Type+Assignee/Type+Domain")
+        #NoteLabel.setWordWrap(True)
         NoteLabel.setStyleSheet("QLabel {color : red;}")
-        NoteLabel.setFixedWidth(400)
+        NoteLabel.setFixedWidth(500)
 
         self.gridLayout_canvas.addWidget(self.msg_txt,1,0)
 
