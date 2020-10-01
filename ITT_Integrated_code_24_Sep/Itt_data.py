@@ -29,9 +29,10 @@ class CustomDialog(QDialog):
         super(CustomDialog, self).__init__(*args, **kwargs)
 
         self.setWindowTitle("Email Sending")
-
+        self.setWhatsThis("Sends CR data to mentioned receipent")
         self.sendButton = QPushButton("Send",self)
         self.credential()
+        self.trail = 0
 
         self.sendButton.clicked.connect(self.send_clicked)
         self.layout = QVBoxLayout()
@@ -119,6 +120,21 @@ class CustomDialog(QDialog):
                 self.receiverId.clear()
 
     def send_clicked(self):
+        if self.trail == 3:
+            list = []
+            #self.win2 = App1(list)
+            #self.hide()
+            #App1.on_backfilter()
+            #self.win2.on_backfilter()
+            #self.win2.hide()
+
+            from itt_main_ui import main_window
+            self.w = main_window()
+            self.w.show()
+            self.hide()
+            #win2 = App1()
+            #win2.on_backfilter()
+
         mail_deliver_msg = ""
         self.mailmsg = "Hi,\n\nPFA of CR Data\n\nRegards,\nIssueTrackingTool"
         self.subject = "[Issue Tracker Tool] CR Data"
@@ -126,22 +142,6 @@ class CustomDialog(QDialog):
         sId = self.senderid.text()
         sPwd = self.senderpswd.text()
         rId = self.receiverId.text()
-        #self.util = utils()
-        #listaccess = displaycharts.Statistics_Window()
-        ######
-        #msg = self.util.empty_fields_message(listaccess.list, listaccess.label)
-        #msg += self.util.display_statastics_invalid_fields_message(listaccess.list, listaccess.label)
-        #if msg != "":
-        #    QMessageBox.about(self, 'Information', msg)
-        #print(self.list)
-        #print(msg_to_send)
-        #print(msg)
-        #if len(self.mailmsg) != 0 and len(msg) == 0:
-        #    if listaccess.list[0] == value_chk.valid.value and listaccess.list[1] == value_chk.valid.value \
-        #            and listaccess.list[2] == value_chk.valid.value:
-        #self.view_senderid()
-        #self.view_receiver()
-        #self.view_password()
         err = 0
         ret = 0
         if "," in self.receiverId.text():
@@ -158,12 +158,16 @@ class CustomDialog(QDialog):
         if len(sId) == 0 or len(rId) == 0 or len(sPwd) == 0:
             QMessageBox.about(self, 'Information', "Please fill all details")
         elif (ret == INVALID_INPUT_ERR) or len(rId)==0:
-
             QMessageBox.about(self, 'Information', "Please enter correct receiver ID")
             self.receiverId.clear()
         else:
             mail_deliver_msg += sending_mail_with_attachment(sId, sPwd, rId, self.mailmsg,self.subject )#sending_mail(mail_id, pwd, rx_mail_id, msg_to_send, subject)
             QMessageBox.about(self, 'Information', mail_deliver_msg)
+
+        if mail_deliver_msg != "Mail Sent Successfully":
+            self.trail = self.trail + 1
+            self.left = 3 - self.trail
+            QMessageBox.about(self, 'Information', str(self.left)+" chances left"  )
             ######
         #status = sending_mail_with_attachment(sId, sPwd, rId, self.mailmsg,self.subject )
         #print(status)
@@ -172,6 +176,7 @@ class App1(QWidget):
     def __init__(self,crlist):
         super().__init__()
         self.crs = crlist
+        self.dflag = 0
         self.title = 'CR Filtered List'
         #adding frame to qvbox layout
         self.setMinimumWidth(600)
@@ -235,24 +240,24 @@ class App1(QWidget):
     def on_download_click(self):
         print("download clicked")
         ret = saveCrsData(self.crs)
-
-        QMessageBox.about(self, 'Information', "Download success")
-
+        if self.dflag != 1:
+            QMessageBox.about(self, 'Information', "Download success")
 
     def sendmailButton(self):
         self.emailbutton = QPushButton("Send Mail",self)
         self.emailbutton.clicked.connect(self.on_email_click)
         self.emailbutton.setFixedHeight(40)
 
-
     def on_email_click(self):
         print("click")
+        self.dflag = 1
         self.on_download_click()
         dlg = CustomDialog(self)
         if dlg.exec_():
             print("Success!")
         else:
             print("Cancel!")
+        self.dflag = 0
         #send_mail()
 
     def backbuttonFilter(self):
