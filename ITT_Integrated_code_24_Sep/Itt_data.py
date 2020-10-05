@@ -32,7 +32,8 @@ class CustomDialog(QDialog):
         self.setWhatsThis("Sends CR data to mentioned receipent")
         self.sendButton = QPushButton("Send",self)
         self.credential()
-        self.trail = 0
+        global chances
+        chances = 0
 
         self.sendButton.clicked.connect(self.send_clicked)
         self.layout = QVBoxLayout()
@@ -120,24 +121,12 @@ class CustomDialog(QDialog):
                 self.receiverId.clear()
 
     def send_clicked(self):
-        if self.trail == 3:
-            list = []
-            #self.win2 = App1(list)
-            #self.hide()
-            #App1.on_backfilter()
-            #self.win2.on_backfilter()
-            #self.win2.hide()
-
-            from itt_main_ui import main_window
-            self.w = main_window()
-            self.w.show()
-            self.hide()
-            #win2 = App1()
-            #win2.on_backfilter()
+        global chances
 
         mail_deliver_msg = ""
-        self.mailmsg = "Hi,\n\nPFA of CR Data\n\nRegards,\nIssueTrackingTool"
-        self.subject = "[Issue Tracker Tool] CR Data"
+        self.mailmsg = "Hi,\n"+"<br>PFA  CR Data\n"+"\nRegards,\n"+"IssueTrackingTool"
+        print(self.mailmsg)
+        self.subject = "[Issue Tracker] CR Data"
         print("send clicked")
         sId = self.senderid.text()
         sPwd = self.senderpswd.text()
@@ -159,15 +148,19 @@ class CustomDialog(QDialog):
             QMessageBox.about(self, 'Information', "Please fill all details")
         elif (ret == INVALID_INPUT_ERR) or len(rId)==0:
             QMessageBox.about(self, 'Information', "Please enter correct receiver ID")
-            self.receiverId.clear()
+            self.receiverId.clear()            
         else:
             mail_deliver_msg += sending_mail_with_attachment(sId, sPwd, rId, self.mailmsg,self.subject )#sending_mail(mail_id, pwd, rx_mail_id, msg_to_send, subject)
             QMessageBox.about(self, 'Information', mail_deliver_msg)
 
         if mail_deliver_msg != "Mail Sent Successfully":
-            self.trail = self.trail + 1
-            self.left = 3 - self.trail
-            QMessageBox.about(self, 'Information', str(self.left)+" chances left"  )
+            chances = chances + 1
+            self.left = 3 - chances
+            QMessageBox.about(self, 'Information',"chances left - "+str(self.left))
+
+        if chances == 3:
+            self.hide()
+            return 1
             ######
         #status = sending_mail_with_attachment(sId, sPwd, rId, self.mailmsg,self.subject )
         #print(status)
@@ -257,7 +250,13 @@ class App1(QWidget):
             print("Success!")
         else:
             print("Cancel!")
+        print(dlg)
         self.dflag = 0
+        if chances == 3:
+            from itt_login_ui import login_window
+            self.w = login_window()
+            self.w.show()
+            self.hide()
         #send_mail()
 
     def backbuttonFilter(self):
