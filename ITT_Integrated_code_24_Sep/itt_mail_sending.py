@@ -55,7 +55,7 @@ def sending_mail_with_attachment(login,password,toaddrs,msgtxt,subject):
     msgText = MIMEText('Alternative plain text message.')
     msgAlternative.attach(msgText)
 
-    msgText = MIMEText('Hi,\n PFA of filtered CR details \n Regards,\n Issue Tracking Tool')
+    msgText = MIMEText('Hi,\n\nPFA of CR details.\n\nRegards,\nIssue Tracker')
     msgAlternative.attach(msgText)
     part = MIMEBase('application', "octet-stream")
     part.set_payload(open("CR_Data.xls", "rb").read())
