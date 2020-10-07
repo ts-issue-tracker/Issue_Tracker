@@ -29,13 +29,15 @@ class CustomDialog(QDialog):
         super(CustomDialog, self).__init__(*args, **kwargs)
 
         self.setWindowTitle("Email Sending")
-        self.setWhatsThis("Sends CR data to mentioned receipent")
-        self.sendButton = QPushButton("Send",self)
+        self.setWhatsThis("Sends CR data to mentioned recipient")
+        self.sendButton = QPushButton()
+        self.sendButton.setText("Send")
         self.credential()
         global chances
         chances = 0
 
         self.sendButton.clicked.connect(self.send_clicked)
+
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.senderidLabel)
         self.layout.addWidget(self.senderid)
@@ -157,6 +159,9 @@ class CustomDialog(QDialog):
             chances = chances + 1
             self.left = 3 - chances
             QMessageBox.about(self, 'Information',"chances left - "+str(self.left))
+
+        if mail_deliver_msg == "Mail Sent Successfully":
+            chances = 0
 
         if chances == 3:
             self.hide()

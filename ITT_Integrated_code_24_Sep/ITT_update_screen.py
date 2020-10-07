@@ -565,7 +565,7 @@ class Update(QWidget):
         if(prev_state == "Analysis"):
             if(state == "Fix"):
                 self.cr_state_entry.clear()
-                self.cr_state_entry.addItem("In-Progress")
+                self.cr_state_entry.addItem("In-progress")
                 msg = QMessageBox()
                 msg.setWindowTitle("Information")
                 msg.setText("Please enter GIT id")
@@ -601,7 +601,7 @@ class Update(QWidget):
         if(prev_state == "Fix"):
             if(state == "Ready"):
                 self.cr_state_entry.clear()
-                self.cr_state_entry.addItem("In-Progress")
+                self.cr_state_entry.addItem("In-progress")
 
         if(prev_state == "Ready"):
             if(state == "Built"):
