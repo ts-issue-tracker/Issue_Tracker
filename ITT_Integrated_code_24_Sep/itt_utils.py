@@ -6,7 +6,7 @@ import enum
 
 class utils:
     def __init__(self):
-        pass
+        self.count = 0
 
     def empty_fields_message(self, list,lb_list):
         final_msg = ""
@@ -184,6 +184,7 @@ class utils:
         else:
             msg_to_return += "Invalid Email ID"
             list[3]=value_chk.invalid.value
+
         return msg_to_return
 
 # creating enumerations using class

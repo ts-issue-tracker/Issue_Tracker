@@ -166,7 +166,7 @@ class View_Report(QWidget):
         self.statusComboBox.addItem('None')
         self.statusComboBox.addItem('Open')
         self.statusComboBox.addItem('Analysis')
-        self.statusComboBox.addItem('In-progress')
+        self.statusComboBox.addItem('Inprogress')
         self.statusComboBox.addItem('Reopen')
         self.statusComboBox.addItem('Closed')
         #self.statusComboBox.setFixedWidth(10)

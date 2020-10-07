@@ -32,7 +32,6 @@ class Statistics_Window(QWidget):
         self.setWindowTitle(title)
         self.setMinimumWidth(1000)
         self.setMinimumHeight(800)
-        self.attempts = 0
 
         oImage = QImage("image2.jpg")
         sImage = oImage.scaled(QSize(1000, 1000))  # resize Image to widgets size
@@ -262,7 +261,7 @@ class Statistics_Window(QWidget):
 
     def init_msg(self):
         self.filtertype=""
-        self.filtertype+="USER SELECTED INFORMATION \n\nFilters:"
+        self.filtertype+="FILTER:"
         self.list_of_labels_to_send=[]
         self.list_to_send=[]
     def get_filter_msg(self):
@@ -286,9 +285,9 @@ class Statistics_Window(QWidget):
 
     def send_mail_btn_click(self):
         mail_deliver_msg=""
-        msg_to_send="Hi, \n\nPlease find the CR Statistics details mentioned below. \n\n\nResult:"#Hey,..Please find the statistics details mentioned below :)\n\n\n"
-        subject="Issue Tracker: CR-Statistics Information"
-        msg_to_send+=self.get_filter_msg()+"\n\nRegards,\nIssue Tracker"
+        msg_to_send="Hi, \n\nPlease find the CR Statistics details mentioned below. \n\nRegards,\nIssue Tracking Tool"#Hey,..Please find the statistics details mentioned below :)\n\n\n"
+        subject="Issue Tracking Tool: CR-Statistics Information"
+        msg_to_send+=self.get_filter_msg()
         mail_id=self.mail_txt.text()
         pwd=self.pwd_txt.text()
         rx_mail_id=self.rx_email_txt.text()
@@ -305,14 +304,7 @@ class Statistics_Window(QWidget):
                     and self.list[2]==value_chk.valid.value:
                 mail_deliver_msg+=sending_mail(mail_id,pwd,rx_mail_id,msg_to_send,subject)
                 QMessageBox.about(self, 'Information', mail_deliver_msg)
-        if len(msg) != 0 or mail_deliver_msg != "Mail Sent Successfully":
-            self.attempts = self.attempts + 1
-            QMessageBox.about(self, 'Information', "Chances left - "+str(3-self.attempts))
-        if self.attempts == 3:
-            from itt_login_ui import login_window
-            self.w = login_window()
-            self.w.show()
-            self.hide()
+
     def resizeEvent(self, event):
         self.centerOnScreen(self.frame)
 
@@ -330,7 +322,7 @@ class Statistics_Window(QWidget):
             self.bar_chart_for_specified_type(text)
         self.msg_txt.setText(self.get_filter_msg())
     def msg_format_for_display(self,type,text):
-        self.filtertype+=" \""+type+"\"\nFilter Options: \""+text+"\"\n\n\nRESULTS\n\n"
+        self.filtertype+=" \""+type+"\"\nSELECTED: \""+text+"\"\n\n"
 
     def readChartType(self, text):
         pass

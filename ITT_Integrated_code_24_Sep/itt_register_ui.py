@@ -5,18 +5,17 @@ import itt_credentials_file_access as file_access
 from itt_login_ui import *
 from PyQt5.QtGui import QFont
 from validations import itt_validations
-from itt_mail_sending import *
-credentials_file="Credentials.csv"
-from itt_utils import *
 
 from PyQt5.QtGui import QPalette,QImage,QPageSize,QBrush
 from PyQt5.QtCore import QSize
 
+from itt_mail_sending import *
+credentials_file="Credentials.csv"
+from itt_utils import *
+
 class register_window(QWidget):
     def __init__(self):
         super().__init__()
-        self.count = 0
-        self.max = 4
         self.title = "Register"
         self.user_var = value_chk.empty.value
         self.pwd_var = value_chk.empty.value
@@ -25,6 +24,12 @@ class register_window(QWidget):
         self.email_pwd_var=value_chk.empty.value
         self.rx_email_id=value_chk.empty.value
         self.list = [self.user_var, self.pwd_var, self.confirm_pwd_var,self.email_id_var,self.email_pwd_var,self.rx_email_id]
+        self.count = 0
+        self.max = 4
+
+        self.setWindowTitle(self.title)
+        self.setMinimumWidth(700)
+        self.setMinimumHeight(700)
 
         self.title_frame = QFrame(self)
         # self.frame.setAttribute(Qt.WA_TranslucentBackground)
@@ -48,15 +53,19 @@ class register_window(QWidget):
         self.setMinimumWidth(600)
 
         self.setMinimumHeight(800)
-        self.frame =QFrame(self)
-        self.frame.setFixedSize(350,350)
-        #self.frame.setFrameShape(QFrame.StyledPanel)
+        self.frame = QFrame(self)
+        self.frame.setFixedSize(350, 350)
+        # self.frame.setFrameShape(QFrame.StyledPanel)
 
         oImage = QImage("image2.jpg")
         sImage = oImage.scaled(QSize(1000, 1000))  # resize Image to widgets size
         palette = QPalette()
         palette.setBrush(QPalette.Window, QBrush(sImage))
         self.setPalette(palette)
+
+        self.frame =QFrame(self)
+        self.frame.setFixedSize(350,350)
+        #self.frame.setFrameShape(QFrame.StyledPanel)
 
         self.gridLayout = QGridLayout(self.frame)
         self.gridLayout.setContentsMargins(20,20,20,20)
@@ -66,7 +75,6 @@ class register_window(QWidget):
         usr_lb.setFont(QFont('Arial', 10))
 
         self.user_txt = QLineEdit()
-
         self.user_txt.setFixedWidth(180)
         self.user_txt.setFont(QFont('Arial', 10))
         self.user_txt.textChanged.connect(self.user_name_validation)
@@ -92,7 +100,6 @@ class register_window(QWidget):
         self.confirm_pwd_txt.editingFinished.connect(lambda: self.password_valid(confirm_pwd_lb.text(),2))
 
         chk_box=QtWidgets.QCheckBox()
-
         chk_box.setText("Show Password")
 
         chk_box.stateChanged.connect(self.chk_box_change_event)
@@ -173,76 +180,87 @@ class register_window(QWidget):
         self.rx_email_txt.setText("")
 
     def password_validation(self):
-        self.count += 1
-        remaining = self.max - self.count
-        remaining = str(remaining)
-        if(self.count < self.max):
-            msg_to_display = ""
-            if self.mail_pwd_txt.text()=="":
-                self.list[4]=value_chk.empty.value
-            else:
-                self.list[4] = value_chk.valid.value
-            if len(msg_to_display)!=0:
-                QMessageBox.about(self, 'Information', msg_to_display + remaining + " attempts left")
+        msg_to_display = ""
+        if self.mail_pwd_txt.text() == "":
+            self.list[4] = value_chk.empty.value
         else:
-            from itt_login_ui import login_window
-            self.w = login_window()
-            self.w.show()
-            self.hide()
+            self.list[4] = value_chk.valid.value
+        if len(msg_to_display) != 0:
+            self.count += 1
+            rem = self.max - self.count
+            rem = str(rem)
+            if (self.count < self.max):
+                QMessageBox.about(self, 'Information', msg_to_display + " " + rem + " attepts left")
+            else:
+                from itt_login_ui import login_window
+                self.w = login_window()
+                self.w.show()
+                self.hide()
+
 
     def user_name_validation(self):
-        self.count += 1
-        remaining = self.max - self.count
-        remaining = str(remaining)
-        if(self.count <= self.max):
-            msg_to_display = ""
-            msg_to_display += self.util.user_name_validtion_register \
-                (self.list, credentials_file, self.user_txt.text())
-            if len(msg_to_display) != 0:
-                QMessageBox.about(self, 'Information', msg_to_display + remaining + " attempts left")
-        else:
-            from itt_login_ui import login_window
-            self.w = login_window()
-            self.w.show()
-            self.hide()
+        msg_to_display = ""
+        msg_to_display += self.util.user_name_validtion_register \
+            (self.list, credentials_file, self.user_txt.text())
+        if len(msg_to_display) != 0:
+            self.count += 1
+            rem = self.max - self.count
+            rem =str(rem)
+            if(self.count < self.max):
+                QMessageBox.about(self, 'Information'," " + msg_to_display + rem + "  attepts left")
+            else:
+                from itt_login_ui import login_window
+                self.w = login_window()
+                self.w.show()
+                self.hide()
+
 
     def password_valid(self,text,number):
-        self.count += 1
-        remaining = self.max - self.count
-        remaining = str(remaining)
         msg_to_display = ""
-        if(self.count < self.max):
-            if number==1:
-                msg_to_display += self.util.password_validation \
-                    (self.list, self.pwd_txt.text())
-            else:
-                msg_to_display += self.util.confirm_password_validation \
-                    (self.list,self.pwd_txt.text(),self.confirm_pwd_txt.text())
-            if len(msg_to_display) != 0:
-                QMessageBox.about(self, 'Information', msg_to_display + remaining + " attempts left")
+        if number==1:
+            msg_to_display += self.util.password_validation \
+                (self.list, self.pwd_txt.text())
         else:
-            from itt_login_ui import login_window
-            self.w = login_window()
-            self.w.show()
-            self.hide()
+            msg_to_display += self.util.confirm_password_validation \
+                (self.list,self.pwd_txt.text(),self.confirm_pwd_txt.text())
 
-    def email_validation(self,mail_label,index):
-        self.count += 1
-        remaining = self.max - self.count
-        remaining = str(remaining)
-        if (self.count < self.max):
+        if len(msg_to_display) != 0:
+                self.count += 1
+                rem = self.max - self.count
+                rem = str(rem)
+                if (self.count < self.max):
+                    QMessageBox.about(self, 'Information', msg_to_display +" " + rem + "  attepts left")
+                else:
+                    from itt_login_ui import login_window
+                    self.w = login_window()
+                    self.w.show()
+                    self.hide()
+
+
+    def email_validation(self, mail_label, index):
             if mail_label.__contains__("Recipient"):
                 self.rmailid = self.rx_email_txt.text()
-                if(self.rmailid == self.mail_txt.text()):
+                if (self.rmailid == self.mail_txt.text()):
                     self.IDlist = list(self.rmailid.split(","))
                 else:
                     msg_to_display = "Please enter same mail id & receipent mail id"
                     if len(msg_to_display) != 0:
-                        QMessageBox.about(self, 'Information', msg_to_display + remaining + " attempts left")
-                #mail=self.rx_email_txt.text()
+                                self.count += 1
+                                rem = self.max - self.count
+                                rem = str(rem)
+                                if (self.count < self.max):
+                                    QMessageBox.about(self, 'Information', msg_to_display + " "+ rem + "  attepts left")
+                                else:
+                                    from itt_login_ui import login_window
+                                    self.w = login_window()
+                                    self.w.show()
+                                    self.hide()
+                    else:
+                        self.count = 0
+                # mail=self.rx_email_txt.text()
             else:
-                self.smailid=self.mail_txt.text()
-                #mail=self.mail_txt.text()
+                self.smailid = self.mail_txt.text()
+                # mail=self.mail_txt.text()
                 self.IDlist = list(self.smailid.split(","))
             """
             else:
@@ -250,18 +268,24 @@ class register_window(QWidget):
             """
             msg_to_display = ""
             if mail_label.__contains__("Recipient"):
-                msg_to_display += self.email_rx_validation_with_msg(self.list, self.IDlist, mail_label,self.mail_txt.text(),index)
+                msg_to_display += self.email_rx_validation_with_msg(self.list, self.IDlist, mail_label,
+                                                                    self.mail_txt.text(), index)
             else:
-                msg_to_display += self.email_validation_with_msg(self.list, self.IDlist,mail_label,index)
-            if len(msg_to_display) != 0:
-                QMessageBox.about(self, 'Information', msg_to_display+ remaining + " attempts left")
-        else:
-            from itt_login_ui import login_window
-            self.w = login_window()
-            self.w.show()
-            self.hide()
+                msg_to_display += self.email_validation_with_msg(self.list, self.IDlist, mail_label, index)
 
-    def email_rx_validation_with_msg(self,list,mail_id_list,mail_label,mail,index):
+            if len(msg_to_display) != 0:
+                        self.count += 1
+                        rem = self.max - self.count
+                        rem = str(rem)
+                        if (self.count < self.max):
+                            QMessageBox.about(self, 'Information', msg_to_display +" " +rem + "  attepts left")
+                        else:
+                            from itt_login_ui import login_window
+                            self.w = login_window()
+                            self.w.show()
+                            self.hide()
+
+    def email_rx_validation_with_msg(self, list, mail_id_list, mail_label, mail, index):
         msg_to_return = ""
         # result = valid.email_id_check(mail_id)
         err = 0
@@ -295,16 +319,15 @@ class register_window(QWidget):
             list[index] = value_chk.invalid.value
         return msg_to_return
 
-    def email_validation_with_msg(self,list,mail_id_list,mail_label,index):
+    def email_validation_with_msg(self, list, mail_id_list, mail_label, index):
         msg_to_return = ""
-        #result = valid.email_id_check(mail_id)
+        # result = valid.email_id_check(mail_id)
         err = 0
         result = 0
         if len(mail_id_list) == 1:
             result = valid.email_id_check(mail_id_list[0])
         elif len(mail_id_list) > 1:
             for i in mail_id_list:
-
                 res = valid.email_id_check(i)
                 if res is not valid.SUCCESS:
                     err = 1
@@ -316,7 +339,7 @@ class register_window(QWidget):
             result = valid.INVALID_INPUT_ERR
 
         if result == valid.SUCCESS:
-            if len(mail_id_list) == 0:#if mail_id == "":
+            if len(mail_id_list) == 0:  # if mail_id == "":
                 list[index] = value_chk.empty.value
             else:
                 list[index] = value_chk.valid.value
@@ -326,9 +349,9 @@ class register_window(QWidget):
         return msg_to_return
 
     def resizeEvent(self, event):
-        self.centerOnScreen(self.frame,self.title_frame)
+        self.centerOnScreen(self.frame, self.title_frame)
 
-    def centerOnScreen(self, frame,frame1):
+    def centerOnScreen(self, frame, frame1):
         frame.move((self.width() - self.frame.width()) / 2, (self.height() - self.frame.height()) / 2)
         frame1.move((self.width() - self.title_frame.width()) / 2, self.title_frame.height())
 
@@ -336,8 +359,7 @@ class register_window(QWidget):
         self.open_login_window()
 
     def submit_btn_click(self):
-        msgtxt = "Congratulations, you are successfully registered with \"Thundersoft Issue Tracking Tool\""\
-                 + "\n your username and password: " + self.user_txt.text()+" and " + self.pwd_txt.text()
+        msgtxt = "Hey..,You are successfully registered with \"Thundersoft Issue Tracking Tool\""
         subject="Thundersoft Issue Tracking Tool Registration"
         msg_to_display=""
         username=self.user_txt.text()
@@ -354,17 +376,15 @@ class register_window(QWidget):
                         QMessageBox.about(self, 'Information', "Username already available,please enter other Username")
                     else:
                         if self.user_txt.text() != "" and self.pwd_txt.text() != '' and self.mail_txt.text() != '':
-                            file_access.writing_username_and_pwd(credentials_file, self.user_txt.text(),
-                                                                 self.pwd_txt.text())
-                            result_msg=sending_mail(self.mail_txt.text(),self.mail_pwd_txt.text(),
+                            if self.mail_txt.text() == self.rx_email_txt.text():
+                                file_access.writing_username_and_pwd(credentials_file, self.user_txt.text(),
+                                                                     self.pwd_txt.text())
+                                sending_mail(self.mail_txt.text(),self.mail_pwd_txt.text(),
                                                          self.rx_email_txt.text(),msgtxt,subject)
-                            if result_msg != "Mail Sent Successfully":
-                                QMessageBox.about(self, 'Information', result_msg+",Registered credentials not sent.\nPlease click on Continue to Login")#"You have successfully registered\nPlease click on Continue to Login")
+                                QMessageBox.about(self, 'Information', "You are successfully register,Please click on Continue to Login")
                                 self.init_fields()
                             else:
-                                QMessageBox.about(self, 'Information',
-                                                  result_msg +",You have successfully registered.\nPlease click on Continue to Login")
-                                self.init_fields()
+                                QMessageBox.about(self, 'Information', "mail id and receipent mail id should be same")
                         else:
                             QMessageBox.about(self, 'Information', "Username/Password Empty can\'t proceed furthur")
         else:
