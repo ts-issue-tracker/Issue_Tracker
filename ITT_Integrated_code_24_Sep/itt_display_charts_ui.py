@@ -30,8 +30,8 @@ class Statistics_Window(QWidget):
         self.list=[value_chk.empty.value,value_chk.empty.value,value_chk.empty.value]
         self.label=["Mail ID","Password","Recipient Mail ID"]
         self.setWindowTitle(title)
-        self.setMinimumWidth(1000)
-        self.setMinimumHeight(800)
+        self.setMinimumWidth(1920)
+        self.setMinimumHeight(1000)
         self.attempts = 0
 
         oImage = QImage("image2.jpg")

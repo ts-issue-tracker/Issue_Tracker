@@ -10,7 +10,7 @@ from ITT_save_excel import *
 from ITT_validate_update import *
 from ITT_display import *
 
-from PyQt5.QtGui import QPalette,QImage,QPageSize,QBrush
+from PyQt5.QtGui import QPalette,QImage,QPageSize,QBrush,QPixmap
 from PyQt5.QtCore import QSize
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -18,8 +18,8 @@ class Update(QWidget):
     def __init__(self,cr_index):
         super().__init__()
         self.setWindowTitle("Update Screen")
-        self.setMinimumWidth(600)
-        self.setMinimumHeight(800)
+        self.setMinimumWidth(1920)
+        self.setMinimumHeight(1000)
 
         self.frame = QFrame(self)
         self.frame.setFixedSize(500, 800)
@@ -33,6 +33,16 @@ class Update(QWidget):
         palette = QPalette()
         palette.setBrush(QPalette.Window, QBrush(sImage))
         self.setPalette(palette)
+
+        self.img_frame = QFrame(self)
+        self.img_frame.setFixedSize(350, 150)
+        # self.img_frame.setFrameShape(QFrame.StyledPanel)
+        self.img_gridLayout = QGridLayout(self.img_frame)
+        self.img_gridLayout.setContentsMargins(20, 20, 20, 20)
+        label = QLabel(self)
+        pixmap = QPixmap('thundersoft.png')
+        label.setPixmap(pixmap)
+        self.img_gridLayout.addWidget(label)
 
         self.frame_three = QFrame(self)
         self.gridLayout_three = QGridLayout(self.frame_three)

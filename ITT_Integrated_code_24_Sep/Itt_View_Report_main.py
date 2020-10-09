@@ -4,7 +4,7 @@ from PyQt5.QtGui import *
 import sys
 from Itt_data import *
 from Itt_View_Report_Validation import *
-from PyQt5.QtGui import QPalette,QImage,QPageSize,QBrush
+from PyQt5.QtGui import QPalette,QImage,QPageSize,QBrush,QPixmap
 from PyQt5.QtCore import QSize
 
 class View_Report(QWidget):
@@ -15,8 +15,8 @@ class View_Report(QWidget):
         self.Searchbutton()
         self.Exitbutton()
 
-        self.setMinimumWidth(600)
-        self.setMinimumHeight(800)
+        self.setMinimumWidth(1900)
+        self.setMinimumHeight(1000)
         self.frame = QFrame(self)
         self.frame.setFixedSize(600, 800)
         #self.frame.setFrameShape(QFrame.StyledPanel)
@@ -25,6 +25,16 @@ class View_Report(QWidget):
         self.mainLayout.setSpacing(0)
         self.mainLayout.setContentsMargins(40, 40, 40, 40)
         self.mainLayout.heightForWidth(0)
+
+        self.img_frame = QFrame(self)
+        self.img_frame.setFixedSize(350, 150)
+        # self.img_frame.setFrameShape(QFrame.StyledPanel)
+        self.img_gridLayout = QGridLayout(self.img_frame)
+        self.img_gridLayout.setContentsMargins(20, 20, 20, 20)
+        label = QLabel(self)
+        pixmap = QPixmap('thundersoft.png')
+        label.setPixmap(pixmap)
+        self.img_gridLayout.addWidget(label)
 
         self.frame_one = QFrame(self)
         #self.frame_one.setFrameShape(QFrame.StyledPanel)

@@ -6,7 +6,7 @@ from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt
 import sys
 
-from PyQt5.QtGui import QPalette,QImage,QPageSize,QBrush
+from PyQt5.QtGui import QPalette,QImage,QPageSize,QBrush,QPixmap
 from PyQt5.QtCore import QSize
 
 from ITT_read_excel import *
@@ -16,8 +16,8 @@ class view_window(QWidget):
         super().__init__()
         self.title = "View Screen"
         self.setWindowTitle(self.title)
-        self.setMinimumWidth(600)
-        self.setMinimumHeight(800)
+        self.setMinimumWidth(1900)
+        self.setMinimumHeight(1000)
         self.frame = QFrame(self)
         self.frame.setFixedSize(500, 800)
         # self.frame.setFrameShape(QFrame.StyledPanel)
@@ -27,6 +27,16 @@ class view_window(QWidget):
         palette = QPalette()
         palette.setBrush(QPalette.Window, QBrush(sImage))
         self.setPalette(palette)
+
+        self.img_frame = QFrame(self)
+        self.img_frame.setFixedSize(350, 150)
+        # self.img_frame.setFrameShape(QFrame.StyledPanel)
+        self.img_gridLayout = QGridLayout(self.img_frame)
+        self.img_gridLayout.setContentsMargins(20, 20, 20, 20)
+        label = QLabel(self)
+        pixmap = QPixmap('thundersoft.png')
+        label.setPixmap(pixmap)
+        self.img_gridLayout.addWidget(label)
 
         self.gridLayout = QGridLayout(self.frame)
         self.gridLayout.setContentsMargins(20, 20, 20, 20)

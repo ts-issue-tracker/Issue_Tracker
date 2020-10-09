@@ -27,7 +27,6 @@ class Windowfinal(QWidget):
         self.hide()
 
     def gui(self):
-
         print("inside gui")
         self.crbox = QLineEdit()
         self.crbox.setEchoMode(QLineEdit.Normal)

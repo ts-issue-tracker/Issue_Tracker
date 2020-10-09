@@ -6,7 +6,7 @@ from itt_login_ui import *
 from PyQt5.QtGui import QFont
 from validations import itt_validations
 
-from PyQt5.QtGui import QPalette,QImage,QPageSize,QBrush
+from PyQt5.QtGui import QPalette,QImage,QPageSize,QBrush,QPixmap
 from PyQt5.QtCore import QSize
 
 from itt_mail_sending import *
@@ -28,8 +28,28 @@ class register_window(QWidget):
         self.max = 4
 
         self.setWindowTitle(self.title)
-        self.setMinimumWidth(700)
-        self.setMinimumHeight(700)
+        self.setMinimumWidth(1920)
+        self.setMinimumHeight(1000)
+
+        self.img_frame = QFrame(self)
+        self.img_frame.setFixedSize(350, 150)
+        # self.img_frame.setFrameShape(QFrame.StyledPanel)
+        self.img_gridLayout = QGridLayout(self.img_frame)
+        self.img_gridLayout.setContentsMargins(20, 20, 20, 20)
+        label = QLabel(self)
+        pixmap = QPixmap('thundersoft.png')
+        label.setPixmap(pixmap)
+        self.img_gridLayout.addWidget(label)
+
+        self.img_frame = QFrame(self)
+        self.img_frame.setFixedSize(350, 150)
+        # self.img_frame.setFrameShape(QFrame.StyledPanel)
+        self.img_gridLayout = QGridLayout(self.img_frame)
+        self.img_gridLayout.setContentsMargins(20, 20, 20, 20)
+        label = QLabel(self)
+        pixmap = QPixmap('thundersoft.png')
+        label.setPixmap(pixmap)
+        self.img_gridLayout.addWidget(label)
 
         self.title_frame = QFrame(self)
         # self.frame.setAttribute(Qt.WA_TranslucentBackground)
@@ -242,7 +262,6 @@ class register_window(QWidget):
                 self.rmailid = self.rx_email_txt.text()
                 self.IDlist = list(self.rmailid.split(","))
                 print("ABC1", self.IDlist)
-                """
                 if (self.rmailid == self.mail_txt.text()):
                     pass
                 else:
@@ -260,17 +279,17 @@ class register_window(QWidget):
                                     self.hide()
                     else:
                         self.count = 0
-                # mail=self.rx_email_txt.text()
-                """
+                mail=self.rx_email_txt.text()
+
             else:
                 self.smailid = self.mail_txt.text()
                 # mail=self.mail_txt.text()
                 self.IDlist = list(self.smailid.split(","))
                 #print("ABC2",self.IDlist)
-            """
-            else:
-                mail=self.mail_txt.text()
-            """
+
+            #else:
+             #   mail=self.mail_txt.text()
+
             msg_to_display = ""
             if mail_label.__contains__("Recipient"):
                 msg_to_display += self.email_rx_validation_with_msg(self.list, self.IDlist, mail_label,
@@ -301,19 +320,7 @@ class register_window(QWidget):
 
         if len(mail_id_list) == 1:
             result = valid.email_id_check(mail_id_list[0])
-            #msg_to_return
-            #return msg_to_return
-          #  if self.rx_email_txt.text() != self.mail_txt.text():
-           #     print("ABC",mail_label,mail,mail_id_list)
-            #    msg_to_return += "Please enter same mail id and recipient mail id"
-             #   list[index] = value_chk.invalid.value
-
         elif len(mail_id_list) > 1:
-            #msg_to_return += "recipient mail id should be only sender mail id"
-            #return msg_to_return
-            result = "multiple recipient mail ID not supported"
-            return result
-            """
             for i in mail_id_list:
                 res = valid.email_id_check(i)
                 if res is not valid.SUCCESS:
@@ -322,7 +329,7 @@ class register_window(QWidget):
                 result = valid.INVALID_INPUT_ERR
             else:
                 result = valid.SUCCESS
-            """
+
         if result == valid.SUCCESS:
             if len(mail_id_list) == 0:  # if mail_id == "":
                 list[index] = value_chk.empty.value
@@ -335,17 +342,12 @@ class register_window(QWidget):
 
     def email_validation_with_msg(self, list, mail_id_list, mail_label, index):
         msg_to_return = ""
-        # result = valid.email_id_check(mail_id)
+        #result = valid.email_id_check(mail_id)
         err = 0
         result = 0
         if len(mail_id_list) == 1:
             result = valid.email_id_check(mail_id_list[0])
         elif len(mail_id_list) > 1:
-            #result = valid.INVALID_INPUT_ERR
-
-            result = "multiple recipient mail ID not supported"
-            return result
-            """  
             for i in mail_id_list:
                 res = valid.email_id_check(i)
                 if res is not valid.SUCCESS:
@@ -354,7 +356,7 @@ class register_window(QWidget):
                 result = valid.INVALID_INPUT_ERR
             else:
                 result = valid.SUCCESS
-            """
+
         elif len(mail_id_list) == 0:
             result = valid.INVALID_INPUT_ERR
 
@@ -404,6 +406,8 @@ class register_window(QWidget):
                                 QMessageBox.about(self, 'Information', "You are successfully register,Please click on Continue to Login")
                                 self.count = 0
                                 self.init_fields()
+                            if len(self.rx_email_txt.text()) == 0:
+                                QMessageBox.about(self, 'Information', self.rx_email_id + "is EMPTY" )
                             else:
                                 self.count += 1
                                 rem = self.max - self.count

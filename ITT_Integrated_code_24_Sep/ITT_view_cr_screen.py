@@ -17,8 +17,8 @@ class view_cr_window(QWidget):
         super().__init__()
         self.title = "View Screen"
         self.setWindowTitle(self.title)
-        self.setMinimumWidth(600)
-        self.setMinimumHeight(800)
+        self.setMinimumWidth(1920)
+        self.setMinimumHeight(1000)
         self.frame = QFrame(self)
         self.frame.setFixedSize(500, 700)
         # self.frame.setFrameShape(QFrame.StyledPanel)

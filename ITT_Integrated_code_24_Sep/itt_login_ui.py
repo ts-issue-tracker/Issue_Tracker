@@ -7,7 +7,7 @@ from itt_register_ui import *
 import itt_credentials_file_access as file_access
 from validations import itt_validations
 from itt_utils import *
-from PyQt5.QtGui import QPalette,QImage,QPageSize,QBrush
+from PyQt5.QtGui import QPalette,QImage,QPageSize,QBrush,QPixmap
 from PyQt5.QtCore import QSize
 
 credentials_file = "Credentials.csv"
@@ -24,8 +24,8 @@ class login_window(QWidget):
         self.lb_list=["Usename","Password"]
         self.non_exising_user=False
         self.setWindowTitle(self.title)
-        self.setMinimumWidth(600)
-        self.setMinimumHeight(800)
+        self.setMinimumWidth(1920)
+        self.setMinimumHeight(1000)
 
         oImage = QImage("image2.jpg")
         sImage = oImage.scaled(QSize(1000, 1000))  # resize Image to widgets size
@@ -33,11 +33,19 @@ class login_window(QWidget):
         palette.setBrush(QPalette.Window, QBrush(sImage))
         self.setPalette(palette)
 
+        self.img_frame = QFrame(self)
+        self.img_frame.setFixedSize(350,150)
+        #self.img_frame.setFrameShape(QFrame.StyledPanel)
+        self.img_gridLayout = QGridLayout(self.img_frame)
+        self.img_gridLayout.setContentsMargins(20, 20, 20, 20)
+        label = QLabel(self)
+        pixmap = QPixmap('thundersoft.png')
+        label.setPixmap(pixmap)
+        self.img_gridLayout.addWidget(label)
+
         self.title_frame = QFrame(self)
-        # self.frame.setAttribute(Qt.WA_TranslucentBackground)
         self.title_frame.setFixedSize(650, 100)
         #self.title_frame.setFrameShape(QFrame.StyledPanel)
-
         self.title_lb = QLabel("ISSUE TRACKING TOOL")
 
         self.title_gridLayout = QGridLayout(self.title_frame)
@@ -110,11 +118,12 @@ class login_window(QWidget):
         self.show()
 
     def resizeEvent(self, event):
-        self.centerOnScreen(self.frame,self.title_frame)
+        self.centerOnScreen(self.frame,self.title_frame,self.img_frame)
 
-    def centerOnScreen(self, frame,frame1):
+    def centerOnScreen(self, frame,frame1,frame2):
         frame.move((self.width() - self.frame.width()) / 2, (self.height() - self.frame.height()) / 2)
         frame1.move((self.width() - self.title_frame.width()) / 2, self.title_frame.height())
+        frame2.move((self.width()-self.img_frame.width()) , 1)
 
     def open_register_window(self):
         from itt_register_ui import register_window
