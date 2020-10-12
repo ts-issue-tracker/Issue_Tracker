@@ -286,9 +286,9 @@ class Statistics_Window(QWidget):
 
     def send_mail_btn_click(self):
         mail_deliver_msg=""
-        msg_to_send="Hi, \n\nPlease find the CR Statistics details mentioned below. \n\n\nResult:"#Hey,..Please find the statistics details mentioned below :)\n\n\n"
-        subject="Issue Tracker: CR-Statistics Information"
-        msg_to_send+=self.get_filter_msg()+"\n\nRegards,\nIssue Tracker"
+        msg_to_send="Hi, \n\nPlease find the CR Statistics details mentioned below. \n\n\n"#Hey,..Please find the statistics details mentioned below :)\n\n\n"
+        subject="Issue Tracking Tool: CR-Statistics Information"
+        msg_to_send+=self.get_filter_msg()+"\n\nRegards,\nIssue Tracking Tool"
         mail_id=self.mail_txt.text()
         pwd=self.pwd_txt.text()
         rx_mail_id=self.rx_email_txt.text()
@@ -308,6 +308,11 @@ class Statistics_Window(QWidget):
         if len(msg) != 0 or mail_deliver_msg != "Mail Sent Successfully":
             self.attempts = self.attempts + 1
             QMessageBox.about(self, 'Information', "Chances left - "+str(3-self.attempts))
+        if mail_deliver_msg == "Mail Sent Successfully":
+            self.attempts = 0
+            self.mail_txt.clear()
+            self.pwd_txt.clear()
+            self.rx_email_txt.clear()
         if self.attempts == 3:
             from itt_login_ui import login_window
             self.w = login_window()

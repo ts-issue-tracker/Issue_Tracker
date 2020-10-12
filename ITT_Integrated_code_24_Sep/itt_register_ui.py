@@ -32,18 +32,8 @@ class register_window(QWidget):
         self.setMinimumHeight(1000)
 
         self.img_frame = QFrame(self)
-        self.img_frame.setFixedSize(350, 150)
-        # self.img_frame.setFrameShape(QFrame.StyledPanel)
-        self.img_gridLayout = QGridLayout(self.img_frame)
-        self.img_gridLayout.setContentsMargins(20, 20, 20, 20)
-        label = QLabel(self)
-        pixmap = QPixmap('thundersoft.png')
-        label.setPixmap(pixmap)
-        self.img_gridLayout.addWidget(label)
-
-        self.img_frame = QFrame(self)
-        self.img_frame.setFixedSize(350, 150)
-        # self.img_frame.setFrameShape(QFrame.StyledPanel)
+        self.img_frame.setFixedSize(350,150)
+        #self.img_frame.setFrameShape(QFrame.StyledPanel)
         self.img_gridLayout = QGridLayout(self.img_frame)
         self.img_gridLayout.setContentsMargins(20, 20, 20, 20)
         label = QLabel(self)
@@ -70,9 +60,9 @@ class register_window(QWidget):
         self.title_lb.setFont(QFont('Arial', 30))
 
         self.setWindowTitle(self.title)
-        self.setMinimumWidth(600)
+        #self.setMinimumWidth(600)
 
-        self.setMinimumHeight(800)
+        #self.setMinimumHeight(800)
         self.frame = QFrame(self)
         self.frame.setFixedSize(350, 350)
         # self.frame.setFrameShape(QFrame.StyledPanel)
@@ -371,17 +361,20 @@ class register_window(QWidget):
         return msg_to_return
 
     def resizeEvent(self, event):
-        self.centerOnScreen(self.frame, self.title_frame)
+        self.centerOnScreen(self.frame, self.title_frame, self.img_frame)
 
-    def centerOnScreen(self, frame, frame1):
+    def centerOnScreen(self, frame, frame1, frame2):
         frame.move((self.width() - self.frame.width()) / 2, (self.height() - self.frame.height()) / 2)
         frame1.move((self.width() - self.title_frame.width()) / 2, self.title_frame.height())
+        frame2.move((self.width() - self.img_frame.width()), 1)
 
     def continue_btn_click(self):
         self.open_login_window()
 
     def submit_btn_click(self):
-        msgtxt = "Hey..,You are successfully registered with \"Thundersoft Issue Tracking Tool\""
+        msgtxt = "Hi,\nYou are successfully registered with \"Thundersoft Issue Tracking Tool\"\n" +\
+                 "Username: " +self.user_txt.text()+"\n"+"Password: " + self.pwd_txt.text()+\
+                "\nRegards, \nIssue Tracking Tool."
         subject="Thundersoft Issue Tracking Tool Registration"
         msg_to_display=""
         username=self.user_txt.text()
@@ -398,25 +391,20 @@ class register_window(QWidget):
                         QMessageBox.about(self, 'Information', "Username already available,please enter other Username")
                     else:
                         if self.user_txt.text() != "" and self.pwd_txt.text() != '' and self.mail_txt.text() != '':
-                            if self.mail_txt.text() == self.rx_email_txt.text():
-                                file_access.writing_username_and_pwd(credentials_file, self.user_txt.text(),
+                            #if self.mail_txt.text() == self.rx_email_txt.text():
+                            file_access.writing_username_and_pwd(credentials_file, self.user_txt.text(),
                                                                      self.pwd_txt.text())
-                                sending_mail(self.mail_txt.text(),self.mail_pwd_txt.text(),
-                                                         self.rx_email_txt.text(),msgtxt,subject)
-                                QMessageBox.about(self, 'Information', "You are successfully register,Please click on Continue to Login")
-                                self.count = 0
-                                self.init_fields()
-                            if len(self.rx_email_txt.text()) == 0:
-                                QMessageBox.about(self, 'Information', self.rx_email_id + "is EMPTY" )
-                            else:
-                                self.count += 1
-                                rem = self.max - self.count
-                                rem = str(rem)
-                                QMessageBox.about(self, 'Information', "mail id and recipient mail id should be one and same"\
-                                                  +"\n",rem +" attempts left")
+                            ret = sending_mail(self.mail_txt.text(),self.mail_pwd_txt.text(),
+                                                         self.mail_txt.text(),msgtxt,subject)
+                            QMessageBox.about(self,'Information',ret)
+                            QMessageBox.about(self, 'Information', "You are successfully register,Please click on Continue to Login")
+                            self.count = 0
+                            self.init_fields()
+                           # if len(self.rx_email_txt.text()) == 0:
+                            #    QMessageBox.about(self, 'Information', self.rx_email_id + "is EMPTY" )
 
-                        else:
-                            QMessageBox.about(self, 'Information', "Username/Password Rreci can\'t proceed furthur")
+                else:
+                     QMessageBox.about(self, 'Information', "Username/Password incorrect can't proceed furthur")
         else:
             if len(invalid_msg_to_display) != 0:
                 msg_to_display += " " + invalid_msg_to_display

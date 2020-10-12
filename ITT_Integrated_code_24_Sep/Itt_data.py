@@ -126,9 +126,9 @@ class CustomDialog(QDialog):
         global chances
 
         mail_deliver_msg = ""
-        self.mailmsg = "Hi,\n"+"<br>PFA  CR Data\n"+"\nRegards,\n"+"IssueTrackingTool"
+        self.mailmsg = "Hi,\n"+"<br>PFA  CR Data\n"+"\nRegards,\n"+"Issue Tracking Tool"
         print(self.mailmsg)
-        self.subject = "[Issue Tracker] CR Data"
+        self.subject = "[Issue Tracking Tool] CR Data"
         print("send clicked")
         sId = self.senderid.text()
         sPwd = self.senderpswd.text()
