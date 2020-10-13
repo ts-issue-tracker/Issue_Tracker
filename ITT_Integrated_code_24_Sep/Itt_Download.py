@@ -9,7 +9,7 @@ wb = xlwt.Workbook()
 ws = wb.add_sheet('My Sheet',cell_overwrite_ok=True)
 def getCr2(cr):
 
-    sheet2 = openfile(1)
+    sheet2 = openfile(OPEN_DATA_FILE)
     sheetdata2 = sheet2#list(sheet2)
     print("before int conv")
     print("type of real cr",type(cr))
@@ -26,7 +26,7 @@ def getCr2(cr):
                 print("getcr",data)
                 dict1[sheetdata2[0][i]]=data#sheet.cell_value(0,i)]=data
     print(result_list1)
-    openfile(3)
+    openfile(CLOSE_DATA_FILE)
     return dict1
 
 def saveCrsData(crlist):

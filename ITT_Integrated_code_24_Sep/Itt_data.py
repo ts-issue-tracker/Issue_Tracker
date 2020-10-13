@@ -35,7 +35,8 @@ class CustomDialog(QDialog):
         self.credential()
         global chances
         chances = 0
-
+        self.sendButton.setDefault(False)
+        self.sendButton.setAutoDefault(False)
         self.sendButton.clicked.connect(self.send_clicked)
 
         self.layout = QVBoxLayout()
@@ -225,7 +226,7 @@ class App1(QWidget):
         self.setLayout(self.layout)
         #self.setGeometry(330, 35, 700, 700)
         self.setWindowTitle("CR Search Results")
-
+        self.showMaximized()
         # Show window
         self.show()
 
@@ -319,8 +320,8 @@ class App1(QWidget):
 def getcols():
 
 
-    sheetdata = openfile(1)
-    namesheetdata = openfile(2)
+    sheetdata = openfile(OPEN_DATA_FILE)
+    namesheetdata = openfile(OPEN_CREDENTIAL_FILE)
     data_cols=len(sheetdata[0])
     name_cols=len(namesheetdata[0])
     #sheetdata = sheet#list(sheet)
@@ -341,32 +342,32 @@ def getcols():
             if (key1 == namesheetdata[filrow][i]):#namesheet.cell_value(filrow, i)):
                 print("inside namesheet true")
                 credential[key1] = i
-    openfile(3)
-    openfile(4)
+    openfile(CLOSE_DATA_FILE)
+    openfile(CLOSE_CREDENTIAL_FILE)
 
 def namelist():
-    namesheet = openfile(2)
+    namesheet = openfile(OPEN_CREDENTIAL_FILE)
     namesheetdata = namesheet#list(namesheet)
     index = credential["Username"]
     list1 = []
     for i in range(len(namesheetdata)):#namesheet.nrows):
         list1.append(namesheetdata[i][index])#namesheet.cell_value(i,index))
     [names.append(x) for x in list1 if x not in names]
-    openfile(4)
+    openfile(CLOSE_CREDENTIAL_FILE)
 
 def bilist():
-    sheet = openfile(1)
+    sheet = openfile(OPEN_DATA_FILE)
     sheetdata = sheet#list(sheet)
     index = filters["Build ID"]
     list1 = []
     for i in range(len(sheetdata)):#sheet.nrows):
         list1.append(sheetdata[i][index])#sheet.cell_value(i,index))
     [bientries.append(x) for x in list1 if x not in bientries]
-    openfile(3)
+    openfile(CLOSE_DATA_FILE)
 
 def getCr(cr):
 
-    sheet = openfile(1)
+    sheet = openfile(OPEN_DATA_FILE)
     sheetdata = sheet#list(sheet)
     data_cols = 13
     print("before int conv")
@@ -386,7 +387,7 @@ def getCr(cr):
                 print("getcr",data)
                 dict[sheetdata[0][i]]=data#sheet.cell_value(0,i)]=data
     print(result_list)
-    openfile(3)
+    openfile(CLOSE_DATA_FILE)
     return dict
 
 
@@ -429,7 +430,7 @@ def search(userFilter):
 def searchCr(field,entry):
     global l1
     global l2
-    sheet = openfile(1)
+    sheet = openfile(OPEN_DATA_FILE)
     sheetdata = sheet#list(sheet)
     index = filters[field]
     crindx = filters["CR"]
@@ -460,7 +461,7 @@ def searchCr(field,entry):
         l1 = list(l2)
         l2.clear()
 
-    openfile(3)
+    openfile(CLOSE_DATA_FILE)
     if len(l1) == 0:
         return 0
 

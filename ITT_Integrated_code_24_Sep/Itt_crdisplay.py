@@ -155,6 +155,7 @@ class Windowfinal(QWidget):
         self.setPalette(palette)
         #self.setGeometry(330, 35, 700, 700)
         self.setLayout(self.layout)
+        self.showMaximized()
         self.show()
 
     def fill(self):

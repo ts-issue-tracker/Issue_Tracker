@@ -15,7 +15,7 @@ class View_Report(QWidget):
         self.Searchbutton()
         self.Exitbutton()
 
-        self.setMinimumWidth(1900)
+        self.setMinimumWidth(1000)
         self.setMinimumHeight(1000)
         self.frame = QFrame(self)
         self.frame.setFixedSize(600, 800)
@@ -94,7 +94,7 @@ class View_Report(QWidget):
         self.setLayout(self.mainLayout)
         #self.setGeometry(330,35,600,800)
         self.setWindowTitle("CR View Report")
-
+        self.showMaximized()
         self.selectedFilter = {"CR":"None","Assignee":"None","State":"None","Domain":"None","Issue Type":"None","Build ID":"None"}
 
 
@@ -134,10 +134,10 @@ class View_Report(QWidget):
         # using all() + dictionary comprehension
         # Check if all values are 0 in dictionary
 
-        openfile(3)
-        openfile(4)
-        openfile(1)
-        openfile(2)
+        openfile(CLOSE_DATA_FILE)
+        openfile(CLOSE_CREDENTIAL_FILE)
+        openfile(OPEN_DATA_FILE)
+        openfile(OPEN_CREDENTIAL_FILE)
         res = all(x == "None" for x in self.selectedFilter.values())
         if (res == 1):
             QMessageBox.about(self, 'Information', "No selection made!")
