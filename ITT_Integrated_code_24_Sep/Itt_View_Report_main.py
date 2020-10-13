@@ -392,11 +392,12 @@ class View_Report(QWidget):
             self.bibox.clear()
 
     def resizeEvent(self, event):
-        self.centerOnScreen(self.frame)
+        self.centerOnScreen(self.frame,self.img_frame)
 
-    def centerOnScreen(self,frame):
+    def centerOnScreen(self,frame,frame2):
         screen = QDesktopWidget()
         frame.move((self.width()-self.frame.width()) / 2, (self.height()-self.frame.height()) / 2)
+        frame2.move((self.width() - self.img_frame.width()), 1)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

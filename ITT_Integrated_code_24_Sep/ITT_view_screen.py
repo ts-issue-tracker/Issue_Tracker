@@ -318,6 +318,7 @@ class view_window(QWidget):
         # grid button
         self.gridLayout_three.addWidget(self.continuebt, 13, 1)
 
+        self.showMaximized()
         self.show()
 
     def continuebt_clicked(self):
@@ -327,10 +328,11 @@ class view_window(QWidget):
         self.hide()
 
     def resizeEvent(self, event):
-        self.centerOnScreen(self.frame)
+        self.centerOnScreen(self.frame,self.img_frame)
 
-    def centerOnScreen(self,frame):
+    def centerOnScreen(self,frame,frame2):
         frame.move(int((self.width()-self.frame.width()) / 2), int((self.height()-self.frame.height()) / 2))
+        frame2.move((self.width() - self.img_frame.width()), 1)
 
     def exit_clicked(self):
         from itt_main_ui import main_window

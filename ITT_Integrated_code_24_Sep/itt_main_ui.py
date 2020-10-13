@@ -7,7 +7,7 @@ from ITT_update_screen import *
 from itt_display_charts_ui import *
 from PyQt5.QtGui import QFont
 
-from PyQt5.QtGui import QPalette,QImage,QPageSize,QBrush
+from PyQt5.QtGui import QPalette,QImage,QPageSize,QBrush,QPixmap
 from PyQt5.QtCore import QSize
 
 credentials_file="Credentials.csv"
@@ -18,13 +18,23 @@ class main_window(QWidget):
         super().__init__()
         self.title = "Issue Tracker"
         self.setWindowTitle(self.title)
-        self.setMinimumWidth(600)
-        self.setMinimumHeight(800)
+        self.setMinimumWidth(1920)
+        self.setMinimumHeight(1000)
 
         self.title_frame = QFrame(self)
         # self.frame.setAttribute(Qt.WA_TranslucentBackground)
         self.title_frame.setFixedSize(650, 100)
         # self.title_frame.setFrameShape(QFrame.StyledPanel)
+
+        self.img_frame = QFrame(self)
+        self.img_frame.setFixedSize(350, 150)
+        # self.img_frame.setFrameShape(QFrame.StyledPanel)
+        self.img_gridLayout = QGridLayout(self.img_frame)
+        self.img_gridLayout.setContentsMargins(20, 20, 20, 20)
+        label = QLabel(self)
+        pixmap = QPixmap('thundersoft.png')
+        label.setPixmap(pixmap)
+        self.img_gridLayout.addWidget(label)
 
         self.title_lb = QLabel("ITT MENU")
 
@@ -95,6 +105,8 @@ class main_window(QWidget):
         self.gridLayout.addWidget(view_btn, 3, 0)
         self.gridLayout.addWidget(display_btn, 4, 0)
         self.gridLayout.addWidget(exit_btn, 5, 0)
+
+        self.showMaximized()
         self.show()
 
     def create_an_issue_btn_click(self):
@@ -120,11 +132,12 @@ class main_window(QWidget):
         self.hide()
 
     def resizeEvent(self, event):
-        self.centerOnScreen(self.frame,self.title_frame)
+        self.centerOnScreen(self.frame,self.title_frame,self.img_frame)
 
-    def centerOnScreen(self, frame,frame1):
+    def centerOnScreen(self, frame,frame1,frame2):
         frame.move((self.width() - self.frame.width()) / 2, (self.height() - self.frame.height()) / 2)
         frame1.move((self.width() - self.title_frame.width()) / 2, self.title_frame.height())
+        frame2.move((self.width() - self.img_frame.width()), 1)
 
     def open_create_an_issue_window(self):
         self.w = Create_cr()

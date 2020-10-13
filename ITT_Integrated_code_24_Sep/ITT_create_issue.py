@@ -283,14 +283,15 @@ class Create_cr(QWidget):
         self.Exit_but.clicked.connect(self.Exit_but_clicked)
         #grid view button
         self.gridLayout_three.addWidget(self.Exit_but,0,2)
-
+        self.showMaximized()
         self.show()
 
     def resizeEvent(self, event):
-        self.centerOnScreen(self.frame)
+        self.centerOnScreen(self.frame, self.img_frame)
 
-    def centerOnScreen(self,frame):
+    def centerOnScreen(self,frame,frame2):
         frame.move(int((self.width()-self.frame.width()) / 2), int((self.height()-self.frame.height()) / 2))
+        frame2.move((self.width() - self.img_frame.width()), 1)
 
     def domainchange(self):
         self.domain_val = self.domain_entry.currentText()
@@ -306,13 +307,13 @@ class Create_cr(QWidget):
     def Upload_but_clicked(self):
         try:
             filename = QFileDialog.getOpenFileName()
-            if filename[0].endswith(('.doc','.docx','.txt','.xlsx','.csv','.log')):
+            if filename[0].endswith(('.doc','.docx','.txt','.xlsx','.csv','.log','.xls')):
                     info = QFileInfo(filename[0])
                     size = info.size()
-                    if(size > 35840):
+                    if(size > 5000000):
                         msg = QMessageBox()
                         msg.setWindowTitle("Information")
-                        msg.setText("Supports upto 35KB")
+                        msg.setText("Supports upto 5MB")
                         x = msg.exec_()
                     else:
                         self.label = QLabel(filename[0])

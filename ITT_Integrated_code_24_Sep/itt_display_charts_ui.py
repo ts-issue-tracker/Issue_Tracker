@@ -14,7 +14,7 @@ from itt_utils import *
 from PyQt5.QtGui import *
 from itt_resource_names import *
 
-from PyQt5.QtGui import QPalette,QImage,QPageSize,QBrush
+from PyQt5.QtGui import QPalette,QImage,QPageSize,QBrush,QPixmap
 from PyQt5.QtCore import QSize
 import textwrap
 
@@ -33,6 +33,16 @@ class Statistics_Window(QWidget):
         self.setMinimumWidth(1920)
         self.setMinimumHeight(1000)
         self.attempts = 0
+
+        self.img_frame = QFrame(self)
+        self.img_frame.setFixedSize(350, 150)
+        # self.img_frame.setFrameShape(QFrame.StyledPanel)
+        self.img_gridLayout = QGridLayout(self.img_frame)
+        self.img_gridLayout.setContentsMargins(20, 20, 20, 20)
+        label = QLabel(self)
+        pixmap = QPixmap('thundersoft.png')
+        label.setPixmap(pixmap)
+        self.img_gridLayout.addWidget(label)
 
         oImage = QImage("image2.jpg")
         sImage = oImage.scaled(QSize(1000, 1000))  # resize Image to widgets size
@@ -77,6 +87,7 @@ class Statistics_Window(QWidget):
         self.gridLayout.addWidget(self.frame_three, 3, 0)
         self.names=resource_names()
 
+        self.showMaximized()
         self.MyUI()
 
     def MyUI(self):
@@ -319,10 +330,11 @@ class Statistics_Window(QWidget):
             self.w.show()
             self.hide()
     def resizeEvent(self, event):
-        self.centerOnScreen(self.frame)
+        self.centerOnScreen(self.frame,self.img_frame)
 
-    def centerOnScreen(self, frame):
+    def centerOnScreen(self, frame,frame2):
         frame.move((self.width() - self.frame.width()) / 2, (self.height() - self.frame.height()) / 2)
+        frame2.move((self.width() - self.img_frame.width()), 1)
 
     def readType(self, text):
         sheet_update()

@@ -9,7 +9,7 @@ from Itt_fileopen import *
 from itt_utils import *
 from itt_validations import *
 import numpy as np
-from PyQt5.QtGui import QPalette,QImage,QPageSize,QBrush
+from PyQt5.QtGui import QPalette,QImage,QPageSize,QBrush,QPixmap
 from PyQt5.QtCore import QSize
 
 
@@ -183,10 +183,18 @@ class App1(QWidget):
         self.frame = QFrame(self)
         self.frame.setFixedSize(500, 700)
 
-
         self.layout = QGridLayout(self.frame)
         self.layout.setSpacing(0)
 
+        self.img_frame = QFrame(self)
+        self.img_frame.setFixedSize(350, 150)
+        # self.img_frame.setFrameShape(QFrame.StyledPanel)
+        self.img_gridLayout = QGridLayout(self.img_frame)
+        self.img_gridLayout.setContentsMargins(20, 20, 20, 20)
+        label = QLabel(self)
+        pixmap = QPixmap('thundersoft.png')
+        label.setPixmap(pixmap)
+        self.img_gridLayout.addWidget(label)
 
         self.frame_one = QFrame(self)
         #self.frame_one.setFrameShape(QFrame.StyledPanel)
@@ -229,7 +237,6 @@ class App1(QWidget):
         self.showMaximized()
         # Show window
         self.show()
-
 
     def downloadButton(self):
         self.dbutton = QPushButton("Download",self)
@@ -315,6 +322,12 @@ class App1(QWidget):
         # Table will fit the screen horizontally
         self.tableWidget.horizontalHeader().setStretchLastSection(True)
         self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+
+    def resizeEvent(self, event):
+        self.centerOnScreen(self.img_frame)
+
+    def centerOnScreen(self,frame2):
+        frame2.move((self.width() - self.img_frame.width()), 1)
 
 
 def getcols():

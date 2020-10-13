@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QPalette,QImage,QPageSize,QBrush
+from PyQt5.QtGui import QPalette,QImage,QPageSize,QBrush,QPixmap
 from PyQt5.QtCore import QSize
 
 class Windowfinal(QWidget):
@@ -33,6 +33,16 @@ class Windowfinal(QWidget):
         self.crboxLabel = QLabel("CR No.")
         self.crboxLabel.setBuddy(self.crbox)
 #        self.crbox.setFixedWidth(400)
+
+        self.img_frame = QFrame(self)
+        self.img_frame.setFixedSize(350, 150)
+        # self.img_frame.setFrameShape(QFrame.StyledPanel)
+        self.img_gridLayout = QGridLayout(self.img_frame)
+        self.img_gridLayout.setContentsMargins(20, 20, 20, 20)
+        label = QLabel(self)
+        pixmap = QPixmap('thundersoft.png')
+        label.setPixmap(pixmap)
+        self.img_gridLayout.addWidget(label)
 
         self.Assigneebox = QLineEdit()
         self.Assigneebox.setEchoMode(QLineEdit.Normal)
@@ -221,6 +231,12 @@ class Windowfinal(QWidget):
 
         # entering history
         self.append_history()
+
+    def resizeEvent(self, event):
+        self.centerOnScreen(self.img_frame)
+
+    def centerOnScreen(self,frame2):
+        frame2.move((self.width() - self.img_frame.width()), 1)
 
     def append_history(self):
         self.history = str(self.details["History"])

@@ -10,6 +10,7 @@ from ITT_save_excel import *
 from ITT_validate_update import *
 from ITT_display import *
 
+from PyQt5.QtCore import QDateTime,QFileInfo
 from PyQt5.QtGui import QPalette,QImage,QPageSize,QBrush,QPixmap
 from PyQt5.QtCore import QSize
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -358,29 +359,38 @@ class Update(QWidget):
         # grid view button
         self.gridLayout_three.addWidget(self.Exit_but, 0, 2)
 
+        self.showMaximized()
         self.show()
 
     def resizeEvent(self, event):
-        self.centerOnScreen(self.frame)
+        self.centerOnScreen(self.frame, self.img_frame)
 
-    def centerOnScreen(self,frame):
-        frame.move(int((self.width()-self.frame.width()) / 2), int((self.height()-self.frame.height()) / 2))
+    def centerOnScreen(self, frame, frame2):
+        frame.move(int((self.width() - self.frame.width()) / 2), int((self.height() - self.frame.height()) / 2))
+        frame2.move((self.width() - self.img_frame.width()), 1)
 
     def Upload_but_clicked(self):
         try:
             filename = QFileDialog.getOpenFileName()
-            if filename[0].endswith(('.doc','.docx','.txt','.xlsx','.csv','.log')):
-                self.label = QLabel(filename[0])
-                self.label.setWordWrap(True)
-                self.gridLayout_1.addWidget(self.label,1,1)
-                self.path = filename[0]
+            if filename[0].endswith(('.doc', '.docx', '.txt', '.xlsx', '.csv', '.log', '.xls')):
+                info = QFileInfo(filename[0])
+                size = info.size()
+                if (size > 5000000):
+                    msg = QMessageBox()
+                    msg.setWindowTitle("Information")
+                    msg.setText("Supports upto 5MB")
+                    x = msg.exec_()
+                else:
+                    self.label = QLabel(filename[0])
+                    self.label.setWordWrap(True)
+                    self.gridLayout_1.addWidget(self.label, 1, 1)
+                    self.path = filename[0]
             else:
                 print("Does not supports")
                 msg = QMessageBox()
                 msg.setWindowTitle("Information")
-                msg.setText("Only supports '.doc','.docx','.txt','.xlsx','.csv','.log'")
+                msg.setText("Only supports '.doc','.docx','.txt','.xlsx','.csv','.log','.xls")
                 x = msg.exec_()
-
         except FileNotFoundError:
             print("Wrong file or file path")
 

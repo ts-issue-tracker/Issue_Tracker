@@ -115,6 +115,7 @@ class login_window(QWidget):
 
         self.util=utils()
 
+        self.showMaximized()
         self.show()
 
     def resizeEvent(self, event):

@@ -180,6 +180,7 @@ class register_window(QWidget):
 
         self.util = utils()
 
+        self.showMaximized()
         self.show()
     def init_fields(self):
         self.user_txt.setText("")
@@ -372,7 +373,7 @@ class register_window(QWidget):
         self.open_login_window()
 
     def submit_btn_click(self):
-        msgtxt = "Hi,\nYou are successfully registered with \"Thundersoft Issue Tracking Tool\"\n" +\
+        msgtxt = "Hi,\n\nYou are successfully registered with \"Thundersoft Issue Tracking Tool\"\n\n\n" +\
                  "Username: " +self.user_txt.text()+"\n"+"Password: " + self.pwd_txt.text()+\
                 "\nRegards, \nIssue Tracking Tool."
         subject="Thundersoft Issue Tracking Tool Registration"

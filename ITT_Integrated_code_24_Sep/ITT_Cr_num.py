@@ -71,13 +71,15 @@ class Enter_cr(QWidget):
         self.Exit_but.clicked.connect(self.Exit_but_clicked)
         # grid view button
         self.gridLayout_1.addWidget(self.Exit_but, 0, 1)
+        self.showMaximized()
         self.show()
 
     def resizeEvent(self, event):
-        self.centerOnScreen(self.frame)
+        self.centerOnScreen(self.frame, self.img_frame)
 
-    def centerOnScreen(self,frame):
-        frame.move((self.width()-self.frame.width()) / 2, (self.height()-self.frame.height()) / 2)
+    def centerOnScreen(self, frame, frame2):
+        frame.move(int((self.width() - self.frame.width()) / 2), int((self.height() - self.frame.height()) / 2))
+        frame2.move((self.width() - self.img_frame.width()), 1)
 
     def Exit_but_clicked(self):
         from itt_main_ui import main_window

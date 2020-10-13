@@ -6,7 +6,7 @@ from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt
 import sys
 
-from PyQt5.QtGui import QPalette,QImage,QPageSize,QBrush
+from PyQt5.QtGui import QPalette,QImage,QPageSize,QBrush,QPixmap
 from PyQt5.QtCore import QSize
 
 from ITT_read_excel import *
@@ -28,6 +28,16 @@ class view_cr_window(QWidget):
         palette = QPalette()
         palette.setBrush(QPalette.Window, QBrush(sImage))
         self.setPalette(palette)
+
+        self.img_frame = QFrame(self)
+        self.img_frame.setFixedSize(350, 150)
+        # self.img_frame.setFrameShape(QFrame.StyledPanel)
+        self.img_gridLayout = QGridLayout(self.img_frame)
+        self.img_gridLayout.setContentsMargins(20, 20, 20, 20)
+        label = QLabel(self)
+        pixmap = QPixmap('thundersoft.png')
+        label.setPixmap(pixmap)
+        self.img_gridLayout.addWidget(label)
 
         self.cr_index = cr_index
         print(reason)
@@ -312,6 +322,8 @@ class view_cr_window(QWidget):
 
         # grid button
         self.gridLayout_three.addWidget(self.continuebt, 13, 1)
+
+        self.showMaximized()
         self.show()
 
     def continuebt_clicked(self):
@@ -321,10 +333,11 @@ class view_cr_window(QWidget):
         self.hide()
 
     def resizeEvent(self, event):
-        self.centerOnScreen(self.frame)
+        self.centerOnScreen(self.frame,self.img_frame)
 
-    def centerOnScreen(self,frame):
+    def centerOnScreen(self,frame,frame2):
         frame.move(int((self.width()-self.frame.width()) / 2), int((self.height()-self.frame.height()) / 2))
+        frame2.move((self.width() - self.img_frame.width()), 1)
 
     def exit_clicked(self):
         from itt_main_ui import main_window
